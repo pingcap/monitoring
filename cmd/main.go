@@ -39,6 +39,7 @@ var (
 	datasource_name = "tidb-cluster"
 	dashboards = []string{"binlog.json", "tidb.json", "overview.json", "tikv_details.json", "tikv_summary.json", "tikv_trouble_shooting.json", "pd.json", "tikv_pull.json"}
 	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml"}
+	overviewExlcudeItems = []string{"Services Port Status", "System Info"}
 	dockerfiles = []string{"Dockerfile", "init.sh"}
 )
 
@@ -159,15 +160,9 @@ func filterDashboard(body string, dashboard string) string{
 			return str
 		}
 
-		count := 0
-		for _, i := range gjson.Get(str, "rows").Array() {
-			if i.Map()["title"].Str == "Services Port Status" || i.Map()["title"].Str == "System Info" {
-				newStr, _ := sjson.Delete(str, fmt.Sprintf("rows.%d", count))
-				str = newStr
-			}
-
-			count++
-		}
+		stream.FromArray(overviewExlcudeItems).Each(func (item string) {
+			str = deleteItemFromOverviewDashboard(str, item)
+		})
 
 		return str
 	}).Map(func(str string) string {
@@ -206,6 +201,27 @@ func filterDashboard(body string, dashboard string) string{
 	})
 
 	return newStr
+}
+
+func deleteItemFromOverviewDashboard(source string, itemName string) string{
+	results := make([]gjson.Result, 1)
+	key := "rows"
+	if gjson.Get(source, "rows").Exists() {
+		results = gjson.Get(source, "rows").Array()
+	}else {
+		results = gjson.Get(source, "panels").Array()
+		key = "panels"
+	}
+
+	for index, r := range results {
+		if r.Map()["title"].Str == itemName {
+			newStr, err := sjson.Delete(source, fmt.Sprintf("%s.%d", key, index))
+			checkErr(err, "delete overview path failed")
+			return newStr
+		}
+	}
+
+	return source
 }
 
 func copyDockerfiles(baseDir string, currentDir string, copyFile string) {
