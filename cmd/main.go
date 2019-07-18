@@ -35,7 +35,7 @@ import (
 var (
 	lowest_version string
 	repository_url string
-	path string
+	baseDir string
 	datasource_name = "tidb-cluster"
 	dashboards = []string{"binlog.json", "tidb.json", "overview.json", "tikv_details.json", "tikv_summary.json", "tikv_trouble_shooting.json", "pd.json", "tikv_pull.json"}
 	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml"}
@@ -50,7 +50,7 @@ func main() {
 		},
 	}
 
-	rootCmd.Flags().StringVar(&path,"path", ".", "the path of export monitor data")
+	rootCmd.Flags().StringVar(&baseDir,"path", ".", "the base directory of the program")
 	rootCmd.Flags().StringVar( &lowest_version,"lowest-version", "2.1.8", "the lowest tidb version")
 	rootCmd.Flags().StringVar(&repository_url, "source-url", "https://raw.githubusercontent.com/pingcap/tidb-ansible", "the tidb monitor source address")
 	rootCmd.MarkFlagRequired("path")
@@ -66,7 +66,6 @@ func exportMonitorData() {
 	checkErr(err, "list reference failed")
 
 	// baseDir is $path/tidb-dashboards
-	baseDir, err := filepath.Abs(".")
 	checkErr(err, "check baseDir failed")
 	monitorDir := fmt.Sprintf("%s%cmonitor", baseDir, filepath.Separator)
 	checkErr(os.RemoveAll(monitorDir), "delete path filed")
