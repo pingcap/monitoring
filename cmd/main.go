@@ -97,7 +97,7 @@ func fetchDashboard(tag string, baseDir string) {
 
 	stream.FromArray(dashboards).Each(func(dashboard string) {
 		body := fetchContent(fmt.Sprintf("%s/%s/scripts/%s", repository_url, tag, dashboard), tag, dashboard)
-		writeFile(dir, dashboard, filterDashboard(body))
+		writeFile(dir, dashboard, filterDashboard(body, dashboard))
 	})
 }
 
@@ -150,10 +150,26 @@ func writeFile(baseDir string, fileName string, body string) {
 	}
 }
 
-func filterDashboard(body string) string{
+func filterDashboard(body string, dashboard string) string{
 	newStr := ""
 	stream.Of(body).Filter(func(str string) bool {
 		return str != ""
+	}).Map(func(str string) string{
+		if dashboard != "overview.json" {
+			return str
+		}
+
+		count := 0
+		for _, i := range gjson.Get(str, "rows").Array() {
+			if i.Map()["title"].Str == "Services Port Status" || i.Map()["title"].Str == "System Info" {
+				newStr, _ := sjson.Delete(str, fmt.Sprintf("rows.%d", count))
+				str = newStr
+			}
+
+			count++
+		}
+
+		return str
 	}).Map(func(str string) string {
 		r := gjson.Get(str, "__requires.0.type")
 		if r.Exists() && r.Str == "grafana" {
