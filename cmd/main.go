@@ -32,12 +32,11 @@ import (
 	"strings"
 )
 
-const (
-	lowest_version  = "v2.1.8"
-	repository_url = "https://raw.githubusercontent.com/pingcap/tidb-ansible"
-	datasource_name = "tidb-cluster"
-)
 var (
+	lowest_version string
+	repository_url string
+	path string
+	datasource_name = "tidb-cluster"
 	dashboards = []string{"binlog.json", "tidb.json", "overview.json", "tikv_details.json", "tikv_summary.json", "tikv_trouble_shooting.json", "pd.json", "tikv_pull.json"}
 	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml"}
 	dockerfiles = []string{"Dockerfile", "init.sh"}
@@ -51,7 +50,9 @@ func main() {
 		},
 	}
 
-	rootCmd.Flags().String("path", ".", "the path of export monitor data")
+	rootCmd.Flags().StringVar(&path,"path", ".", "the path of export monitor data")
+	rootCmd.Flags().StringVar( &lowest_version,"lowest-version", "2.1.8", "the lowest tidb version")
+	rootCmd.Flags().StringVar(&repository_url, "source-url", "https://raw.githubusercontent.com/pingcap/tidb-ansible", "the tidb monitor source address")
 	rootCmd.MarkFlagRequired("path")
 	rootCmd.Execute()
 }
@@ -90,6 +91,7 @@ func exportMonitorData() {
 	})
 }
 
+// fetchDashboard fetch dashboards from the source and replace some variables in the file.
 func fetchDashboard(tag string, baseDir string) {
 	dir := fmt.Sprintf("%s%cdashboards", baseDir, filepath.Separator)
 	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path=" + dir)
@@ -100,6 +102,7 @@ func fetchDashboard(tag string, baseDir string) {
 	})
 }
 
+// fetchRules fetch rules from the source
 func fetchRules(tag string, baseDir string) {
 	dir := fmt.Sprintf("%s%crules", baseDir, filepath.Separator)
 	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path=" + dir)
