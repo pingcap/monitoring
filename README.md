@@ -51,7 +51,7 @@ There will be monitoring binary, you can run it like this
 The program will replace some variables and the docker will receive 4 variables: 
 ```$xslt
 GF_PROVISIONING_PATH // grafana provisioning path
-$TIDB_CLUSTER_NAME // TiDB cluster name
-$TIDB_ENABLE_BINLOG // whether enable binlog
-$PROM_CONFIG_PATH // proemtheus rules config path
+TIDB_CLUSTER_NAME // TiDB cluster name
+TIDB_ENABLE_BINLOG // whether enable binlog
+PROM_CONFIG_PATH // proemtheus rules config path
 ```
