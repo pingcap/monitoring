@@ -195,8 +195,8 @@ func filterDashboard(body string) string{
 
 func copyDockerfiles(baseDir string, currentDir string, copyFile string) {
 	df, err := ioutil.ReadFile(fmt.Sprintf("%s%ccmd%c%s", baseDir, filepath.Separator, filepath.Separator, copyFile))
-	checkErr(err, fmt.Sprintf("read Dockerfile failed", copyFile))
-	checkErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", currentDir, filepath.Separator, copyFile), df, os.ModePerm), "create Dockerfile failed")
+	checkErr(err, fmt.Sprintf("read file failed, file=%s", copyFile))
+	checkErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", currentDir, filepath.Separator, copyFile), df, os.ModePerm), "create file failed")
 }
 
 func checkErr(err error, msg string) {
