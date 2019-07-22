@@ -1,0 +1,46 @@
+/* Move down content because we have a fixed navbar that is 50px tall with 20px padding */
+body {
+  /*padding-top: 70px;*/
+  padding-bottom: 20px;
+}
+
+.state_indicator {
+  padding: 0 4px 0 4px;
+}
+
+.literal_output td {
+  font-family: monospace;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.tooltip-inner {
+  max-width: none;
+  text-align: left;
+}
+
+.label {
+  white-space: normal;
+}
+
+#editor {
+  position: absolute;
+  width: 500px;
+  height: 400px;
+}
+
+table th td {
+  border: 1px solid black;
+}
+table th tr td h2 {
+  font-size: 26px;
+}
+.rule_cell {
+  white-space: pre-wrap;
+  background-color: #F5F5F5;
+  display: block;
+  font-family: monospace;
+}
+
