@@ -50,7 +50,9 @@ func startServer() {
 		staticHandler.ServeHTTP(c.Writer, c.Request)
 	})
 
-	bizlogic.NewReloader(u, watchDir).Start()
+	if err := bizlogic.NewReloader(u, watchDir).Start(); err != nil {
+		log.Fatal("Watch dir failed", )
+	}
 
-	log.Fatal("StartServer server failed", engine.Run("0.0.0.0:8081").Error())
+	log.Fatal("StartServer server failed", engine.Run("0.0.0.0:9089").Error())
 }

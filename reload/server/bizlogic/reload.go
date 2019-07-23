@@ -26,7 +26,6 @@ func (r *Reloader) Start() error {
 	if err != nil {
 		return err
 	}
-	defer watcher.Close()
 
 	go func() {
 		r.watch(watcher)
@@ -36,6 +35,7 @@ func (r *Reloader) Start() error {
 }
 
 func (r *Reloader) watch(watcher *fsnotify.Watcher) {
+	defer watcher.Close()
 	for {
 		select {
 		case event, ok := <- watcher.Events:
@@ -47,7 +47,7 @@ func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 				return
 			}
 
-			if err := r.promReload(); err != nil {
+			if err := r.promReload(event); err != nil {
 				log.Println("reload failed", err)
 			}
 		case err, ok := <- watcher.Errors:
@@ -60,8 +60,8 @@ func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 	}
 }
 
-func (r *Reloader) promReload() error {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/-/reload", r.promUrl), nil)
+func (r *Reloader) promReload(event fsnotify.Event) error {
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/-/reload", r.promUrl), nil)
 	if err != nil {
 		return errors.Wrap(err,"init prometheus request failed")
 	}
@@ -75,7 +75,7 @@ func (r *Reloader) promReload() error {
 	if resp.StatusCode != 200 {
 		return errors.New(fmt.Sprintf("Received error response code, %d", resp.StatusCode))
 	}
-	log.Println("successfully triggered reload")
+	log.Println(fmt.Printf("successfully triggered reload, event=%s, name=%s", event.Op.String(), event.Name))
 	return nil
 }
 
@@ -84,7 +84,19 @@ func (r *Reloader) isValidEvent(event fsnotify.Event) bool {
 		return true
 	}
 	if event.Op&fsnotify.Create == fsnotify.Create {
-		return false
+		return true
+	}
+
+	if event.Op&fsnotify.Chmod == fsnotify.Chmod {
+		return true
+	}
+
+	if event.Op&fsnotify.Remove == fsnotify.Remove {
+		return true
+	}
+
+	if event.Op&fsnotify.Rename == fsnotify.Rename {
+		return true
 	}
 
 	return false

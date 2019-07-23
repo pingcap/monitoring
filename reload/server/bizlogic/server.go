@@ -6,6 +6,7 @@ import (
 	"github.com/pingcap/monitoring/reload/server/types"
 	"github.com/pingcap/monitoring/reload/server/utils"
 	"github.com/pkg/errors"
+	"github.com/prometheus/prometheus/pkg/rulefmt"
 	"github.com/wushilin/stream"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -89,8 +90,6 @@ func (s *server) getConfigs()([]string, error) {
 	return r, nil
 }
 
-
-
 func (s *server) UpdateConfig(c *gin.Context) {
 	configName := utils.GetHttpParameter(c.Param, "config")
 
@@ -108,13 +107,40 @@ func (s *server) UpdateConfig(c *gin.Context) {
 
 		stream.FromArray(files).Filter(func(info os.FileInfo) bool {
 			return info.Name() == configName
-		}).Each(func(info os.FileInfo) {
-			v, err := yaml.Marshal(config.Data)
-			if err != nil {
+		}).Map(func(info os.FileInfo) []byte {
+			return []byte(config.Data)
+		}).Filter(func (data []byte) bool {
+			if err := parse(data); err != nil {
+				c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
+				return false
+			}
+			return true
+		}).Each(func (data []byte) {
+			if err := ioutil.WriteFile(fmt.Sprintf("%s%c%s", s.dir, filepath.Separator, configName), data, os.ModePerm); err != nil {
 				c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
 			} else {
-				fmt.Println(string(v))
+				c.JSON(http.StatusOK, config)
 			}
 		})
 	}
 }
+
+func parse(content []byte) error {
+	var groups rulefmt.RuleGroups
+	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
+		return err
+	}
+
+	errs := groups.Validate()
+	if errs == nil || len(errs) == 0 {
+		return nil
+	}
+
+	var errStr string
+	stream.FromArray(errs).Each(func (err error) {
+		errStr += err.Error()
+	})
+
+	return errors.New(errStr)
+}
+

@@ -44,3 +44,16 @@ table th tr td h2 {
   font-family: monospace;
 }
 
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.navbarl {
+  position: relative;
+  min-height: 50px;
+  /* margin-bottom: 20px; */
+  border: 1px solid transparent;
+}
+
