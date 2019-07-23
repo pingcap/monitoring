@@ -1,4 +1,14 @@
-# Cloud TiDB Monitoring
+# Overview
+This repo contains two functions. One support dynamic reload rules of prometheus, the other is used to support multi TiDB version.
+
+## Function1 - Dynamic reload rules of Prometheus
+It is a simple binary to trigger a reload when Rules are updated. It watches dirs and call `reload` API that the rules has been changed. 
+It provide a UI to update rules(For ease of use, the UI is very like UI of Prometheus).
+![UI](reload/ui/static/image/ui.png)
+
+The text editor is friendly to Yaml format. To quickly verify that the modification is successful, there is Rules UI which get rules from Prometheus (You can also verify it by Prometheus.)
+
+## Function2 - Cloud TiDB Monitoring
 
 ## Overview
 It automatic generate all TiDB version monitoring information (default it just generate data which TiDB version >= 2.1.8). The structure of monitor directory like this
