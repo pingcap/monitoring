@@ -19,7 +19,11 @@ There is binary in `reload/build/{plateform}/reload`, you can run it like this
 ```
 
 ## Overview
-It automatic generate all TiDB version monitoring information (default it just generate data which TiDB version >= 2.1.8). The structure of monitor directory like this
+
+Generate versioned monitoring data that is used by tidb-operator. This project pulls TiDB monitoring data from [tidb-ansible](https://github.com/pingcap/tidb-ansible) and uses the git tag to understand the TiDB version.
+
+All TiDB version monitoring information is automatically generated (by default it generates for TiDB version >= 2.1.8). The structure of monitor directory is like this
+
 ```$xslt
  monitor/
     |── v2.1.8
@@ -56,7 +60,7 @@ It automatic generate all TiDB version monitoring information (default it just g
     |___ ...
         
 ```
-It pull TiDB monitoring data from [tidb-ansible](https://github.com/pingcap/tidb-ansible) and use git tag to distinct TiDB version.
+
 
 ## How to use it
 ```$xslt
