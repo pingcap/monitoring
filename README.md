@@ -3,12 +3,10 @@ This repo contains two functions. One support dynamic reload rules of prometheus
 
 ## Function1 - Dynamic reload rules of Prometheus
 It is a simple binary to trigger a reload when Rules are updated. It watches dirs and call `reload` API that the rules has been changed. 
-It provide a UI to update rules(For ease of use, the UI is very like UI of Prometheus).
+It provide a UI to update rules(For ease of use, the UI is similar with UI of Prometheus).
 ![UI](reload/ui/static/image/ui.png)
 
-The text editor is friendly to Yaml format. To quickly verify that the modification is successful, there is Rules UI which get rules from Prometheus (You can also verify it by Prometheus.)
-
-## Function2 - Cloud TiDB Monitoring
+The text editor is friendly to Yaml format. To quickly verify that the modification is successful, there is Rules UI which get rules from Prometheus (You can also verify it by Prometheus.).
 ## How to use it
 ```$xslt
 make
@@ -18,6 +16,7 @@ There is binary in `reload/build/{plateform}/reload`, you can run it like this
 ./reload --watch-path=/tmp/prometheus-2.8.0.darwin-amd64/rules --prometheus-url=http://127.0.0.1:9090
 ```
 
+## Function2 - Cloud TiDB Monitoring
 ## Overview
 It automatic generate all TiDB version monitoring information (default it just generate data which TiDB version >= 2.1.8). The structure of monitor directory like this
 ```$xslt
