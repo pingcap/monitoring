@@ -1,7 +1,7 @@
 # Overview
 This repo contains two functions. One support dynamic reload rules of prometheus, the other is used to support multi TiDB version.
 
-## Function1 - Dynamic reload rules of Prometheus
+## Function1 - Prometheus Rule Reloader
 It is a simple binary to trigger a reload when Rules are updated. It watches dirs and call `reload` API that the rules has been changed. 
 It provide a UI to update rules(For ease of use, the UI is similar with UI of Prometheus).
 ![UI](reload/ui/static/image/ui.png)
