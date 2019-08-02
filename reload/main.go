@@ -51,7 +51,7 @@ func startServer() {
 	})
 
 	if err := bizlogic.NewReloader(u, watchDir).Start(); err != nil {
-		log.Fatal("Watch dir failed", )
+		log.Fatal("Watch dir failed", err)
 	}
 
 	log.Fatal("StartServer server failed", engine.Run("0.0.0.0:9089").Error())
