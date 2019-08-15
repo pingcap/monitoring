@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: elasticsearch
+  name: es-exporter
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 10s
+  - port: http
+  - scheme: http
+  jobLabel: app
+  selector:
+    matchLabels:
+      app: elasticsearch-exporter
