@@ -16,7 +16,8 @@ mkdir manifests/prometheus
 mkdir manifests/prometheus-operator
 mkdir output/prometheus
 mkdir manifests/archive
-                                               # optional, but we would like to generate yaml, not json
+
+# optional, but we would like to generate yaml, not json
 jsonnet --ext-str PrivateCloudEnv="$1" -J vendor -m output/prometheus kubernetes-cluster-monitoring.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml; rm -f {}' -- {}
 
 mv output/prometheus/0*.yaml manifests/prometheus-operator
