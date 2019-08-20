@@ -43,12 +43,12 @@ local kp =  (if std.extVar("PrivateCloudEnv") == "true" then privateCloud else c
                },
       prometheus+: {
         spec+: {
-          retention: '30d',
+          retention: '15d',
           storage: {
             volumeClaimTemplate:
               pvc.new() +
               pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-              pvc.mixin.spec.resources.withRequests({ storage: '1Gi' }) +
+              pvc.mixin.spec.resources.withRequests({ storage: '30Gi' }) +
               pvc.mixin.spec.withStorageClassName('local-storage'),
           },
         },
@@ -108,7 +108,7 @@ local kp =  (if std.extVar("PrivateCloudEnv") == "true" then privateCloud else c
        pvc.mixin.metadata.withName($._config.grafanaPVCName) +
        pvc.mixin.metadata.withNamespace($._config.namespace) +
        pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-       pvc.mixin.spec.resources.withRequests({ storage: '1Gi' }) +
+       pvc.mixin.spec.resources.withRequests({ storage: '5Gi' }) +
        pvc.mixin.spec.withStorageClassName('local-storage'),
 
      deployment:
