@@ -18,7 +18,7 @@ spec:
   resources:
     requests:
       memory: 400Mi
-  retention: 30d
+  retention: 15d
   ruleSelector:
     matchLabels:
       prometheus: k8s
@@ -39,6 +39,6 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 30Gi
         storageClassName: local-storage
   version: v2.7.2
