@@ -13,6 +13,9 @@ local privateCloudConfig = {
     notKubeDnsSelector: 'job="kube-test"',
 };
 
+local statefulSet = k.apps.v1beta2.statefulSet;
+local toleration = statefulSet.mixin.spec.template.spec.tolerationsType;
+
 local cloud = (import 'kube-prometheus/kube-prometheus.libsonnet') + (import 'public-cloud-config.libsonnet');
 local cloudConfig = {
  namespace: 'monitoring',
@@ -43,6 +46,14 @@ local kp =  (if std.extVar("PrivateCloudEnv") == "true" then privateCloud else c
                },
       prometheus+: {
         spec+: {
+          tolerations: [
+            toleration.new() + (
+                  if std.objectHas(t, 'key') then toleration.withKey(t.key) else toleration) + (
+                  if std.objectHas(t, 'operator') then toleration.withOperator(t.operator) else toleration) + (
+                  if std.objectHas(t, 'value') then toleration.withValue(t.value) else toleration) + (
+                  if std.objectHas(t, 'effect') then toleration.withEffect(t.effect) else toleration),
+                  for t in config._config.tolerations
+          ],
           retention: '15d',
           storage: {
             volumeClaimTemplate:
@@ -195,7 +206,15 @@ local kp =  (if std.extVar("PrivateCloudEnv") == "true" then privateCloud else c
        deployment.mixin.spec.template.spec.withNodeSelector({ 'beta.kubernetes.io/os': 'linux' }) +
        deployment.mixin.spec.template.spec.withVolumes(volumes) +
        deployment.mixin.spec.template.spec.withServiceAccountName('grafana') +
-       deployment.mixin.spec.template.spec.withInitContainers(initContainer)
+       deployment.mixin.spec.template.spec.withInitContainers(initContainer) +
+       deployment.mixin.spec.template.spec.withTolerations([
+                                                                       toleration.new() + (
+                                                                             if std.objectHas(t, 'key') then toleration.withKey(t.key) else toleration) + (
+                                                                             if std.objectHas(t, 'operator') then toleration.withOperator(t.operator) else toleration) + (
+                                                                             if std.objectHas(t, 'value') then toleration.withValue(t.value) else toleration) + (
+                                                                             if std.objectHas(t, 'effect') then toleration.withEffect(t.effect) else toleration),
+                                                                             for t in config._config.tolerations
+                                                                     ])
   },
 };
 

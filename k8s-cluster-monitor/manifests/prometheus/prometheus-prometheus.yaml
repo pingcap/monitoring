@@ -41,4 +41,6 @@ spec:
           requests:
             storage: 30Gi
         storageClassName: local-storage
+  tolerations:
+  - operator: Exists
   version: v2.7.2
