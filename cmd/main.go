@@ -49,6 +49,7 @@ var (
 		"tikv_trouble_shooting.json": "Test-Cluster-TiKV-Trouble-Shooting",
 		"pd.json": "Test-Cluster-PD",
 		"tikv_pull.json": "Test-Cluster-TiKV",
+		"overview_pull.json": "Test-Cluster-Overview",
 	}
 
 	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml"}
