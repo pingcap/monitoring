@@ -114,8 +114,17 @@ func fetchDashboard(tag string, baseDir string) {
 	stream.FromMapEntries(dashboards).Each(func(entry stream.MapEntry) {
 		dashboard := entry.Key.(reflect.Value).String()
 		body := fetchContent(fmt.Sprintf("%s/%s/scripts/%s", repository_url, tag, dashboard), tag, dashboard)
-		writeFile(dir, dashboard, filterDashboard(body, dashboard, entry.Value.(string)))
+		writeFile(dir, convertDashboardFileName(dashboard), filterDashboard(body, dashboard, entry.Value.(string)))
 	})
+}
+
+// convertDashboardFileName convert file name
+func convertDashboardFileName(dashboard string) string{
+	if strings.HasPrefix(dashboard, "overview") {
+		return "overview.json"
+	}
+
+	return dashboard
 }
 
 // fetchRules fetch rules from the source
