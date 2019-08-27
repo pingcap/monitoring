@@ -48,3 +48,23 @@ for file in $PROM_CONFIG_PATH/rules/*
 do
     sed -i 's/ENV_LABELS_ENV/'$TIDB_CLUSTER_NAME'/g' $file
 done
+
+# Datasources
+if [ $GF_DATASOURCE_PATH ];
+then
+    if [ $GF_NODE_EXPORTER_DATASOURCE_URL ];
+    then
+        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_NODE_EXPORTER_DATASOURCE_URL',g' /tmp/disk-datasource.yaml
+    fi
+
+    if [ $GF_TIDB_CLUSTER_URL ];
+    then
+        sed -i 's,http://127.0.0.1:9090,'$GF_TIDB_CLUSTER_URL',g' /tmp/tidb-cluster-datasource.yaml
+    fi
+
+    cp /tmp/disk-datasource.yaml $GF_DATASOURCE_PATH/
+    cp /tmp/tidb-cluster-datasource.yaml $GF_DATASOURCE_PATH/
+    sed -i 's/Test-Cluster-Disk-Performance/'$TIDB_CLUSTER_NAME'-Disk-Performance/g' /tmp/disk-datasource.yaml
+    cp /tmp/node-disk-dashboard.json $GF_PROVISIONING_PATH/dashboards
+fi
+
