@@ -64,7 +64,18 @@ then
 
     cp /tmp/disk-datasource.yaml $GF_DATASOURCE_PATH/
     cp /tmp/tidb-cluster-datasource.yaml $GF_DATASOURCE_PATH/
-    sed -i 's/Test-Cluster-Disk-Performance/'$TIDB_CLUSTER_NAME'-Disk-Performance/g' /tmp/disk-datasource.yaml
-    cp /tmp/node-disk-dashboard.json $GF_PROVISIONING_PATH/dashboards
+
+    # pods
+    if [ $TIDB_CLUSTER_NAMESPACE ];
+    then
+         sed -i 's/TIDB_NAMESPACE/'$TIDB_CLUSTER_NAMESPACE'/g' /tmp/pods.json
+    fi
+    sed -i 's/Test-Cluster-Pods/'$TIDB_CLUSTER_NAME'-Pods/g' /tmp/pods.json
+    cp /tmp/pods.json $GF_PROVISIONING_PATH/dashboards
+
+    # nodes
+     sed -i 's/Test-Cluster-Nodes/'$TIDB_CLUSTER_NAME'-Nodes/g' /tmp/nodes.json
+     cp /tmp/nodes.json $GF_PROVISIONING_PATH/dashboards
+
 fi
 

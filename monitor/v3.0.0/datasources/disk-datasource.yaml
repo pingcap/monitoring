@@ -4,7 +4,7 @@
     {
       "access": "proxy",
       "editable": true,
-      "name": "tidb-node-disk",
+      "name": "k8s-cluster",
       "orgId": 1,
       "type": "prometheus",
       "url": "http://prometheus-k8s.monitoring.svc:9090",

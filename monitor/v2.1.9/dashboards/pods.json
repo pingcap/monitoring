@@ -1,0 +1,994 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 14,
+  "iteration": 1567054748841,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 20,
+      "panels": [],
+      "title": "PV Info",
+      "type": "row"
+    },
+    {
+      "columns": [],
+      "datasource": "k8s-cluster",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 22,
+      "links": [],
+      "pageSize": 10,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/Time|__name__|endpoint|instance|job|namespace|pod|service/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "storage_size",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #A",
+          "thresholds": [],
+          "type": "number",
+          "unit": "bytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 2,
+          "pattern": "Value #B",
+          "rangeMaps": [
+            {
+              "from": "-1",
+              "text": "false",
+              "to": "0"
+            },
+            {
+              "from": "1",
+              "text": "true",
+              "to": "1000000"
+            }
+          ],
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "(sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{namespace=\"TIDB_NAMESPACE\"}) by (persistentvolumeclaim) * on (persistentvolumeclaim) group_left\n(storageclass) kube_persistentvolumeclaim_info{namespace=\"TIDB_NAMESPACE\"})",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        },
+        {
+          "expr": "kube_persistentvolumeclaim_status_phase{namespace=\"TIDB_NAMESPACE\"} == 1",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "B"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "PVC Info",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "k8s-cluster",
+      "fill": 1,
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 7,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeat": null,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "kubelet_volume_stats_capacity_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Total",
+          "refId": "A"
+        },
+        {
+          "expr": "kubelet_volume_stats_used_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Used",
+          "refId": "B"
+        },
+        {
+          "expr": "kubelet_volume_stats_available_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Free",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Volume Space Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 18,
+      "panels": [
+        {
+          "cacheTimeout": null,
+          "columns": [],
+          "datasource": "k8s-cluster",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 2
+          },
+          "id": 12,
+          "links": [],
+          "pageSize": 10,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "link": false,
+              "pattern": "/Time|job|instance|__endpoint__|namespace|__name__|endpoint|pod/",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "available_endpoint",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "Value",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "expr": "(kube_service_spec_type{namespace=\"TIDB_NAMESPACE\"} * on (service, namespace) group_left(cluster_ip ) kube_service_info{namespace=\"TIDB_NAMESPACE\"}) * on (namespace, service) group_left(Value)\n sum(label_replace(kube_endpoint_address_available{namespace=\"TIDB_NAMESPACE\"}, \"service\", \"$0\", \"endpoint\", \".*\")) by (namespace, service)",
+              "format": "table",
+              "instant": true,
+              "intervalFactor": 1,
+              "legendFormat": "Avaliable Endpoint Number",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Service Info",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "title": "Service Info",
+      "type": "row"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 16,
+      "panels": [],
+      "title": "Pod Info",
+      "type": "row"
+    },
+    {
+      "columns": [],
+      "datasource": "k8s-cluster",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 10,
+      "links": [],
+      "pageSize": 10,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/Time|Value/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sum(kube_pod_container_info{pod=\"$pod\",namespace=\"TIDB_NAMESPACE\"}) by (pod, container, image)",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pod Image Version",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "k8s-cluster",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 5,
+      "links": [],
+      "pageSize": 10,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/Time|instance|uid|__name__|created_by_kind|created_by_name|job|endpoint|host_ip|namespace|service|Value/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "kube_pod_info{namespace=\"TIDB_NAMESPACE\", pod=\"$pod\"} * on(namespace, pod) group_left(phase) (kube_pod_status_phase{namespace=\"TIDB_NAMESPACE\", pod=\"$pod\"} == 1)",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pod Mapping",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "k8s-cluster",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "id": 2,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeat": null,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(container_memory_rss{ namespace=\"TIDB_NAMESPACE\", pod_name=\"$pod\", container_name!=\"POD\", container_name!=\"\"}) by (container_name)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "{{container_name}} (RSS)",
+          "refId": "E"
+        },
+        {
+          "expr": "sum(container_memory_cache{namespace=\"TIDB_NAMESPACE\", pod_name=\"$pod\", container_name!=\"POD\", container_name!=\"\"}) by (container_name)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "{{container_name}} (Cache)",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(container_memory_working_set_bytes{ namespace=\"TIDB_NAMESPACE\", pod_name=\"$pod\", container_name!=\"POD\", container_name!=\"\"}) by (container_name)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "{{container_name}} (WorkingSet)",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{ namespace=\"TIDB_NAMESPACE\", pod=\"$pod\"}) by (namespace, pod, container)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "{{container}} (Limit)",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{ namespace=\"TIDB_NAMESPACE\", pod=\"$pod\"}) by (namespace, pod, container)",
+          "format": "time_series",
+          "instant": false,
+          "intervalFactor": 2,
+          "legendFormat": "{{container}} (Request)",
+          "refId": "D"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Memory Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "k8s-cluster",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "id": 3,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeat": null,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"TIDB_NAMESPACE\", image!=\"\", pod_name=\"$pod\", container_name=~\"$container\", container_name!=\"POD\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "Current: {{ container_name }}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum by(container) (kube_pod_container_resource_requests{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"TIDB_NAMESPACE\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "Requested: {{ container }}",
+          "refId": "B"
+        },
+        {
+          "expr": "sum by(container) (kube_pod_container_resource_limits{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"TIDB_NAMESPACE\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "Limit: {{ container }}",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU Usage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "k8s-cluster",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "id": 4,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeat": null,
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sort_desc(sum by (pod_name) (rate(container_network_receive_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"TIDB_NAMESPACE\", pod_name=\"$pod\"}[1m])))",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "RX",
+          "refId": "A"
+        },
+        {
+          "expr": "sort_desc(sum by (pod_name) (rate(container_network_transmit_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"TIDB_NAMESPACE\", pod_name=\"$pod\"}[1m])))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "TX",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Network I/O",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "k8s-cluster",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "id": 14,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(container_fs_writes_bytes_total{pod_name=\"$pod\",container_name=\"$container\"}[1m])) by (container_name,device)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Write: {{container_name}}-{{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(container_fs_reads_bytes_total{pod_name=\"$pod\",container_name=\"$container\"}[1m])) by (container_name,device)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Read: {{container_name}}-{{device}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Pod Disk IO",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 18,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "isNone": true,
+          "text": "None",
+          "value": ""
+        },
+        "datasource": "k8s-cluster",
+        "definition": "",
+        "hide": 2,
+        "includeAll": false,
+        "label": "cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": "label_values(kube_pod_info, cluster)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "pi-jtzwt",
+          "value": "pi-jtzwt"
+        },
+        "datasource": "k8s-cluster",
+        "definition": "label_values(kube_pod_info{cluster=\"$cluster\", namespace=~\"TIDB_NAMESPACE\"}, pod)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Pod",
+        "multi": false,
+        "name": "pod",
+        "options": [],
+        "query": "label_values(kube_pod_info{cluster=\"$cluster\", namespace=~\"TIDB_NAMESPACE\"}, pod)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "k8s-cluster",
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Container",
+        "multi": false,
+        "name": "container",
+        "options": [],
+        "query": "label_values(kube_pod_container_info{cluster=\"$cluster\", namespace=\"TIDB_NAMESPACE\", pod=\"$pod\"}, container)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "tags": [],
+          "text": "tikv-tennix-tikv-2",
+          "value": "tikv-tennix-tikv-2"
+        },
+        "datasource": "k8s-cluster",
+        "definition": "label_values(kubelet_volume_stats_capacity_bytes{namespace=~\"TIDB_NAMESPACE\"},persistentvolumeclaim)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "pvc",
+        "query": "label_values(kubelet_volume_stats_capacity_bytes{namespace=~\"TIDB_NAMESPACE\"},persistentvolumeclaim)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "Test-Cluster-Pods",
+  "uid": "ab4f13a9892a76a4d21ce8c2445bf4ea",
+  "version": 55
+}
