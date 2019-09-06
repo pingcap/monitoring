@@ -33,6 +33,9 @@ import (
 	"strings"
 )
 
+// expect_basic_file_size is used to check file number in auto generated directory.
+const expect_basic_file_size  = 17
+
 var (
 	lowest_version string
 	repository_url string
@@ -50,18 +53,19 @@ var (
 		"pd.json": "Test-Cluster-PD",
 		"tikv_pull.json": "Test-Cluster-TiKV",
 		"overview_pull.json": "Test-Cluster-Overview",
+		"lightning.json": "Test-Cluster-Lightning",
 	}
 
-	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml"}
+	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml", "binlog.rules.yml", "lightning.rules.yml"}
 	overviewExlcudeItems = []string{"Services Port Status", "System Info"}
 	tikvExcludeItems = []string{"IO utilization"}
 	//dockerfiles = []string{"Dockerfile", "init.sh"}
 
 	localFiles = map[string]string {
-		"datasource/disk-datasource.yaml": "datasources",
+		"datasource/k8s-datasource.yaml": "datasources",
 		"datasource/tidb-cluster-datasource.yaml": "datasources",
-		"pods/pods.json": "dashboards",
-		"nodes/nodes.json": "dashboards",
+		"dashboards/pods/pods.json": "dashboards",
+		"dashboards/nodes/nodes.json": "dashboards",
 		"Dockerfile": ".",
 		"init.sh": ".",
 	}
@@ -108,11 +112,24 @@ func exportMonitorData() {
 		fetchDashboard(tag, dir)
 		fetchRules(tag, dir)
 		return dir
-	}).Each(func(dir string) {
-
+	}).Peek(func(dir string) {
+		// copy local files
 		stream.FromMapEntries(localFiles).Each(func(entry stream.MapEntry) {
 			copyLocalfiles(baseDir, dir, entry.Key.(reflect.Value).String(), entry.Value.(string))
 		})
+	}).Each(func(dir string) {
+		// check dir files
+		count := 0
+		filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+			if !info.IsDir() {
+				count++
+			}
+			return nil
+		})
+
+		if count < expect_basic_file_size {
+			checkErr(errors.New("file number is not matched"), fmt.Sprintf("dir=%s, expectSize=%d, actualSize=%d", dir, expect_basic_file_size, count))
+		}
 	})
 }
 

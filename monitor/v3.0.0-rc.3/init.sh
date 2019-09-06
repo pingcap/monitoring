@@ -32,6 +32,17 @@ if $TIDB_ENABLE_BINLOG
 then
     cp /tmp/binlog.json $GF_PROVISIONING_PATH/dashboards
     sed -i 's/Test-Cluster-Binlog/'$TIDB_CLUSTER_NAME'-Binlog/g'  $GF_PROVISIONING_PATH/dashboards/binlog.json
+else
+    rm -rf /tmp/binlog*.yml
+fi
+
+# Lighting
+if $TIDB_ENABLE_IMPORTER
+then
+    cp /tmp/lightning.json $GF_PROVISIONING_PATH/dashboards
+    sed -i 's/Test-Cluster-Lightning/'$TIDB_CLUSTER_NAME'-Lightning/g'  $GF_PROVISIONING_PATH/dashboards/lightning.json
+else
+    rm -rf /tmp/lightning*.yml
 fi
 
 # Rules
@@ -54,7 +65,7 @@ if [ $GF_DATASOURCE_PATH ];
 then
     if [ $GF_NODE_EXPORTER_DATASOURCE_URL ];
     then
-        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_NODE_EXPORTER_DATASOURCE_URL',g' /tmp/disk-datasource.yaml
+        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_NODE_EXPORTER_DATASOURCE_URL',g' /tmp/k8s-datasource.yaml
     fi
 
     if [ $GF_TIDB_CLUSTER_URL ];
@@ -62,20 +73,18 @@ then
         sed -i 's,http://127.0.0.1:9090,'$GF_TIDB_CLUSTER_URL',g' /tmp/tidb-cluster-datasource.yaml
     fi
 
-    cp /tmp/disk-datasource.yaml $GF_DATASOURCE_PATH/
+    cp /tmp/k8s-datasource.yaml $GF_DATASOURCE_PATH/
     cp /tmp/tidb-cluster-datasource.yaml $GF_DATASOURCE_PATH/
 
     # pods
     if [ $TIDB_CLUSTER_NAMESPACE ];
     then
-         sed -i 's/TIDB_NAMESPACE/'$TIDB_CLUSTER_NAMESPACE'/g' /tmp/pods.json
+         sed -i 's/$namespace/'$TIDB_CLUSTER_NAMESPACE'/g' /tmp/pods.json
     fi
-    sed -i 's/Test-Cluster-Pods/'$TIDB_CLUSTER_NAME'-Pods/g' /tmp/pods.json
+    sed -i 's/Test-Cluster-Pods-Info/'$TIDB_CLUSTER_NAME'-Pods-Info/g' /tmp/pods.json
     cp /tmp/pods.json $GF_PROVISIONING_PATH/dashboards
 
     # nodes
-     sed -i 's/Test-Cluster-Nodes/'$TIDB_CLUSTER_NAME'-Nodes/g' /tmp/nodes.json
      cp /tmp/nodes.json $GF_PROVISIONING_PATH/dashboards
-
 fi
 
