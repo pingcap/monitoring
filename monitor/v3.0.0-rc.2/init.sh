@@ -56,16 +56,16 @@ if [ $GF_DATASOURCE_PATH ];
 then
     if [ $GF_K8S_PROMETHEUS_URL ];
     then
-        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_K8S_PROMETHEUS_URL',g' /tmp/k8s-datasource.yaml
+        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_K8S_PROMETHEUS_URL',g' /tmp/k8s-datasource.json
     fi
 
     if [ $GF_TIDB_PROMETHEUS_URL ];
     then
-        sed -i 's,http://127.0.0.1:9090,'$GF_TIDB_PROMETHEUS_URL',g' /tmp/tidb-cluster-datasource.yaml
+        sed -i 's,http://127.0.0.1:9090,'$GF_TIDB_PROMETHEUS_URL',g' /tmp/tidb-cluster-datasource.json
     fi
 
-    cp /tmp/k8s-datasource.yaml $GF_DATASOURCE_PATH/
-    cp /tmp/tidb-cluster-datasource.yaml $GF_DATASOURCE_PATH/
+    cp /tmp/k8s-datasource.json $GF_DATASOURCE_PATH/
+    cp /tmp/tidb-cluster-datasource.json $GF_DATASOURCE_PATH/
 
     # pods
     if [ $TIDB_CLUSTER_NAMESPACE ];
