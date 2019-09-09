@@ -28,22 +28,13 @@ else
 fi
 
 # Binlog dashboard
-if $TIDB_ENABLE_BINLOG
-then
-    cp /tmp/binlog.json $GF_PROVISIONING_PATH/dashboards
-    sed -i 's/Test-Cluster-Binlog/'$TIDB_CLUSTER_NAME'-Binlog/g'  $GF_PROVISIONING_PATH/dashboards/binlog.json
-else
-    rm -rf /tmp/binlog*.yml
-fi
+cp /tmp/binlog.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-Binlog/'$TIDB_CLUSTER_NAME'-Binlog/g'  $GF_PROVISIONING_PATH/dashboards/binlog.json
 
 # Lighting
-if $TIDB_ENABLE_IMPORTER
-then
-    cp /tmp/lightning.json $GF_PROVISIONING_PATH/dashboards
-    sed -i 's/Test-Cluster-Lightning/'$TIDB_CLUSTER_NAME'-Lightning/g'  $GF_PROVISIONING_PATH/dashboards/lightning.json
-else
-    rm -rf /tmp/lightning*.yml
-fi
+cp /tmp/lightning.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-Lightning/'$TIDB_CLUSTER_NAME'-Lightning/g'  $GF_PROVISIONING_PATH/dashboards/lightning.json
+
 
 # Rules
 if [ ! -d $PROM_CONFIG_PATH/rules  ];then
