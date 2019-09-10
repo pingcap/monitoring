@@ -50,6 +50,14 @@ for file in $PROM_CONFIG_PATH/rules/*
 do
     sed -i 's/ENV_LABELS_ENV/'$TIDB_CLUSTER_NAME'/g' $file
 done
+# Copy Persistent rules to override raw files
+if [ $PROM_PERSISTENT_DIR ];
+then
+    if [ -d $PROM_PERSISTENT_DIR/latest-rules/${TIDB_VERSION##*/} ];then
+        cp -f $PROM_PERSISTENT_DIR/latest-rules/${TIDB_VERSION##*/}/*.rules.yml $PROM_CONFIG_PATH/rules
+    fi
+fi
+
 
 # Datasources
 if [ $GF_DATASOURCE_PATH ];
