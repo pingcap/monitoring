@@ -50,8 +50,9 @@ for file in $PROM_CONFIG_PATH/rules/*
 do
     sed -i 's/ENV_LABELS_ENV/'$TIDB_CLUSTER_NAME'/g' $file
 done
+
 # Copy Persistent rules to override raw files
-if [ $PROM_PERSISTENT_DIR ];
+if [ ! -z $PROM_PERSISTENT_DIR ];
 then
     if [ -d $PROM_PERSISTENT_DIR/latest-rules/${TIDB_VERSION##*/} ];then
         cp -f $PROM_PERSISTENT_DIR/latest-rules/${TIDB_VERSION##*/}/*.rules.yml $PROM_CONFIG_PATH/rules
@@ -60,25 +61,27 @@ fi
 
 
 # Datasources
-if [ $GF_DATASOURCE_PATH ];
+if [ ! -z $GF_DATASOURCE_PATH ];
 then
-    if [ $GF_K8S_PROMETHEUS_URL ];
+    if [ ! -z $GF_K8S_PROMETHEUS_URL ];
     then
-        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_K8S_PROMETHEUS_URL',g' /tmp/k8s-datasource.json
+        sed -i 's,http://prometheus-k8s.monitoring.svc:9090,'$GF_K8S_PROMETHEUS_URL',g' /tmp/k8s-datasource.yaml
     fi
 
-    if [ $GF_TIDB_PROMETHEUS_URL ];
+    if [ ! -z $GF_TIDB_PROMETHEUS_URL ];
     then
-        sed -i 's,http://127.0.0.1:9090,'$GF_TIDB_PROMETHEUS_URL',g' /tmp/tidb-cluster-datasource.json
+        sed -i 's,http://127.0.0.1:9090,'$GF_TIDB_PROMETHEUS_URL',g' /tmp/tidb-cluster-datasource.yaml
     fi
 
-    cp /tmp/k8s-datasource.json $GF_DATASOURCE_PATH/
-    cp /tmp/tidb-cluster-datasource.json $GF_DATASOURCE_PATH/
+    cp /tmp/k8s-datasource.yaml $GF_DATASOURCE_PATH/
+    cp /tmp/tidb-cluster-datasource.yaml $GF_DATASOURCE_PATH/
 
     # pods
-    if [ $TIDB_CLUSTER_NAMESPACE ];
+    if [ ! -z $TIDB_CLUSTER_NAMESPACE ];
     then
          sed -i 's/$namespace/'$TIDB_CLUSTER_NAMESPACE'/g' /tmp/pods.json
+    else
+         sed -i 's/$namespace/default/g' /tmp/pods.json
     fi
     sed -i 's/Test-Cluster-Pods-Info/'$TIDB_CLUSTER_NAME'-Pods-Info/g' /tmp/pods.json
     cp /tmp/pods.json $GF_PROVISIONING_PATH/dashboards
