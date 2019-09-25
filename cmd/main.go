@@ -62,8 +62,8 @@ var (
 	//dockerfiles = []string{"Dockerfile", "init.sh"}
 
 	localFiles = map[string]string {
-		"datasource/k8s-datasource.json": "datasources",
-		"datasource/tidb-cluster-datasource.json": "datasources",
+		"datasource/k8s-datasource.yaml": "datasources",
+		"datasource/tidb-cluster-datasource.yaml": "datasources",
 		"dashboards/pods/pods.json": "dashboards",
 		"dashboards/nodes/nodes.json": "dashboards",
 		"Dockerfile": ".",

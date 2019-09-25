@@ -6,8 +6,8 @@ import (
 	"net/url"
 )
 
-func NewService(promUrl *url.URL, watchDir string) *gin.Engine {
-	s := bizlogic.NewServer(promUrl, watchDir)
+func NewService(promUrl *url.URL, watchDir string, needStoreFileToStorePath bool, storePath string) *gin.Engine {
+	s := bizlogic.NewServer(promUrl, watchDir, needStoreFileToStorePath, storePath)
 	r := gin.Default()
 
 	ws := r.Group("monitoring")

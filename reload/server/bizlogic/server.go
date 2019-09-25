@@ -6,6 +6,7 @@ import (
 	"github.com/pingcap/monitoring/reload/server/types"
 	"github.com/pingcap/monitoring/reload/server/utils"
 	"github.com/pkg/errors"
+	"github.com/prometheus/common/log"
 	"github.com/prometheus/prometheus/pkg/rulefmt"
 	"github.com/wushilin/stream"
 	"gopkg.in/yaml.v2"
@@ -19,12 +20,16 @@ import (
 type server struct {
 	url *url.URL
 	dir string
+	storePath string
+	needStoreFileToStorePath bool
 }
 
-func NewServer(promURL *url.URL, watchDir string) *server {
+func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool, storePath string) *server {
 	return &server{
 		url: promURL,
 		dir: watchDir,
+		needStoreFileToStorePath: needStoreFileToStorePath,
+		storePath: storePath,
 	}
 }
 
@@ -115,11 +120,20 @@ func (s *server) UpdateConfig(c *gin.Context) {
 				return false
 			}
 			return true
-		}).Each(func (data []byte) {
+		}).Peek(func (data []byte) {
 			if err := ioutil.WriteFile(fmt.Sprintf("%s%c%s", s.dir, filepath.Separator, configName), data, os.ModePerm); err != nil {
 				c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
 			} else {
 				c.JSON(http.StatusOK, config)
+			}
+		}).Filter(func (data []byte) bool{
+			if !s.needStoreFileToStorePath {
+				log.Info("do not need to store file to storepath")
+			}
+			return s.needStoreFileToStorePath
+		}).Each(func (data []byte) {
+			if err := ioutil.WriteFile(fmt.Sprintf("%s%c%s", s.storePath, filepath.Separator, configName), data, os.ModePerm); err != nil {
+				log.Error("write file to store path failed", err)
 			}
 		})
 	}
@@ -143,4 +157,3 @@ func parse(content []byte) error {
 
 	return errors.New(errStr)
 }
-
