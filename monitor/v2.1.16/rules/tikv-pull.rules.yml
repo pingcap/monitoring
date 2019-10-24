@@ -8,6 +8,7 @@ groups:
       env: ENV_LABELS_ENV
       level: emergency
       expr: process_resident_memory_bytes{job=~"tikv",instance=~".*"} - (process_resident_memory_bytes{job=~"tikv",instance=~".*"} offset 5m) > 5*1024*1024*1024
+      for: 5m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -20,6 +21,7 @@ groups:
       env: ENV_LABELS_ENV
       level: emergency
       expr: sum(increase(tidb_tikvclient_gc_action_result{type="success"}[6h])) < 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -32,6 +34,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  sum(rate(tikv_server_report_failure_msg_total{type="unreachable"}[10m])) BY (store_id) > 10
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -44,6 +47,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  sum(rate(tikv_channel_full_total[10m])) BY (type, instance) > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -56,6 +60,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  delta( tikv_engine_write_stall[10m])  > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -68,6 +73,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  histogram_quantile(0.99, sum(rate(tikv_raftstore_log_lag_bucket[1m])) by (le, instance))  > 5000
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -80,6 +86,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  histogram_quantile(0.99, sum(rate(tikv_storage_engine_async_request_duration_seconds_bucket{type="snapshot"}[1m])) by (le, instance, type)) > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -92,6 +99,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  histogram_quantile(0.99, sum(rate(tikv_storage_engine_async_request_duration_seconds_bucket{type="write"}[1m])) by (le, instance, type)) > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -104,6 +112,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  histogram_quantile(0.9999, sum(rate(tikv_coprocessor_request_wait_seconds_bucket[1m])) by (le, instance, req)) > 10
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -116,6 +125,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr: sum(rate(tikv_thread_cpu_seconds_total{name=~"raftstore_.*"}[1m])) by (instance, name)  > 0.8
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -128,6 +138,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr: histogram_quantile(0.99, sum(rate(tikv_raftstore_append_log_duration_seconds_bucket[1m])) by (le, instance)) > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -140,6 +151,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr: histogram_quantile(0.99, sum(rate(tikv_raftstore_apply_log_duration_seconds_bucket[1m])) by (le, instance)) > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -152,6 +164,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  histogram_quantile(0.99, sum(rate(tikv_scheduler_latch_wait_duration_seconds_bucket[1m])) by (le, instance, type))  > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -164,6 +177,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  sum(rate(tikv_thread_cpu_seconds_total{name="apply_worker"}[1m])) by (instance) > 0.9
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -176,6 +190,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr: sum(increase(tidb_tikvclient_gc_action_result{type="fail"}[1m])) > 10
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -188,6 +203,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: delta(tikv_pd_heartbeat_tick_total{type="leader"}[30s]) < -10
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -200,6 +216,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: histogram_quantile(0.999, sum(rate(tikv_raftstore_raft_process_duration_secs_bucket{type='ready'}[1m])) by (le, instance, type)) > 2
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -212,6 +229,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: histogram_quantile(0.999, sum(rate(tikv_raftstore_raft_process_duration_secs_bucket{type='tick'}[1m])) by (le, instance, type)) > 2
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -224,6 +242,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  abs(delta( tikv_scheduler_contex_total[5m])) > 1000
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -236,6 +255,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  histogram_quantile(0.99, sum(rate(tikv_scheduler_command_duration_seconds_bucket[1m])) by (le, instance, type)  / 1000)  > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -248,6 +268,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum(rate(tikv_thread_cpu_seconds_total{name=~"storage_schedul.*"}[1m])) by (instance) > 0.8
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -260,6 +281,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  delta( tikv_coprocessor_outdated_request_wait_seconds_count[10m] )  > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -272,6 +294,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  increase(tikv_coprocessor_request_error{reason!="lock"}[10m]) > 100
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, reason: {{ $labels.reason }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -284,6 +307,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  increase(tikv_coprocessor_request_error{reason="lock"}[10m]) > 10000
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, reason: {{ $labels.reason }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -296,6 +320,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  delta( tikv_coprocessor_pending_request[10m]) > 5000
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -308,6 +333,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum(rate(tikv_thread_cpu_seconds_total{name=~"cop_.*"}[1m])) by (instance) / ( count(tikv_thread_cpu_seconds_total{name=~"cop_.*"}) *  0.9 ) / count(count(tikv_thread_cpu_seconds_total) by (instance)) > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -320,6 +346,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum(tikv_worker_pending_task_total) BY (instance,name)  > 1000
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -332,6 +359,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  count( (sum(tikv_store_size_bytes{type="available"}) by (instance) / sum(tikv_store_size_bytes{type="capacity"}) by (instance) < 0.2) and (sum(tikv_raftstore_snapshot_traffic_total{type="applying"}) by (instance) > 0 ) ) > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -343,7 +371,8 @@ groups:
     labels:
       env: ENV_LABELS_ENV
       level: warning
-      expr: histogram_quantile(0.99, sum(rate(tikv_raftstore_region_size_bucket[1m])) by (le)) > 1073741824 
+      expr: histogram_quantile(0.99, sum(rate(tikv_raftstore_region_size_bucket[1m])) by (le)) > 1073741824
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'

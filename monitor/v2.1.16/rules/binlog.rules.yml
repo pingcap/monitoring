@@ -19,6 +19,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr: (time() - binlog_drainer_checkpoint_tso / 1000) > 3600
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -31,6 +32,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: histogram_quantile(0.9, rate(binlog_pump_rpc_duration_seconds_bucket{method="WriteBinlog"}[5m]))
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -43,6 +45,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: histogram_quantile(0.9, rate(binlog_pump_storage_write_binlog_duration_time_bucket{type="batch"}[5m]))
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -55,6 +58,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: binlog_pump_storage_storage_size_bytes{type="available"} < 20 * 1024 * 1024 * 1024
+      for: 10s
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -67,6 +71,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: histogram_quantile(0.9, rate(binlog_drainer_txn_duration_time_bucket[1m])) > 10
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'

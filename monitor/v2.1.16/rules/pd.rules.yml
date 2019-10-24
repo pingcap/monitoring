@@ -8,6 +8,7 @@ groups:
       env: ENV_LABELS_ENV
       level: emergency
       expr:  sum ( pd_cluster_status{type="store_down_count"} ) > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -20,6 +21,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m])) by (instance,job,le) ) > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -32,6 +34,7 @@ groups:
       env: ENV_LABELS_ENV
       level: critical
       expr:  sum( pd_regions_status{type="miss_peer_region_count"} )  > 100
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -44,6 +47,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum ( pd_cluster_status{type="store_disconnected_count"} )   > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -56,6 +60,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum ( pd_cluster_status{type="store_low_space_count"} )  > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -68,6 +73,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  histogram_quantile(0.99, sum(rate(etcd_network_peer_round_trip_time_seconds_bucket[1m])) by (To,instance,job,le) ) > 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -80,6 +86,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{type="tso"}[1m])) by (instance,job,le) ) > 0.1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -92,6 +99,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum ( pd_regions_status{type="down_peer_region_count"} ) > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -104,6 +112,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: sum ( pd_regions_status{type="incorrect_namespace_region_count"} ) > 0
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -116,6 +125,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum( pd_regions_status{type="pending_peer_region_count"} )  > 100
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -128,6 +138,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  count( changes(pd_server_tso{type="save"}[10m]) > 0 )   >= 2
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
       value: '{{ $value }}'
@@ -140,6 +151,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr:  sum(pd_cluster_status{type="storage_size"}) / sum(pd_cluster_status{type="storage_capacity"}) * 100  > 80
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
@@ -152,6 +164,7 @@ groups:
       env: ENV_LABELS_ENV
       level: warning
       expr: changes(pd_server_tso{type="system_time_slow"}[10m]) >= 1
+      for: 1m
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
       value: '{{ $value }}'
