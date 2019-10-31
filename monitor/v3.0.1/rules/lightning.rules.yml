@@ -6,9 +6,10 @@ groups:
     for: 1m
     labels:
       env: ENV_LABELS_ENV
+      expr: sum ( lightning_tables{result="failure"} ) > 0
       level: emergency
-      expr:  sum ( lightning_tables{result="failure"} ) > 0
     annotations:
-      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
-      value: '{{ $value }}'
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
       summary: Lightning failed to import a table
+      value: '{{ $value }}'

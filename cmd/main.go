@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/go-version"
 	"github.com/pkg/errors"
+	"github.com/prometheus/prometheus/pkg/rulefmt"
 	"github.com/spf13/cobra"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -31,6 +32,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // expect_basic_file_size is used to check file number in auto generated directory.
@@ -68,6 +70,12 @@ var (
 		"dashboards/nodes/nodes.json": "dashboards",
 		"Dockerfile": ".",
 		"init.sh": ".",
+	}
+
+	needToReplaceExpr = map[string]string {
+		strings.ToUpper("pd_cluster_low_space"): `(sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
+		strings.ToUpper("pd_cluster_lost_connect_tikv_nums"): `(sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
+		strings.ToUpper("pd_pending_peer_region_count"): `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 	}
 )
 
@@ -161,7 +169,14 @@ func fetchRules(tag string, baseDir string) {
 
 	stream.FromArray(rules).Each(func(rule string) {
 		body := fetchContent(fmt.Sprintf("%s/%s/roles/prometheus/files/%s", repository_url, tag, rule), tag, rule)
-		writeFile(dir, rule, body)
+		if body == "" {
+			return
+		}
+
+		newRule, err := replaceAlertExpr([]byte(body))
+		checkErr(err, "replace expr failed")
+
+		writeFile(dir, rule, string(newRule))
 	})
 }
 
@@ -355,4 +370,38 @@ func exist(path string) bool {
 	} else {
 		return true
 	}
+}
+
+func replaceAlertExpr(content []byte) ([]byte, error){
+	var groups rulefmt.RuleGroups
+	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
+		return nil, err
+	}
+
+	var newGS rulefmt.RuleGroups
+	for _, group := range groups.Groups {
+		newG := rulefmt.RuleGroup{
+			Interval: group.Interval,
+			Name: group.Name,
+			Rules: make([]rulefmt.Rule, len(group.Rules)),
+		}
+
+		stream.FromArray(group.Rules).Map(func(rule rulefmt.Rule) rulefmt.Rule{
+			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
+			if !ok {
+				return rule
+			}
+
+			rule.Expr = newExpr
+			if _, ok := rule.Labels["expr"]; ok {
+				rule.Labels["expr"] = newExpr
+			}
+
+			return rule
+		}).CollectTo(newG.Rules)
+
+		newGS.Groups = append(newGS.Groups, newG)
+	}
+
+	return yaml.Marshal(newGS)
 }
