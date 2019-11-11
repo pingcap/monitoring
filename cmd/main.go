@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/go-version"
 	"github.com/pkg/errors"
+	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/rulefmt"
 	"github.com/spf13/cobra"
 	"github.com/tidwall/gjson"
@@ -33,10 +34,14 @@ import (
 	"reflect"
 	"strings"
 	yaml "gopkg.in/yaml.v2"
+	"time"
 )
 
-// expect_basic_file_size is used to check file number in auto generated directory.
-const expect_basic_file_size  = 17
+const (
+	// expect_basic_file_size is used to check file number in auto generated directory.
+	expect_basic_file_size  = 17
+	ALERT_FOR_CONFIG = "5m"
+)
 
 var (
 	lowest_version string
@@ -77,9 +82,12 @@ var (
 		strings.ToUpper("pd_cluster_lost_connect_tikv_nums"): `(sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 		strings.ToUpper("pd_pending_peer_region_count"): `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 	}
+
+	forConfig, configerr = model.ParseDuration(ALERT_FOR_CONFIG)
 )
 
 func main() {
+	checkErr(configerr, "config for duration failed")
 	var rootCmd = &cobra.Command{
 		Use: "monitoring",
 		Run: func(co *cobra.Command, args []string) {
@@ -390,6 +398,10 @@ func replaceAlertExpr(content []byte) ([]byte, error){
 			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
 			if !ok {
 				return rule
+			}
+
+			if time.Duration(rule.For) <= (time.Second * 60) {
+				rule.For = forConfig
 			}
 
 			rule.Expr = newExpr
