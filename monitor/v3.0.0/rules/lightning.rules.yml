@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: Lightning_import_failure_tables_count
     expr: sum ( lightning_tables{result="failure"} ) > 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: sum ( lightning_tables{result="failure"} ) > 0

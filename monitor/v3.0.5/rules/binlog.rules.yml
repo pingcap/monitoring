@@ -3,7 +3,6 @@ groups:
   rules:
   - alert: binlog_pump_storage_error_count
     expr: changes(binlog_pump_storage_error_count[1m]) > 0
-    for: 5m
     labels:
       env: ENV_LABELS_ENV
       expr: changes(binlog_pump_storage_error_count[1m]) > 0
@@ -15,7 +14,7 @@ groups:
       value: '{{ $value }}'
   - alert: binlog_drainer_checkpoint_high_delay
     expr: (time() - binlog_drainer_checkpoint_tso / 1000) > 3600
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: (time() - binlog_drainer_checkpoint_tso / 1000) > 3600
@@ -28,7 +27,7 @@ groups:
   - alert: binlog_pump_write_binlog_rpc_duration_seconds_bucket
     expr: histogram_quantile(0.9, rate(binlog_pump_rpc_duration_seconds_bucket{method="WriteBinlog"}[5m]))
       > 1
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: histogram_quantile(0.9, rate(binlog_pump_rpc_duration_seconds_bucket{method="WriteBinlog"}[5m]))
@@ -41,7 +40,7 @@ groups:
   - alert: binlog_pump_storage_write_binlog_duration_time_bucket
     expr: histogram_quantile(0.9, rate(binlog_pump_storage_write_binlog_duration_time_bucket{type="batch"}[5m]))
       > 1
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: histogram_quantile(0.9, rate(binlog_pump_storage_write_binlog_duration_time_bucket{type="batch"}[5m]))
@@ -54,7 +53,7 @@ groups:
   - alert: binlog_pump_storage_available_size_less_than_20G
     expr: binlog_pump_storage_storage_size_bytes{type="available"} < 20 * 1024 * 1024
       * 1024
-    for: 5m
+    for: 10s
     labels:
       env: ENV_LABELS_ENV
       expr: binlog_pump_storage_storage_size_bytes{type="available"} < 20 * 1024 *
@@ -68,7 +67,7 @@ groups:
   - alert: binlog_drainer_execute_duration_time_more_than_10s
     expr: histogram_quantile(0.9, rate(binlog_drainer_execute_duration_time_bucket[1m]))
       > 10
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: histogram_quantile(0.9, rate(binlog_drainer_txn_duration_time_bucket[1m]))
@@ -81,7 +80,6 @@ groups:
       value: '{{ $value }}'
   - alert: binlog_drainer_checkpoint_tso_no_change_for_1m
     expr: changes(binlog_drainer_checkpoint_tso[1m]) < 1
-    for: 5m
     labels:
       env: ENV_LABELS_ENV
       expr: changes(binlog_drainer_checkpoint_tso[1m]) < 1

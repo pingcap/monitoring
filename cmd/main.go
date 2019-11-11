@@ -27,60 +27,61 @@ import (
 	"gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/storage/memory"
+	yaml "gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
-	yaml "gopkg.in/yaml.v2"
 	"time"
 )
 
 const (
 	// expect_basic_file_size is used to check file number in auto generated directory.
-	expect_basic_file_size  = 17
-	ALERT_FOR_CONFIG = "5m"
+	expect_basic_file_size = 17
+	ALERT_FOR_CONFIG       = "5m"
 )
 
 var (
-	lowest_version string
-	repository_url string
-	baseDir string
+	lowest_version  string
+	repository_url  string
+	baseDir         string
 	datasource_name = "tidb-cluster"
 	//dashboards = []string{"binlog.json", "tidb.json", "overview.json", "tikv_details.json", "tikv_summary.json", "tikv_trouble_shooting.json", "pd.json", "tikv_pull.json"}
 
 	dashboards = map[string]string{
-		"binlog.json": "Test-Cluster-Binlog",
-		"tidb.json": "Test-Cluster-TiDB",
-		"overview.json": "Test-Cluster-Overview",
-		"tikv_details.json": "Test-Cluster-TiKV-Details",
-		"tikv_summary.json": "Test-Cluster-TiKV-Summary",
+		"binlog.json":                "Test-Cluster-Binlog",
+		"tidb.json":                  "Test-Cluster-TiDB",
+		"overview.json":              "Test-Cluster-Overview",
+		"tikv_details.json":          "Test-Cluster-TiKV-Details",
+		"tikv_summary.json":          "Test-Cluster-TiKV-Summary",
 		"tikv_trouble_shooting.json": "Test-Cluster-TiKV-Trouble-Shooting",
-		"pd.json": "Test-Cluster-PD",
-		"tikv_pull.json": "Test-Cluster-TiKV",
-		"overview_pull.json": "Test-Cluster-Overview",
-		"lightning.json": "Test-Cluster-Lightning",
+		"pd.json":                    "Test-Cluster-PD",
+		"tikv_pull.json":             "Test-Cluster-TiKV",
+		"overview_pull.json":         "Test-Cluster-Overview",
+		"lightning.json":             "Test-Cluster-Lightning",
 	}
 
-	rules = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml", "binlog.rules.yml", "lightning.rules.yml"}
+	rules                = []string{"tidb.rules.yml", "pd.rules.yml", "tikv-pull.rules.yml", "tikv.rules.yml", "binlog.rules.yml", "lightning.rules.yml"}
 	overviewExlcudeItems = []string{"Services Port Status", "System Info"}
-	tikvExcludeItems = []string{"IO utilization"}
+	tikvExcludeItems     = []string{"IO utilization"}
 	//dockerfiles = []string{"Dockerfile", "init.sh"}
 
-	localFiles = map[string]string {
-		"datasource/k8s-datasource.yaml": "datasources",
+	localFiles = map[string]string{
+		"datasource/k8s-datasource.yaml":          "datasources",
 		"datasource/tidb-cluster-datasource.yaml": "datasources",
-		"dashboards/pods/pods.json": "dashboards",
-		"dashboards/nodes/nodes.json": "dashboards",
-		"Dockerfile": ".",
-		"init.sh": ".",
+		"dashboards/pods/pods.json":               "dashboards",
+		"dashboards/nodes/nodes.json":             "dashboards",
+		"Dockerfile":                              ".",
+		"init.sh":                                 ".",
 	}
 
-	needToReplaceExpr = map[string]string {
-		strings.ToUpper("pd_cluster_low_space"): `(sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
+	needToReplaceExpr = map[string]string{
+		strings.ToUpper("pd_cluster_low_space"):              `(sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 		strings.ToUpper("pd_cluster_lost_connect_tikv_nums"): `(sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
-		strings.ToUpper("pd_pending_peer_region_count"): `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
+		strings.ToUpper("pd_pending_peer_region_count"):      `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
+		strings.ToUpper("pd_miss_peer_region_count"):         `(sum( pd_regions_status{type="miss_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 	}
 
 	forConfig, configerr = model.ParseDuration(ALERT_FOR_CONFIG)
@@ -95,8 +96,8 @@ func main() {
 		},
 	}
 
-	rootCmd.Flags().StringVar(&baseDir,"path", ".", "the base directory of the program")
-	rootCmd.Flags().StringVar( &lowest_version,"lowest-version", "2.1.8", "the lowest tidb version")
+	rootCmd.Flags().StringVar(&baseDir, "path", ".", "the base directory of the program")
+	rootCmd.Flags().StringVar(&lowest_version, "lowest-version", "2.1.8", "the lowest tidb version")
 	rootCmd.Flags().StringVar(&repository_url, "source-url", "https://raw.githubusercontent.com/pingcap/tidb-ansible", "the tidb monitor source address")
 	rootCmd.MarkFlagRequired("path")
 	rootCmd.Execute()
@@ -117,11 +118,11 @@ func exportMonitorData() {
 
 	stream.FromArray(refs).Filter(func(ref *plumbing.Reference) bool {
 		return ref.Name().IsTag()
-	}).Map(func(ref *plumbing.Reference) string{
+	}).Map(func(ref *plumbing.Reference) string {
 		return ref.Name().Short()
-	}).Filter(func(tag string) bool{
+	}).Filter(func(tag string) bool {
 		return compareVersion(tag)
-	}).Map(func (tag string) string{
+	}).Map(func(tag string) string {
 		dir := fmt.Sprintf("%s%c%s", monitorDir, filepath.Separator, tag)
 		fmt.Println("tagpath=" + tag)
 
@@ -152,7 +153,7 @@ func exportMonitorData() {
 // fetchDashboard fetch dashboards from the source and replace some variables in the file.
 func fetchDashboard(tag string, baseDir string) {
 	dir := fmt.Sprintf("%s%cdashboards", baseDir, filepath.Separator)
-	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path=" + dir)
+	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path="+dir)
 
 	stream.FromMapEntries(dashboards).Each(func(entry stream.MapEntry) {
 		dashboard := entry.Key.(reflect.Value).String()
@@ -162,7 +163,7 @@ func fetchDashboard(tag string, baseDir string) {
 }
 
 // convertDashboardFileName convert file name
-func convertDashboardFileName(dashboard string) string{
+func convertDashboardFileName(dashboard string) string {
 	if strings.HasPrefix(dashboard, "overview") {
 		return "overview.json"
 	}
@@ -173,7 +174,7 @@ func convertDashboardFileName(dashboard string) string{
 // fetchRules fetch rules from the source
 func fetchRules(tag string, baseDir string) {
 	dir := fmt.Sprintf("%s%crules", baseDir, filepath.Separator)
-	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path=" + dir)
+	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path="+dir)
 
 	stream.FromArray(rules).Each(func(rule string) {
 		body := fetchContent(fmt.Sprintf("%s/%s/roles/prometheus/files/%s", repository_url, tag, rule), tag, rule)
@@ -188,7 +189,7 @@ func fetchRules(tag string, baseDir string) {
 	})
 }
 
-func fetchContent(url string, tag string, fileName string) string  {
+func fetchContent(url string, tag string, fileName string) string {
 	r, err := http.NewRequest("GET", url, nil)
 	checkErr(err, "request body failed")
 
@@ -218,24 +219,24 @@ func writeFile(baseDir string, fileName string, body string) {
 
 	fn := fmt.Sprintf("%s%c%s", baseDir, filepath.Separator, fileName)
 	f, err := os.Create(fn)
-	checkErr(err, "create file failed, f=" + fn)
+	checkErr(err, "create file failed, f="+fn)
 	defer f.Close()
 
 	if _, err := f.WriteString(body); err != nil {
-		checkErr(err, "write file failed, f=" + fn)
+		checkErr(err, "write file failed, f="+fn)
 	}
 }
 
-func filterDashboard(body string, dashboard string, title string) string{
+func filterDashboard(body string, dashboard string, title string) string {
 	newStr := ""
 	stream.Of(body).Filter(func(str string) bool {
 		return str != ""
-	}).Map(func(str string) string{
+	}).Map(func(str string) string {
 		if dashboard != "overview.json" {
 			return str
 		}
 
-		stream.FromArray(overviewExlcudeItems).Each(func (item string) {
+		stream.FromArray(overviewExlcudeItems).Each(func(item string) {
 			str = deleteOverviewItemFromDashboard(str, item)
 		})
 
@@ -245,7 +246,7 @@ func filterDashboard(body string, dashboard string, title string) string{
 			return str
 		}
 
-		stream.FromArray(tikvExcludeItems).Each(func (item string) {
+		stream.FromArray(tikvExcludeItems).Each(func(item string) {
 			str = deleteTiKVItemFromDashboard(str, item)
 		})
 
@@ -260,7 +261,7 @@ func filterDashboard(body string, dashboard string, title string) string{
 		}
 
 		return str
-	}).Map(func (str string) string {
+	}).Map(func(str string) string {
 		// replace links item
 		if gjson.Get(str, "links").Exists() {
 			newStr, err := sjson.Set(str, "links", []struct{}{})
@@ -269,35 +270,35 @@ func filterDashboard(body string, dashboard string, title string) string{
 		}
 
 		return str
-	}).Map(func (str string) string {
+	}).Map(func(str string) string {
 		// replace datasource name
 		if gjson.Get(str, "__inputs").Exists() && gjson.Get(str, "__inputs.0.name").Exists() {
 			datasource := gjson.Get(str, "__inputs.0.name").Str
 			return strings.ReplaceAll(str, fmt.Sprintf("${%s}", datasource), datasource_name)
 		}
 		return str
-	}).Map(func(str string)string {
+	}).Map(func(str string) string {
 		// delete input defination
 		if gjson.Get(str, "__inputs").Exists() {
 			newStr, err := sjson.Delete(str, "__inputs")
-		    checkErr(err, "delete path failed")
+			checkErr(err, "delete path failed")
 			return newStr
 		}
 
 		return str
-	}).Map(func (str string) string {
+	}).Map(func(str string) string {
 		// unify the title name
-		newStr ,err := sjson.Set(str, "title", title)
+		newStr, err := sjson.Set(str, "title", title)
 		checkErr(err, "replace title failed")
 		return newStr
-	}).Each(func (str string) {
+	}).Each(func(str string) {
 		newStr = str
 	})
 
 	return newStr
 }
 
-func deleteOverviewItemFromDashboard(source string, itemName string) string{
+func deleteOverviewItemFromDashboard(source string, itemName string) string {
 	key := getRowsOrPannels(source)
 
 	for index, r := range gjson.Get(source, key).Array() {
@@ -312,7 +313,7 @@ func deleteOverviewItemFromDashboard(source string, itemName string) string{
 func deleteTiKVItemFromDashboard(source string, itemName string) string {
 	key := getRowsOrPannels(source)
 
-	for index, _ := range  gjson.Get(source, key).Array() {
+	for index, _ := range gjson.Get(source, key).Array() {
 		for index2, r2 := range gjson.Get(source, fmt.Sprintf("%s.%d.panels", key, index)).Array() {
 			if r2.Map()["title"].Str == itemName {
 				return deleteItem(source, fmt.Sprintf("%s.%d.panels.%d", key, index, index2))
@@ -380,7 +381,7 @@ func exist(path string) bool {
 	}
 }
 
-func replaceAlertExpr(content []byte) ([]byte, error){
+func replaceAlertExpr(content []byte) ([]byte, error) {
 	var groups rulefmt.RuleGroups
 	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
 		return nil, err
@@ -390,11 +391,11 @@ func replaceAlertExpr(content []byte) ([]byte, error){
 	for _, group := range groups.Groups {
 		newG := rulefmt.RuleGroup{
 			Interval: group.Interval,
-			Name: group.Name,
-			Rules: make([]rulefmt.Rule, len(group.Rules)),
+			Name:     group.Name,
+			Rules:    make([]rulefmt.Rule, len(group.Rules)),
 		}
 
-		stream.FromArray(group.Rules).Map(func(rule rulefmt.Rule) rulefmt.Rule{
+		stream.FromArray(group.Rules).Map(func(rule rulefmt.Rule) rulefmt.Rule {
 			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
 			if !ok {
 				return rule
