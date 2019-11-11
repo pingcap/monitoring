@@ -42,7 +42,7 @@ groups:
   - alert: PD_cluster_lost_connect_tikv_nums
     expr: (sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance)
       > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-    for: 1m
+    for: 5m
     labels:
       env: ENV_LABELS_ENV
       expr: (sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance)
@@ -56,7 +56,7 @@ groups:
   - alert: PD_cluster_low_space
     expr: (sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0)
       and (sum(etcd_server_is_leader) by (instance) > 0)
-    for: 1m
+    for: 5m
     labels:
       env: ENV_LABELS_ENV
       expr: (sum(pd_cluster_status{type="store_low_space_count"}) by (instance) >
@@ -122,7 +122,7 @@ groups:
   - alert: PD_pending_peer_region_count
     expr: (sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  >
       100) and (sum(etcd_server_is_leader) by (instance) > 0)
-    for: 1m
+    for: 5m
     labels:
       env: ENV_LABELS_ENV
       expr: (sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  >
