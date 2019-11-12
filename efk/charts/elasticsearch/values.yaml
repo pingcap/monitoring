@@ -13,7 +13,8 @@ client:
 master:
   replicas: 2
   persistence:
-    storageClass: "local-storage"
+    enabled: true
+    # storageClass: "local-storage"
   resources:
     limits:
       cpu: "1"
@@ -23,7 +24,8 @@ data:
   replicas: 3
   heapSize: "2048m"
   persistence:
-    storageClass: "local-storage"
+    enabled: true
+    # storageClass: "local-storage"
     size: "40Gi"
   resources:
     limits:
