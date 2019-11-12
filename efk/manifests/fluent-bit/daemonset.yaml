@@ -54,9 +54,6 @@ spec:
         - name: config
           mountPath: /fluent-bit/etc/parsers_custom.conf
           subPath: parsers.conf
-        - mountPath: /data1/var/lib/docker/containers
-          name: dockerroot
-          readOnly: true
 
       terminationGracePeriodSeconds: 10
 
@@ -74,7 +71,3 @@ spec:
       - name: config
         configMap:
           name: infra-fluent-bit-config
-      - hostPath:
-          path: /data1/var/lib/docker/containers
-        name: dockerroot
-
