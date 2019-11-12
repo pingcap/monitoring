@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: infra-fluent-bit-config
+  labels:
+    app: fluent-bit
+data:
+  fluent-bit-service.conf: |-
+    [SERVICE]
+        Flush        1
+        Daemon       Off
+        Log_Level    info
+        Parsers_File parsers.conf
+        Parsers_File parsers_custom.conf
+
+  fluent-bit-input.conf: |-
+    [INPUT]
+        Name             tail
+        Path             /var/log/containers/*_slowlog-*.log
+        Parser           docker
+        Tag              slowlog.*
+        Refresh_Interval 5
+        Mem_Buf_Limit    1MB
+        Docker_Mode      On
+        Skip_Long_Lines  On
+    [INPUT]
+        Name             tail
+        Path             /var/log/containers/*_auditlog-*.log
+        Parser           docker
+        Tag              auditlog.*
+        Refresh_Interval 5
+        Mem_Buf_Limit    1MB
+        Docker_Mode      On
+        Skip_Long_Lines  On
+    [INPUT]
+        Name             tail
+        Path             /var/log/containers/*.log
+        Exclude_Path     /var/log/containers/*_slowlog*.log, /var/log/containers/*_auditlog*.log
+        Parser           docker
+        Tag              kube.*
+        Refresh_Interval 5
+        Mem_Buf_Limit    5MB
+        Docker_Mode      On
+        Skip_Long_Lines  On
+    [INPUT]
+        Name             tail
+        Path             /var/log/messages
+        Parser           sysmsg
+        Tag              system.*
+        Refresh_Interval 5
+        Mem_Buf_Limit    1MB
+        Skip_Long_Lines  On
+
+  fluent-bit-filter.conf: |-
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_Tag_Prefix     kube.var.log.containers.
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Merge_Log           On
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude On
+    [FILTER]
+        Name                kubernetes
+        Match               slowlog.*
+        Kube_Tag_Prefix     slowlog.var.log.containers.
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Merge_Log           On
+        K8S-Logging.Parser  Off
+        K8S-Logging.Exclude Off
+    [FILTER]
+        Name                kubernetes
+        Match               auditlog.*
+        Kube_Tag_Prefix     auditlog.var.log.containers.
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Merge_Log           On
+        K8S-Logging.Parser  Off
+        K8S-Logging.Exclude Off
+
+  fluent-bit-output.conf: |-
+    [OUTPUT]
+        Name  es
+        Match kube.*
+        Host  infra-es-elasticsearch-client
+        Port  9200
+        Logstash_Format On
+        Retry_Limit False
+        Type  flb_type
+        Time_Key @timestamp
+        Include_Tag_Key On
+        Replace_Dots On
+        Logstash_Prefix kubernetes_cluster
+        Generate_ID On
+    [OUTPUT]
+        Name  es
+        Match system.*
+        Host  infra-es-elasticsearch-client
+        Port  9200
+        Logstash_Format On
+        Retry_Limit False
+        Type  flb_type
+        Time_Key @timestamp
+        Include_Tag_Key On
+        Replace_Dots On
+        Logstash_Prefix syslog
+        Generate_ID On
+        #Trace_Output On
+    [OUTPUT]
+        Name          forward
+        Match         slowlog.*
+        Host          infra-fluentd
+        Port          24224
+        Retry_Limit   false
+    [OUTPUT]
+        Name          forward
+        Match         auditlog.*
+        Host          infra-fluentd
+        Port          24224
+        Retry_Limit   false
+
+  fluent-bit.conf: |-
+    @INCLUDE fluent-bit-service.conf
+    @INCLUDE fluent-bit-input.conf
+    @INCLUDE fluent-bit-filter.conf
+    @INCLUDE fluent-bit-output.conf
+
+  parsers.conf: |-
+    [PARSER]
+        Name        pingcap_log
+        Format      regex
+        Regex       \[(?<time>\d{4}\/\d{2}\/\d{2}.\d{2}:\d{2}:\d{2}.\d{3}).\+\d{2}:\d{2}\].\[(?<level>\w*)\].\[(?<source>\w.*):(?<line>\d*)\].(?<message>.*$)
+        Time_Key    time
+        Time_Format %Y/%m/%d %H:%M:%S.%L
+    [PARSER]
+        Name        sysmsg
+        Format      regex
+        Regex       /^(?<time>[^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:[^\:]*\:)? *(?<message>.*)$/
+        Time_Format %Y-%m-%dT%T.%N%z
+        Time_Key    time
+        Time_Keep   On

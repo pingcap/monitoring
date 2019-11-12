@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: elasticsearch-config
+  labels:
+    app: elasticsearch-config
+spec:
+  template:
+    metadata:
+      name: elasticsearch-config
+      labels:
+        app: elasticsearch-config
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: jq
+        image: everpeace/curl-jq
+        env:
+          - name: ES_URL
+            valueFrom:
+              configMapKeyRef:
+                name: es-config
+                key: es.url
+        command:
+        - bash
+        - -c
+        - |
+          ip=$ES_URL
+          echo $ip
+          count=1
+          jq -c '.[]' /tmp/esconfig.json | while read i; do
+             while :
+             do
+                t=$(curl -s -o /dev/null -w %{http_code} -XPUT -H 'Content-Type: application/json' $ip/_template/template$count -d "$i" )
+                if [ $t -ne 200 ];then
+                   echo "request failed:" + $i
+                   sleep 5
+                else
+                   echo "request successful:" + $i
+                   count=`expr $count + 1`
+                   break
+                fi
+             done
+          done
+          echo "done"
+        volumeMounts:
+        - name: es-config
+          mountPath: /tmp
+      volumes:
+      - name: es-config
+        configMap:
+          name: es-config

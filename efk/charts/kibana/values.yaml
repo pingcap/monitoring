@@ -1,0 +1,8 @@
+files:
+  kibana.yml:
+    ## Default Kibana configuration from kibana-docker.
+    server.name: k8s-kibana
+    elasticsearch.url: http://infra-es-elasticsearch-client:9200
+
+service:
+  type: NodePort

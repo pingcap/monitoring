@@ -1,0 +1,72 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: infra-fluentd
+  labels:
+    app: fluentd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+      annotations:
+        last-update: "1561520021"
+    spec:
+      containers:
+      - name: fluentd
+        image: "gcr.io/google-containers/fluentd-elasticsearch:v2.3.2"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: OUTPUT_HOST
+            value: "infra-es-elasticsearch-client"
+          - name: OUTPUT_PORT
+            value: "9200"
+          - name: OUTPUT_SCHEME
+            value: "http"
+          - name: OUTPUT_SSL_VERSION
+            value: "TLSv1"
+          - name: OUTPUT_BUFFER_CHUNK_LIMIT
+            value: "2M"
+          - name: OUTPUT_BUFFER_QUEUE_LIMIT
+            value: "8"
+        resources:
+            {}
+            
+        ports:
+          - name: forwarder-tcp
+            containerPort: 24224
+            protocol: TCP
+          - name: forwarder-udp
+            containerPort: 24224
+            protocol: UDP
+          - name: monitor-agent
+            containerPort: 24220
+            protocol: TCP
+          - name: http-input
+            containerPort: 9880
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            # Use percent encoding for query param.
+            # The value is {"log": "health check"}.
+            # the endpoint itself results in a new fluentd
+            # tag 'fluentd.pod-healthcheck'
+            path: /fluentd.pod.healthcheck?json=%7B%22log%22%3A+%22health+check%22%7D
+            port: 9880
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: config-volume-infra-fluentd
+          mountPath: /etc/fluent/config.d
+        - name: buffer
+          mountPath: "/var/log/fluentd-buffers"
+      volumes:
+        - name: config-volume-infra-fluentd
+          configMap:
+            name: infra-fluentd
+        - name: buffer
+          emptyDir: {}
