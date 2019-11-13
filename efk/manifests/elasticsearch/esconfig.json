@@ -1,0 +1,98 @@
+[
+  {
+    "index_patterns": [
+      "slowlog*"
+    ],
+    "settings": {
+      "number_of_shards": 2,
+      "index.refresh_interval": "120s",
+      "index.translog.durability": "async"
+    },
+    "mappings": {
+      "_default_": {
+        "dynamic": false,
+        "_source": {
+          "enabled": true
+        },
+        "properties": {
+          "kubernetes.namespace_name": {
+            "type": "keyword"
+          },
+          "@timestamp": {
+            "type": "date"
+          },
+          "query": {
+            "type": "text"
+          }
+        }
+      }
+    }
+  },
+  {
+    "index_patterns": [
+      "kubernetes_cluster*"
+    ],
+    "settings": {
+      "number_of_shards": 2,
+      "index.refresh_interval": "120s",
+      "index.translog.durability": "async"
+    },
+    "mappings": {
+      "_default_": {
+        "dynamic": false,
+        "_source": {
+          "enabled": true
+        },
+        "properties": {
+          "level": {
+            "type": "keyword"
+          },
+          "kubernetes.namespace_name": {
+            "type": "keyword"
+          },
+          "kubernetes.pod_name": {
+            "type": "keyword"
+          },
+          "kubernetes.labels.app_kubernetes_io/component": {
+            "type": "keyword"
+          },
+          "@timestamp": {
+            "type": "date"
+          },
+          "log":{
+            "type": "text"
+          }
+        }
+      }
+    }
+  },
+  {
+    "index_patterns": [
+      "syslog*"
+    ],
+    "settings": {
+      "number_of_shards": 2,
+      "index.refresh_interval": "120s",
+      "index.translog.durability": "async"
+    },
+    "mappings": {
+      "_default_": {
+        "dynamic": false,
+        "_source": {
+          "enabled": true
+        },
+        "properties": {
+          "host": {
+            "type": "keyword"
+          },
+          "@timestamp": {
+            "type": "date"
+          },
+          "message": {
+            "type": "text"
+          }
+        }
+      }
+    }
+  }
+]
