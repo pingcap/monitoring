@@ -85,7 +85,9 @@ spec:
   - metadata:
       name: data
     spec:
-      storageClassName: standard
+      # Specify a storage class name if there is no default storage class in k8s,
+      # or you do not want to use default storage class
+      # storageClassName: standard
       accessModes:
       - ReadWriteOnce
       resources:
