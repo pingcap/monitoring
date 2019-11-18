@@ -27,13 +27,13 @@ import (
 	"gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/storage/memory"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
-	yaml "gopkg.in/yaml.v2"
 	"time"
 )
 
@@ -395,13 +395,13 @@ func replaceAlertExpr(content []byte) ([]byte, error){
 		}
 
 		stream.FromArray(group.Rules).Map(func(rule rulefmt.Rule) rulefmt.Rule{
+			if time.Duration(rule.For) <= (time.Second * 60) {
+				rule.For = forConfig
+			}
+
 			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
 			if !ok {
 				return rule
-			}
-
-			if time.Duration(rule.For) <= (time.Second * 60) {
-				rule.For = forConfig
 			}
 
 			rule.Expr = newExpr
