@@ -342,7 +342,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 3
       },
       "id": 10,
       "links": [],
@@ -363,15 +363,43 @@
             "rgba(50, 172, 45, 0.97)"
           ],
           "decimals": 2,
-          "pattern": "/Time|Value/",
+          "pattern": "/Time/",
           "thresholds": [],
           "type": "hidden",
           "unit": "short"
+        },
+        {
+          "unit": "short",
+          "type": "string",
+          "alias": "status",
+          "decimals": 2,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "colorMode": null,
+          "pattern": "Value",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "thresholds": [],
+          "mappingType": 2,
+          "rangeMaps": [
+            {
+              "from": "-1",
+              "to": "0",
+              "text": "stoped"
+            },
+            {
+              "from": "0",
+              "to": "100",
+              "text": "running"
+            }
+          ]
         }
       ],
       "targets": [
         {
-          "expr": "sum(kube_pod_container_info{pod=\"$pod\",namespace=\"$namespace\"}) by (pod, container, image)",
+          "expr": "sum(kube_pod_container_info{pod=\"$pod\",namespace=\"$namespace\"}) by (pod, container, image)  * on(pod,container)  group_left sum(kube_pod_container_status_running{namespace=\"$namespace\"}) by (pod, container)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -381,6 +409,84 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Pod Image Version",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "k8s-cluster",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 23,
+      "links": [],
+      "pageSize": 10,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/Time/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "restart",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 2,
+          "pattern": "Value",
+          "rangeMaps": [
+            {
+              "from": "-1",
+              "text": "stoped",
+              "to": "0"
+            },
+            {
+              "from": "0",
+              "text": "running",
+              "to": "100"
+            }
+          ],
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=\"$pod\"}) by (pod, container)",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Container Restart Count",
       "transform": "table",
       "type": "table"
     },
