@@ -1637,7 +1637,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "((min by(device, instance) (node_filesystem_size_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"}) -\nmin by(device, instance) (node_filesystem_avail_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"})) /\nmin by(device, instance) (node_filesystem_size_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"})) * 100",
+          "expr": "((max by(device, instance) (node_filesystem_size_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"}) -\n max by(device, instance) (node_filesystem_avail_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"})) /\n max by(device, instance) (node_filesystem_size_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"})) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - Usage",
@@ -1726,7 +1726,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(min by(device, instance) (node_filesystem_size_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"}) -\nmin by(device, instance) (node_filesystem_avail_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"}))",
+          "expr": "(max by(device, instance) (node_filesystem_size_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"}) -\n max by(device, instance) (node_filesystem_avail_bytes{device!~\"rootfs|tmpfs\", instance=\"$node:$port\"}))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - Used",
