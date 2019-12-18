@@ -78,7 +78,7 @@ data:
       reserve_data true
       <parse>
        @type regexp
-       expression /^.*\[TIMESTAMP=(?<timestamp>.*)\] \[EVENT_CLASS=(?<event>.*)\] \[EVENT_SUBCLASS=.* \[COST_TIME=(?<cost_time>.*)\] \[HOST=(?<host>.*)\] \[CLIENT_IP=(?<client>.*)\] \[USER=(?<user>.*)] \[DATABASES="\[(?<db>.?*)]"] \[TABLES="\[(?<table>.?*)]"] \[SQL_TEXT="(?<sql>.?*)"] \[ROWS=(?<row>\d?*)\].*$/
+       expression /^.*\[TIMESTAMP=(?<timestamp>.*)\] \[EVENT_CLASS=(?<event>.*)\] \[EVENT_SUBCLASS=.* \[COST_TIME=(?<cost_time>.*)\] \[HOST=(?<host>.*)\] \[CLIENT_IP=(?<client>.*)\] \[USER=(?<user>.*)] \[DATABASES="\[(?<db>.?*)]"] \[TABLES="\[(?<table>.?*)]"] \[SQL_TEXT=["]?(?<sql>.*?)["]?] \[ROWS=(?<row>\d?*)\].*$/
 
        time_key timestamp
        time_type string
