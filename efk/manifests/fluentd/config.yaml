@@ -83,6 +83,7 @@ data:
        time_key timestamp
        time_type string
        time_format %Y/%m/%d %H:%M:%S.%L
+       types cost_time:float,row:integer
       </parse>
     </filter>
 
