@@ -144,7 +144,7 @@ data:
       evaluation_interval: 15s
 
     scrape_configs:
-    - job_name: kubelet
+    - job_name: kubelet-0
       kubernetes_sd_configs:
       - role: node
       scheme: https
@@ -160,6 +160,21 @@ data:
         regex: (.+)
         target_label: __metrics_path__
         replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+
+    - job_name: kubelet-1
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      relabel_configs:
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics
 
     - job_name: node-exporter
       kubernetes_sd_configs:
