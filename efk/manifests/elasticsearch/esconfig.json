@@ -94,5 +94,100 @@
         }
       }
     }
+  },
+  {
+    "index_patterns": [
+      "audit*"
+    ],
+    "settings": {
+      "number_of_shards": 2,
+      "index.refresh_interval": "120s",
+      "index.translog.durability": "async"
+    },
+    "mappings": {
+      "_default_": {
+        "dynamic": false,
+        "_source": {
+          "enabled": true
+        },
+        "properties": {
+          "kubernetes.namespace_name": {
+            "type": "keyword"
+          },
+          "@timestamp": {
+            "type": "date"
+          },
+          "client": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "cost_time": {
+            "type": "double"
+          },
+          "db": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "event": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "host": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "row": {
+            "type": "long"
+          },
+          "sql": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "table": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "user": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+       }
+    }
   }
 ]
