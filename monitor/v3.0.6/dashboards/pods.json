@@ -363,24 +363,75 @@
             "rgba(50, 172, 45, 0.97)"
           ],
           "decimals": 2,
-          "pattern": "/Time|Value/",
+          "pattern": "/Time/",
           "thresholds": [],
           "type": "hidden",
           "unit": "short"
+        },
+        {
+          "alias": "status",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 2,
+          "pattern": "Value #A",
+          "rangeMaps": [
+            {
+              "from": "-1",
+              "text": "stoped",
+              "to": "0"
+            },
+            {
+              "from": "0",
+              "text": "running",
+              "to": "100"
+            }
+          ],
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "unit": "short",
+          "type": "number",
+          "alias": "restart count",
+          "decimals": 2,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "colorMode": null,
+          "pattern": "Value #B",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "thresholds": [],
+          "mappingType": 2
         }
       ],
       "targets": [
         {
-          "expr": "sum(kube_pod_container_info{pod=\"$pod\",namespace=\"$namespace\"}) by (pod, container, image)",
+          "expr": "sum(kube_pod_container_info{pod=\"$pod\",namespace=\"$namespace\"}) by (pod, container, image)  * on(pod,container)  group_left sum(kube_pod_container_status_running{namespace=\"$namespace\"}) by (pod, container)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"$namespace\", pod=\"$pod\"}) by (pod, container)",
+          "intervalFactor": 1,
+          "format": "table",
+          "instant": true
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Pod Image Version",
+      "title": "Pod Container Status",
       "transform": "table",
       "type": "table"
     },
