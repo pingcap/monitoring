@@ -51,7 +51,6 @@
   "iteration": 1564756163207,
   "links": [],
   "panels": [
-    
     {
       "collapsed": true,
       "gridPos": {
@@ -3104,7 +3103,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{job=\"tikv\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{job=\"tidb-cluster\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3191,7 +3190,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(process_resident_memory_bytes{job=\"tikv\"}) by (instance)",
+              "expr": "avg(process_resident_memory_bytes{job=\"tidb-cluster\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",

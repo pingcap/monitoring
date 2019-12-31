@@ -1659,7 +1659,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(time() - process_start_time_seconds{job=\"tidb\"})",
+              "expr": "(time() - process_start_time_seconds{job=\"tidb-cluster\"})",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -1756,7 +1756,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{job=\"tidb\"}",
+              "expr": "process_resident_memory_bytes{job=\"tidb-cluster\"}",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -1764,7 +1764,7 @@
               "refId": "A"
             },
             {
-              "expr": "go_memstats_heap_alloc_bytes{job=\"tidb\"}",
+              "expr": "go_memstats_heap_alloc_bytes{job=\"tidb-cluster\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "heap-{{instance}}",
@@ -1862,7 +1862,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(process_cpu_seconds_total{job=\"tidb\"}[1m])",
+              "expr": "rate(process_cpu_seconds_total{job=\"tidb-cluster\"}[1m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2060,7 +2060,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_open_fds{job=\"tidb\"}",
+              "expr": "process_open_fds{job=\"tidb-cluster\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2245,7 +2245,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(go_gc_duration_seconds_sum{job=\"tidb\"}[1m])",
+              "expr": "rate(go_gc_duration_seconds_sum{job=\"tidb-cluster\"}[1m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2336,7 +2336,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": " go_threads{job=\"tidb\"}",
+              "expr": " go_threads{job=\"tidb-cluster\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2424,7 +2424,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": " rate(go_gc_duration_seconds_count{job=\"tidb\"}[1m])",
+              "expr": " rate(go_gc_duration_seconds_count{job=\"tidb-cluster\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2521,7 +2521,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_memstats_gc_cpu_fraction{job=\"tidb\"}",
+              "expr": "go_memstats_gc_cpu_fraction{job=\"tidb-cluster\"}",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -7913,7 +7913,7 @@
               "legendFormat": "{{type}}",
               "refId": "A"
             },
-	    {
+            {
               "expr": "sum(rate(tidb_ddl_add_index_total[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
