@@ -16,7 +16,7 @@
         },
         "properties": {
           "kubernetes.namespace_name": {
-            "type": "keyword"
+            "type": "text"
           },
           "@timestamp": {
             "type": "date"
