@@ -22,7 +22,7 @@ var (
 		strings.ToUpper("pd_pending_peer_region_count"):      `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 	}
 
-	forConfig, configerr = model.ParseDuration(ALERT_FOR_CONFIG)
+	forConfig, _ = model.ParseDuration(ALERT_FOR_CONFIG)
 )
 
 func WriteRule(body string, ruleName string, baseDir string) error {

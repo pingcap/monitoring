@@ -13,7 +13,11 @@ func Compress(sourceDir string, dest string) error {
 		return err
 	}
 
-	d, _ := os.Create(dest)
+	d, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+
 	defer d.Close()
 	gw := gzip.NewWriter(d)
 	defer gw.Close()
