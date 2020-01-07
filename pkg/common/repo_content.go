@@ -5,19 +5,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/go-querystring/query"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
 	"strings"
+
+	"github.com/google/go-querystring/query"
 )
 
-const(
-	headerOTP           = "X-GitHub-OTP"
+const (
+	headerOTP      = "X-GitHub-OTP"
 	defaultBaseURL = "https://api.github.com/"
-	defaultOwner = "pingcap"
+	defaultOwner   = "pingcap"
 )
 
 // RepositoryContent represents a file or directory in a github repository.
@@ -40,10 +41,10 @@ type RepositoryContent struct {
 
 // RepositoryContentFileOptions specifies optional parameters for CreateFile, UpdateFile, and DeleteFile.
 type RepositoryContentFileOptions struct {
-	Message   *string       `json:"message,omitempty"`
-	Content   []byte        `json:"content,omitempty"` // unencoded
-	SHA       *string       `json:"sha,omitempty"`
-	Branch    *string       `json:"branch,omitempty"`
+	Message *string `json:"message,omitempty"`
+	Content []byte  `json:"content,omitempty"` // unencoded
+	SHA     *string `json:"sha,omitempty"`
+	Branch  *string `json:"branch,omitempty"`
 }
 
 // RepositoryContentGetOptions represents an optional ref parameter, which can be a SHA,
@@ -57,7 +58,7 @@ type GitRepoService struct {
 	client  *http.Client
 }
 
-func NewGitRepoService() (*GitRepoService, error){
+func NewGitRepoService() (*GitRepoService, error) {
 	url, err := url.Parse(defaultBaseURL)
 	if err != nil {
 		return nil, err
@@ -65,7 +66,7 @@ func NewGitRepoService() (*GitRepoService, error){
 
 	return &GitRepoService{
 		baseURL: url,
-		client: http.DefaultClient,
+		client:  http.DefaultClient,
 	}, nil
 }
 
@@ -77,7 +78,7 @@ func NewGitRepoServiceWithAuth(auth BasicAuthTransport) (*GitRepoService, error)
 
 	return &GitRepoService{
 		baseURL: url,
-		client: auth.Client(),
+		client:  auth.Client(),
 	}, nil
 }
 
@@ -129,7 +130,6 @@ func (t *BasicAuthTransport) transport() http.RoundTripper {
 	}
 	return http.DefaultTransport
 }
-
 
 // GitHub API docs: https://developer.github.com/v3/repos/contents/#get-contents
 func (r *GitRepoService) GetContents(owner, repo, path string, opt *RepositoryContentGetOptions) (fileContent *RepositoryContent, directoryContent []*RepositoryContent, err error) {

@@ -7,7 +7,6 @@ import (
 	"os"
 )
 
-
 func Compress(sourceDir string, dest string) error {
 	file, err := os.Open(sourceDir)
 	if err != nil {

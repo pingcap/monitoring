@@ -3,36 +3,37 @@ package operator
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/pingcap/monitoring/pkg/common"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/wushilin/stream"
-	"strings"
 )
 
-const(
+const (
 	datasource_name = "tidb-cluster"
 )
 
-var(
+var (
 	overviewExlcudeItems = []string{"Services Port Status", "System Info"}
-	tikvExcludeItems = []string{"IO utilization"}
+	tikvExcludeItems     = []string{"IO utilization"}
 
 	dashboards = map[string]string{
-		"binlog.json": "Test-Cluster-Binlog",
-		"tidb.json": "Test-Cluster-TiDB",
-		"overview.json": "Test-Cluster-Overview",
-		"tikv_details.json": "Test-Cluster-TiKV-Details",
-		"tikv_summary.json": "Test-Cluster-TiKV-Summary",
+		"binlog.json":                "Test-Cluster-Binlog",
+		"tidb.json":                  "Test-Cluster-TiDB",
+		"overview.json":              "Test-Cluster-Overview",
+		"tikv_details.json":          "Test-Cluster-TiKV-Details",
+		"tikv_summary.json":          "Test-Cluster-TiKV-Summary",
 		"tikv_trouble_shooting.json": "Test-Cluster-TiKV-Trouble-Shooting",
-		"pd.json": "Test-Cluster-PD",
-		"tikv_pull.json": "Test-Cluster-TiKV",
-		"overview_pull.json": "Test-Cluster-Overview",
-		"lightning.json": "Test-Cluster-Lightning",
+		"pd.json":                    "Test-Cluster-PD",
+		"tikv_pull.json":             "Test-Cluster-TiKV",
+		"overview_pull.json":         "Test-Cluster-Overview",
+		"lightning.json":             "Test-Cluster-Lightning",
 	}
 )
 
-func WriteDashboard(dir string, body string, name string) error{
+func WriteDashboard(dir string, body string, name string) error {
 	title, exist := dashboards[name]
 	if !exist {
 		return errors.New(fmt.Sprintf("%s dashboard is not found in operator", name))
@@ -43,7 +44,7 @@ func WriteDashboard(dir string, body string, name string) error{
 }
 
 // convertDashboardFileName convert file name
-func convertDashboardFileName(dashboard string) string{
+func convertDashboardFileName(dashboard string) string {
 	if strings.HasPrefix(dashboard, "overview") {
 		return "overview.json"
 	}
@@ -51,16 +52,16 @@ func convertDashboardFileName(dashboard string) string{
 	return dashboard
 }
 
-func filterDashboard(body string, dashboard string, title string) string{
+func filterDashboard(body string, dashboard string, title string) string {
 	newStr := ""
 	stream.Of(body).Filter(func(str string) bool {
 		return str != ""
-	}).Map(func(str string) string{
+	}).Map(func(str string) string {
 		if dashboard != "overview.json" {
 			return str
 		}
 
-		stream.FromArray(overviewExlcudeItems).Each(func (item string) {
+		stream.FromArray(overviewExlcudeItems).Each(func(item string) {
 			str = deleteOverviewItemFromDashboard(str, item)
 		})
 
@@ -70,7 +71,7 @@ func filterDashboard(body string, dashboard string, title string) string{
 			return str
 		}
 
-		stream.FromArray(tikvExcludeItems).Each(func (item string) {
+		stream.FromArray(tikvExcludeItems).Each(func(item string) {
 			str = deleteTiKVItemFromDashboard(str, item)
 		})
 
@@ -85,7 +86,7 @@ func filterDashboard(body string, dashboard string, title string) string{
 		}
 
 		return str
-	}).Map(func (str string) string {
+	}).Map(func(str string) string {
 		// replace links item
 		if gjson.Get(str, "links").Exists() {
 			newStr, err := sjson.Set(str, "links", []struct{}{})
@@ -94,14 +95,14 @@ func filterDashboard(body string, dashboard string, title string) string{
 		}
 
 		return str
-	}).Map(func (str string) string {
+	}).Map(func(str string) string {
 		// replace datasource name
 		if gjson.Get(str, "__inputs").Exists() && gjson.Get(str, "__inputs.0.name").Exists() {
 			datasource := gjson.Get(str, "__inputs.0.name").Str
 			return strings.ReplaceAll(str, fmt.Sprintf("${%s}", datasource), datasource_name)
 		}
 		return str
-	}).Map(func(str string)string {
+	}).Map(func(str string) string {
 		// delete input defination
 		if gjson.Get(str, "__inputs").Exists() {
 			newStr, err := sjson.Delete(str, "__inputs")
@@ -110,19 +111,19 @@ func filterDashboard(body string, dashboard string, title string) string{
 		}
 
 		return str
-	}).Map(func (str string) string {
+	}).Map(func(str string) string {
 		// unify the title name
-		newStr ,err := sjson.Set(str, "title", title)
+		newStr, err := sjson.Set(str, "title", title)
 		common.CheckErr(err, "replace title failed")
 		return newStr
-	}).Each(func (str string) {
+	}).Each(func(str string) {
 		newStr = str
 	})
 
 	return newStr
 }
 
-func deleteOverviewItemFromDashboard(source string, itemName string) string{
+func deleteOverviewItemFromDashboard(source string, itemName string) string {
 	key := getRowsOrPannels(source)
 
 	for index, r := range gjson.Get(source, key).Array() {
@@ -137,7 +138,7 @@ func deleteOverviewItemFromDashboard(source string, itemName string) string{
 func deleteTiKVItemFromDashboard(source string, itemName string) string {
 	key := getRowsOrPannels(source)
 
-	for index, _ := range  gjson.Get(source, key).Array() {
+	for index, _ := range gjson.Get(source, key).Array() {
 		for index2, r2 := range gjson.Get(source, fmt.Sprintf("%s.%d.panels", key, index)).Array() {
 			if r2.Map()["title"].Str == itemName {
 				return deleteItem(source, fmt.Sprintf("%s.%d.panels.%d", key, index, index2))

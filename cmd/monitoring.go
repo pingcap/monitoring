@@ -4,6 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"reflect"
+	"strings"
+
 	"github.com/google/go-github/github"
 	"github.com/pingcap/monitoring/pkg/ansible"
 	"github.com/pingcap/monitoring/pkg/common"
@@ -12,46 +18,41 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/wushilin/stream"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"os"
-	"path/filepath"
-	"reflect"
-	"strings"
 )
 
-const(
-	Ansible = "ansible"
+const (
+	Ansible  = "ansible"
 	Opertaor = "operator"
 
 	Ansible_Grfana_Dir = "tidb-monitor"
-	Ansible_Rule_Dir = "tidb-rule"
-	Commit_Branch = "auto-generate-for-%s"
+	Ansible_Rule_Dir   = "tidb-rule"
+	Commit_Branch      = "auto-generate-for-%s"
 )
 
 var (
 	platformMonitoringDir string
-	configFile string
-	rootDir string
-	autoPush bool
-	cfg *Config
-	tag string
+	configFile            string
+	rootDir               string
+	autoPush              bool
+	cfg                   *Config
+	tag                   string
 
-	baseTagDir string
-	ansibleGrafanaDir string
-	ansibleRuleDir string
+	baseTagDir         string
+	ansibleGrafanaDir  string
+	ansibleRuleDir     string
 	operatorGrafanaDir string
-	operatorRuleDir string
+	operatorRuleDir    string
 
-	operatorFiles = map[string]string {
+	operatorFiles = map[string]string{
 		"datasource": "datasources",
-		"grafana": "dashboards",
+		"grafana":    "dashboards",
 		"Dockerfile": ".",
-		"init.sh": ".",
+		"init.sh":    ".",
 	}
 
 	ansibleFiles = map[string]string{
 		"grafana": Ansible_Grfana_Dir,
-		"rule": Ansible_Rule_Dir,
+		"rule":    Ansible_Rule_Dir,
 	}
 )
 
@@ -76,11 +77,11 @@ func main() {
 		},
 	}
 
-	rootCmd.Flags().StringVar(&configFile,"config", "", "the monitoring configuration file.")
-	rootCmd.Flags().StringVar(&tag,"tag", "", "the tag of pull monitoring repo.")
-	rootCmd.Flags().StringVar(&rootDir,"root-dir", ".", "the base directory of the program")
-	rootCmd.Flags().StringVar(&platformMonitoringDir,"platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
-	rootCmd.Flags().BoolVar(&autoPush,"auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
+	rootCmd.Flags().StringVar(&configFile, "config", "", "the monitoring configuration file.")
+	rootCmd.Flags().StringVar(&tag, "tag", "", "the tag of pull monitoring repo.")
+	rootCmd.Flags().StringVar(&rootDir, "root-dir", ".", "the base directory of the program")
+	rootCmd.Flags().StringVar(&platformMonitoringDir, "platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
+	rootCmd.Flags().BoolVar(&autoPush, "auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
 	rootCmd.MarkFlagRequired("tag")
 
@@ -91,22 +92,22 @@ func stepUp() {
 	rootDir = removeLastSlash(rootDir)
 	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", rootDir, filepath.Separator, filepath.Separator, tag)
 	common.CheckErr(os.RemoveAll(baseTagDir), "delete path filed")
-	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path=" + baseTagDir)
+	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path="+baseTagDir)
 
 	// ansible directory
 	ansibleGrafanaDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Grfana_Dir)
-	common.CheckErr(os.MkdirAll(ansibleGrafanaDir, os.ModePerm), "create dir failed, path=" + ansibleGrafanaDir)
+	common.CheckErr(os.MkdirAll(ansibleGrafanaDir, os.ModePerm), "create dir failed, path="+ansibleGrafanaDir)
 	ansibleRuleDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Rule_Dir)
-	common.CheckErr(os.MkdirAll(ansibleRuleDir, os.ModePerm), "create dir failed, path=" + ansibleRuleDir)
+	common.CheckErr(os.MkdirAll(ansibleRuleDir, os.ModePerm), "create dir failed, path="+ansibleRuleDir)
 
 	// operator direcotry
 	operatorGrafanaDir = fmt.Sprintf("%s%cdashboards", getOperatorDir(baseTagDir), filepath.Separator)
-	common.CheckErr(os.MkdirAll(operatorGrafanaDir, os.ModePerm), "create dir failed, path=" + operatorGrafanaDir)
+	common.CheckErr(os.MkdirAll(operatorGrafanaDir, os.ModePerm), "create dir failed, path="+operatorGrafanaDir)
 	operatorRuleDir = fmt.Sprintf("%s%crules", getOperatorDir(baseTagDir), filepath.Separator)
-	common.CheckErr(os.MkdirAll(operatorRuleDir, os.ModePerm), "create dir failed, path=" + operatorRuleDir)
+	common.CheckErr(os.MkdirAll(operatorRuleDir, os.ModePerm), "create dir failed, path="+operatorRuleDir)
 }
 
-func Start() error{
+func Start() error {
 	content, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		return err
@@ -149,8 +150,8 @@ func Start() error{
 	return nil
 }
 
-func PushPullRequest() error{
-	client := func() *github.Client{
+func PushPullRequest() error {
+	client := func() *github.Client {
 		var tp github.BasicAuthTransport
 		if cfg.Token != "" {
 			tp = github.BasicAuthTransport{
@@ -193,7 +194,7 @@ func PushPullRequest() error{
 	return common.CreatePR(client, commitBrach, ctx, tag)
 }
 
-func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string) []*common.RepositoryContent{
+func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string) []*common.RepositoryContent {
 	_, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
 		Ref: tag,
 	})
@@ -208,7 +209,7 @@ func fetchDirectory(rservice *common.GitRepoService, owner string, repoName stri
 
 func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.GitRepoService) {
 	var name string
-	stream.FromArray(dashboards).Map(func(dashboard *common.RepositoryContent) string{
+	stream.FromArray(dashboards).Map(func(dashboard *common.RepositoryContent) string {
 		name = *dashboard.Name
 		content, err := service.DownloadContents(dashboard)
 		common.CheckErr(err, "")
@@ -218,7 +219,7 @@ func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.G
 		}
 
 		return string(content)
-	}).Filter(func(content string) bool{
+	}).Filter(func(content string) bool {
 		return content != ""
 	}).Peek(func(content string) {
 		// ansible
@@ -231,7 +232,7 @@ func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.G
 
 func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoService) {
 	var name string
-	stream.FromArray(rules).Map(func(rule *common.RepositoryContent) string{
+	stream.FromArray(rules).Map(func(rule *common.RepositoryContent) string {
 		name = *rule.Name
 		content, err := service.DownloadContents(rule)
 		common.CheckErr(err, "")
@@ -241,7 +242,7 @@ func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoServ
 		}
 
 		return string(content)
-	}).Filter(func(content string) bool{
+	}).Filter(func(content string) bool {
 		return content != ""
 	}).Peek(func(content string) {
 		// ansible
@@ -260,7 +261,7 @@ func getOperatorDir(baseTagDir string) string {
 	return fmt.Sprintf("%s%c%s", baseTagDir, filepath.Separator, Opertaor)
 }
 
-func RepoService(cfg *Config) (*common.GitRepoService, error){
+func RepoService(cfg *Config) (*common.GitRepoService, error) {
 	if cfg.Token != "" {
 		return common.NewGitRepoServiceWithAuth(common.BasicAuthTransport{
 			OTP: cfg.Token,
@@ -314,9 +315,9 @@ func getPlatFormConfigDir() string {
 	return removeLastSlash(platformMonitoringDir)
 }
 
-func removeLastSlash(str string) string{
-	if str[len(str) - 1] == filepath.Separator {
-		str = str[0: len(str) - 1]
+func removeLastSlash(str string) string {
+	if str[len(str)-1] == filepath.Separator {
+		str = str[0 : len(str)-1]
 	}
 
 	return str
@@ -335,17 +336,16 @@ func Load(s string) (*Config, error) {
 }
 
 type Config struct {
-	UserName string `yaml:"user_name,omitempty"`
-	Password string `yaml:"password,omitempty"`
-	Email  string `yaml:"email"`
-	Token string `yaml:"token,omitempty"`
+	UserName         string            `yaml:"user_name,omitempty"`
+	Password         string            `yaml:"password,omitempty"`
+	Email            string            `yaml:"email"`
+	Token            string            `yaml:"token,omitempty"`
 	ComponentConfigs []ComponentConfig `yaml:"components"`
-
 }
 
 type ComponentConfig struct {
-	RepoName string `yaml:"repo_name"`
-	MonitorPath     string `yaml:"monitor_path"`
-	RulesPath     string  `yaml:"rule_path"`
-	Owner    string `yaml:"owner,omitempty"`
+	RepoName    string `yaml:"repo_name"`
+	MonitorPath string `yaml:"monitor_path"`
+	RulesPath   string `yaml:"rule_path"`
+	Owner       string `yaml:"owner,omitempty"`
 }

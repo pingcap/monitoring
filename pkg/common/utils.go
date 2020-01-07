@@ -3,24 +3,25 @@ package common
 import (
 	"context"
 	"fmt"
-	"github.com/google/go-github/github"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/google/go-github/github"
+	"github.com/pkg/errors"
 )
 
-const(
+const (
 	Monitoring_Owner = "pingcap"
-	Monitoirng_Repo = "monitoring"
-	Commit_Message = "auto generate monitoring configurations for %s"
+	Monitoirng_Repo  = "monitoring"
+	Commit_Message   = "auto generate monitoring configurations for %s"
 )
 
-var(
-	PR_Subject = "Automated generate monitoring configurations for %s"
-	PR_Description = "Automated generate monitoring configurations"
+var (
+	PR_Subject            = "Automated generate monitoring configurations for %s"
+	PR_Description        = "Automated generate monitoring configurations"
 	Monitoring_Base_Brach = "master"
 )
 
@@ -31,11 +32,11 @@ func WriteFile(baseDir string, fileName string, body string) {
 
 	fn := fmt.Sprintf("%s%c%s", baseDir, filepath.Separator, fileName)
 	f, err := os.Create(fn)
-	CheckErr(err, "create file failed, f=" + fn)
+	CheckErr(err, "create file failed, f="+fn)
 	defer f.Close()
 
 	if _, err := f.WriteString(body); err != nil {
-		CheckErr(err, "write file failed, f=" + fn)
+		CheckErr(err, "write file failed, f="+fn)
 	}
 }
 
@@ -53,7 +54,6 @@ func PathExist(path string) bool {
 	}
 }
 
-
 func ExtractFromPath(path string) string {
 	for i := len(path) - 1; i >= 0; i-- {
 		if path[i] == filepath.Separator {
@@ -63,7 +63,7 @@ func ExtractFromPath(path string) string {
 	return path
 }
 
-func ListAllFiles(path string) []string{
+func ListAllFiles(path string) []string {
 	info, err := os.Stat(path)
 	CheckErr(err, "")
 
@@ -94,7 +94,7 @@ func ListFiles(dir string) []string {
 }
 
 func GetRef(client *github.Client, commitBranch string, ctx context.Context) (ref *github.Reference, err error) {
-	if ref, _, err = client.Git.GetRef(ctx, Monitoring_Owner, Monitoirng_Repo, "refs/heads/"+ commitBranch); err == nil {
+	if ref, _, err = client.Git.GetRef(ctx, Monitoring_Owner, Monitoirng_Repo, "refs/heads/"+commitBranch); err == nil {
 		return ref, nil
 	}
 
@@ -104,9 +104,8 @@ func GetRef(client *github.Client, commitBranch string, ctx context.Context) (re
 		return nil, errors.New("The commit branch does not exist but `-base-branch` is the same as `-commit-branch`")
 	}
 
-
 	var baseRef *github.Reference
-	if baseRef, _, err = client.Git.GetRef(ctx, Monitoring_Owner, Monitoirng_Repo, "refs/heads/" + Monitoring_Base_Brach); err != nil {
+	if baseRef, _, err = client.Git.GetRef(ctx, Monitoring_Owner, Monitoirng_Repo, "refs/heads/"+Monitoring_Base_Brach); err != nil {
 		return nil, err
 	}
 	newRef := &github.Reference{Ref: github.String("refs/heads/" + commitBranch), Object: &github.GitObject{SHA: baseRef.Object.SHA}}
@@ -128,8 +127,8 @@ func GetTree(client *github.Client, ref *github.Reference, directory string, ctx
 			return nil, err
 		}
 
-		if rootDir[len(rootDir) - 1] == filepath.Separator {
-			rootDir = rootDir[0: len(rootDir) - 1]
+		if rootDir[len(rootDir)-1] == filepath.Separator {
+			rootDir = rootDir[0 : len(rootDir)-1]
 		}
 
 		treePath := strings.ReplaceAll(file, fmt.Sprintf("%s%c", rootDir, filepath.Separator), "")
