@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"github.com/google/go-github/github"
 	"github.com/pingcap/monitoring/pkg/ansible"
 	"github.com/pingcap/monitoring/pkg/common"
 	"github.com/pingcap/monitoring/pkg/operator"
@@ -14,6 +16,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 )
 
 const(
@@ -22,11 +25,15 @@ const(
 
 	Ansible_Grfana_Dir = "tidb-monitor"
 	Ansible_Rule_Dir = "tidb-rule"
+	Commit_Branch = "auto-generate-for-%s"
 )
 
 var (
+	platformMonitoringDir string
 	configFile string
 	rootDir string
+	autoPush bool
+	cfg *Config
 	tag string
 
 	baseTagDir string
@@ -54,7 +61,6 @@ func main() {
 		Run: func(co *cobra.Command, args []string) {
 			defer func() {
 				if err := recover(); err != nil {
-					//logrus.Error(err)
 					traceE := traceErr.Wrap(err.(error), "")
 					fmt.Printf("%+v", traceE)
 					os.RemoveAll(baseTagDir)
@@ -73,6 +79,8 @@ func main() {
 	rootCmd.Flags().StringVar(&configFile,"config", "", "the monitoring configuration file.")
 	rootCmd.Flags().StringVar(&tag,"tag", "", "the tag of pull monitoring repo.")
 	rootCmd.Flags().StringVar(&rootDir,"root-dir", ".", "the base directory of the program")
+	rootCmd.Flags().StringVar(&platformMonitoringDir,"platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
+	rootCmd.Flags().BoolVar(&autoPush,"auto-push", false, "auto push monitoring configurations")
 	rootCmd.MarkFlagRequired("config")
 	rootCmd.MarkFlagRequired("tag")
 
@@ -80,6 +88,7 @@ func main() {
 }
 
 func stepUp() {
+	rootDir = removeLastSlash(rootDir)
 	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", rootDir, filepath.Separator, filepath.Separator, tag)
 	common.CheckErr(os.RemoveAll(baseTagDir), "delete path filed")
 	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path=" + baseTagDir)
@@ -103,7 +112,7 @@ func Start() error{
 		return err
 	}
 
-	cfg, err:= Load(string(content))
+	cfg, err = Load(string(content))
 	if err != nil {
 		return err
 	}
@@ -133,7 +142,55 @@ func Start() error{
 		copyOperatorLocalfiles(entry.Key.(reflect.Value).String(), entry.Value.(string))
 	})
 
+	if autoPush {
+		return PushPullRequest()
+	}
+
 	return nil
+}
+
+func PushPullRequest() error{
+	client := func() *github.Client{
+		var tp github.BasicAuthTransport
+		if cfg.Token != "" {
+			tp = github.BasicAuthTransport{
+				Username: strings.TrimSpace(cfg.UserName),
+				Password: strings.TrimSpace(cfg.Password),
+			}
+		}
+
+		if cfg.UserName != "" || cfg.Password == "" {
+			tp = github.BasicAuthTransport{
+				Username: strings.TrimSpace(cfg.UserName),
+				Password: strings.TrimSpace(cfg.Password),
+			}
+		}
+
+		return github.NewClient(tp.Client())
+	}()
+
+	ctx := context.Background()
+
+	commitBrach := fmt.Sprintf(Commit_Branch, tag)
+	ref, err := common.GetRef(client, commitBrach, ctx)
+	if err != nil {
+		return err
+	}
+
+	if ref == nil {
+		return errors.New("No error where returned but the reference is nil")
+	}
+
+	tree, err := common.GetTree(client, ref, baseTagDir, ctx, rootDir)
+	if err != nil {
+		return err
+	}
+
+	if err := common.PushCommit(client, ref, tree, ctx, tag, cfg.UserName, cfg.Email); err != nil {
+		return err
+	}
+
+	return common.CreatePR(client, commitBrach, ctx, tag)
 }
 
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string) []*common.RepositoryContent{
@@ -221,7 +278,7 @@ func RepoService(cfg *Config) (*common.GitRepoService, error){
 }
 
 func copyOperatorLocalfiles(sourcePath string, dstPath string) {
-	operatorConfig := fmt.Sprintf("%s%c%s", getPlateFormConfigDir(), filepath.Separator, Opertaor)
+	operatorConfig := fmt.Sprintf("%s%c%s", getPlatFormConfigDir(), filepath.Separator, Opertaor)
 	files := common.ListAllFiles(fmt.Sprintf("%s%c%s", operatorConfig, filepath.Separator, sourcePath))
 
 	stream.FromArray(files).Each(func(file string) {
@@ -237,7 +294,7 @@ func copyOperatorLocalfiles(sourcePath string, dstPath string) {
 }
 
 func copyAnsibleLocalFiles(sourcePath string, dstPath string) {
-	ansibleConfig := fmt.Sprintf("%s%c%s", getPlateFormConfigDir(), filepath.Separator, Ansible)
+	ansibleConfig := fmt.Sprintf("%s%c%s", getPlatFormConfigDir(), filepath.Separator, Ansible)
 
 	files := common.ListAllFiles(fmt.Sprintf("%s%c%s", ansibleConfig, filepath.Separator, sourcePath))
 
@@ -253,8 +310,16 @@ func copyAnsibleLocalFiles(sourcePath string, dstPath string) {
 	})
 }
 
-func getPlateFormConfigDir() string {
-	return fmt.Sprintf("%s%cplatform-config", rootDir, filepath.Separator)
+func getPlatFormConfigDir() string {
+	return removeLastSlash(platformMonitoringDir)
+}
+
+func removeLastSlash(str string) string{
+	if str[len(str) - 1] == filepath.Separator {
+		str = str[0: len(str) - 1]
+	}
+
+	return str
 }
 
 // Load parses the YAML input s into a Config.
@@ -272,6 +337,7 @@ func Load(s string) (*Config, error) {
 type Config struct {
 	UserName string `yaml:"user_name,omitempty"`
 	Password string `yaml:"password,omitempty"`
+	Email  string `yaml:"email"`
 	Token string `yaml:"token,omitempty"`
 	ComponentConfigs []ComponentConfig `yaml:"components"`
 
