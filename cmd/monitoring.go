@@ -80,7 +80,7 @@ func main() {
 	rootCmd.Flags().StringVar(&tag,"tag", "", "the tag of pull monitoring repo.")
 	rootCmd.Flags().StringVar(&rootDir,"root-dir", ".", "the base directory of the program")
 	rootCmd.Flags().StringVar(&platformMonitoringDir,"platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
-	rootCmd.Flags().BoolVar(&autoPush,"auto-push", false, "auto push monitoring configurations")
+	rootCmd.Flags().BoolVar(&autoPush,"auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
 	rootCmd.MarkFlagRequired("tag")
 
