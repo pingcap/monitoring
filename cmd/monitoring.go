@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/github"
 	"github.com/pingcap/monitoring/pkg/ansible"
@@ -32,7 +33,7 @@ const (
 var (
 	platformMonitoringDir string
 	configFile            string
-	rootDir               string
+	outputDir             string
 	autoPush              bool
 	cfg                   *Config
 	tag                   string
@@ -43,6 +44,7 @@ var (
 	operatorGrafanaDir string
 	operatorRuleDir    string
 
+	useGlobalTag  = true
 	operatorFiles = map[string]string{
 		"datasource": "datasources",
 		"grafana":    "dashboards",
@@ -81,18 +83,18 @@ func main() {
 
 	rootCmd.Flags().StringVar(&configFile, "config", "", "the monitoring configuration file.")
 	rootCmd.Flags().StringVar(&tag, "tag", "", "the tag of pull monitoring repo.")
-	rootCmd.Flags().StringVar(&rootDir, "root-dir", ".", "the base directory of the program")
+	rootCmd.Flags().StringVar(&outputDir, "output-dir", ".", "the base directory of the program")
 	rootCmd.Flags().StringVar(&platformMonitoringDir, "platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
 	rootCmd.Flags().BoolVar(&autoPush, "auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
-	rootCmd.MarkFlagRequired("tag")
+	//rootCmd.MarkFlagRequired("tag")
 
 	rootCmd.Execute()
 }
 
 func stepUp() {
-	rootDir = removeLastSlash(rootDir)
-	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", rootDir, filepath.Separator, filepath.Separator, tag)
+	outputDir = removeLastSlash(outputDir)
+	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", outputDir, filepath.Separator, filepath.Separator, tag)
 	common.CheckErr(os.RemoveAll(baseTagDir), "delete path filed")
 	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path="+baseTagDir)
 
@@ -120,19 +122,30 @@ func Start() error {
 		return err
 	}
 
+	if tag == "" {
+		for _, cfg := range cfg.ComponentConfigs {
+			if cfg.Ref == "" {
+				return errors.New(fmt.Sprintf("empty branch/tag info for %s", cfg.RepoName))
+			}
+		}
+
+		tag = fmt.Sprintf("tmp_branch_%d", time.Now().Unix())
+		useGlobalTag = false
+	}
+
 	rservice, err := RepoService(cfg)
 	if err != nil {
 		return err
 	}
 
 	stream.FromArray(cfg.OperatorConfig.NeedToReplaceExpr).Each(func(expr ReplaceExpr) {
-		operatorReplaceExpr[expr.RuleName] = expr.NewExpr
+		operatorReplaceExpr[strings.ToUpper(expr.RuleName)] = expr.NewExpr
 	})
 
 	stream.FromArray(cfg.ComponentConfigs).Peek(func(component ComponentConfig) {
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath), rservice)
+		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, component.Ref), rservice)
 	}).Each(func(component ComponentConfig) {
-		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath), rservice)
+		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, component.Ref), rservice)
 	})
 
 	// copy ansible platform config
@@ -188,7 +201,7 @@ func PushPullRequest() error {
 		return errors.New("No error where returned but the reference is nil")
 	}
 
-	tree, err := common.GetTree(client, ref, baseTagDir, ctx, rootDir)
+	tree, err := common.GetTree(client, ref, baseTagDir, ctx, outputDir)
 	if err != nil {
 		return err
 	}
@@ -200,9 +213,15 @@ func PushPullRequest() error {
 	return common.CreatePR(client, commitBrach, ctx, tag)
 }
 
-func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string) []*common.RepositoryContent {
+func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
 	_, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
-		Ref: tag,
+		Ref: func() string {
+			if useGlobalTag {
+				return tag
+			}
+
+			return ref
+		}(),
 	})
 
 	common.CheckErr(err, "")
@@ -347,13 +366,14 @@ type Config struct {
 	Email            string            `yaml:"email"`
 	Token            string            `yaml:"token,omitempty"`
 	ComponentConfigs []ComponentConfig `yaml:"components"`
-	OperatorConfig
+	OperatorConfig   OperatorConfig    `yaml:"operator"`
 }
 
 type ComponentConfig struct {
 	RepoName    string `yaml:"repo_name"`
 	MonitorPath string `yaml:"monitor_path"`
 	RulesPath   string `yaml:"rule_path"`
+	Ref         string `yaml:"ref"`
 	Owner       string `yaml:"owner,omitempty"`
 }
 
