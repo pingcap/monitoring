@@ -54,6 +54,8 @@ var (
 		"grafana": Ansible_Grfana_Dir,
 		"rule":    Ansible_Rule_Dir,
 	}
+
+	operatorReplaceExpr = make(map[string]string)
 )
 
 func main() {
@@ -122,6 +124,10 @@ func Start() error {
 	if err != nil {
 		return err
 	}
+
+	stream.FromArray(cfg.OperatorConfig.NeedToReplaceExpr).Each(func(expr ReplaceExpr) {
+		operatorReplaceExpr[expr.RuleName] = expr.NewExpr
+	})
 
 	stream.FromArray(cfg.ComponentConfigs).Peek(func(component ComponentConfig) {
 		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath), rservice)
@@ -249,7 +255,7 @@ func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoServ
 		common.WriteFile(ansibleRuleDir, name, content)
 	}).Each(func(content string) {
 		// operatotr
-		operator.WriteRule(content, name, operatorRuleDir)
+		operator.WriteRule(content, name, operatorRuleDir, operatorReplaceExpr)
 	})
 }
 
@@ -341,6 +347,7 @@ type Config struct {
 	Email            string            `yaml:"email"`
 	Token            string            `yaml:"token,omitempty"`
 	ComponentConfigs []ComponentConfig `yaml:"components"`
+	OperatorConfig
 }
 
 type ComponentConfig struct {
@@ -348,4 +355,13 @@ type ComponentConfig struct {
 	MonitorPath string `yaml:"monitor_path"`
 	RulesPath   string `yaml:"rule_path"`
 	Owner       string `yaml:"owner,omitempty"`
+}
+
+type OperatorConfig struct {
+	NeedToReplaceExpr []ReplaceExpr `yaml:"replace_expr"`
+}
+
+type ReplaceExpr struct {
+	RuleName string `yaml:"rule_name"`
+	NewExpr  string `yaml:"expr"`
 }

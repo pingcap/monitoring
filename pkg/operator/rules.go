@@ -16,17 +16,11 @@ const (
 )
 
 var (
-	needToReplaceExpr = map[string]string{
-		strings.ToUpper("pd_cluster_low_space"):              `(sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
-		strings.ToUpper("pd_cluster_lost_connect_tikv_nums"): `(sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
-		strings.ToUpper("pd_pending_peer_region_count"):      `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
-	}
-
-	forConfig, _ = model.ParseDuration(ALERT_FOR_CONFIG)
+	forConfig, err = model.ParseDuration(ALERT_FOR_CONFIG)
 )
 
-func WriteRule(body string, ruleName string, baseDir string) error {
-	newRule, err := replaceAlertExpr([]byte(body))
+func WriteRule(body string, ruleName string, baseDir string, needToReplaceExpr map[string]string) error {
+	newRule, err := replaceAlertExpr([]byte(body), needToReplaceExpr)
 	if err != nil {
 		return err
 	}
@@ -35,7 +29,7 @@ func WriteRule(body string, ruleName string, baseDir string) error {
 	return nil
 }
 
-func replaceAlertExpr(content []byte) ([]byte, error) {
+func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]byte, error) {
 	var groups rulefmt.RuleGroups
 	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
 		return nil, err
@@ -51,7 +45,9 @@ func replaceAlertExpr(content []byte) ([]byte, error) {
 
 		stream.FromArray(group.Rules).Map(func(rule rulefmt.Rule) rulefmt.Rule {
 			if time.Duration(rule.For) <= (time.Second * 60) {
-				rule.For = forConfig
+				if err != nil {
+					rule.For = forConfig
+				}
 			}
 
 			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
