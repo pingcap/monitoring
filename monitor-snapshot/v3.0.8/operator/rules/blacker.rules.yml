@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: TiDB_server_is_down
     expr: probe_success{group="tidb"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="tidb"} == 0
@@ -14,7 +14,7 @@ groups:
       value: '{{ $value }}'
   - alert: Pump_server_is_down
     expr: probe_success{group="pump"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="pump"} == 0
@@ -25,7 +25,7 @@ groups:
       value: '{{ $value }}'
   - alert: Drainer_server_is_down
     expr: probe_success{group="drainer"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="drainer"} == 0
@@ -36,7 +36,7 @@ groups:
       value: '{{ $value }}'
   - alert: TiKV_server_is_down
     expr: probe_success{group="tikv"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="tikv"} == 0
@@ -47,7 +47,7 @@ groups:
       value: '{{ $value }}'
   - alert: PD_server_is_down
     expr: probe_success{group="pd"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="pd"} == 0
@@ -58,7 +58,7 @@ groups:
       value: '{{ $value }}'
   - alert: Node_exporter_server_is_down
     expr: probe_success{group="node_exporter"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="node_exporter"} == 0
@@ -69,7 +69,7 @@ groups:
       value: '{{ $value }}'
   - alert: Blackbox_exporter_server_is_down
     expr: probe_success{group="blackbox_exporter"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="blackbox_exporter"} == 0
@@ -80,7 +80,7 @@ groups:
       value: '{{ $value }}'
   - alert: Grafana_server_is_down
     expr: probe_success{group="grafana"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="grafana"} == 0
@@ -91,7 +91,7 @@ groups:
       value: '{{ $value }}'
   - alert: Pushgateway_server_is_down
     expr: probe_success{group="pushgateway"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="pushgateway"} == 0
@@ -102,7 +102,7 @@ groups:
       value: '{{ $value }}'
   - alert: Kafka_exporter_is_down
     expr: probe_success{group="kafka_exporter"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="kafka_exporter"} == 0
@@ -113,7 +113,7 @@ groups:
       value: '{{ $value }}'
   - alert: Pushgateway_metrics_interface
     expr: probe_success{job="blackbox_exporter_http"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{job="blackbox_exporter_http"}  == 0
@@ -125,7 +125,7 @@ groups:
   - alert: BLACKER_ping_latency_more_than_1s
     expr: max_over_time(probe_duration_seconds{job=~"blackbox_exporter.*_icmp"}[1m])
       > 1
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: max_over_time(probe_duration_seconds{job=~"blackbox_exporter.*_icmp"}[1m])

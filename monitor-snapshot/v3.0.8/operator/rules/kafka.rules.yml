@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: Kafka_is_down
     expr: probe_success{group="kafka"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="kafka"} == 0
@@ -14,7 +14,7 @@ groups:
       value: '{{ $value }}'
   - alert: kafka_brokers
     expr: kafka_brokers < 3
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: kafka_brokers < 3
@@ -26,7 +26,7 @@ groups:
       value: '{{ $value }}'
   - alert: Zookeeper_is_down
     expr: probe_success{group="zookeeper"} == 0
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: probe_success{group="zookeeper"} == 0
@@ -37,7 +37,7 @@ groups:
       value: '{{ $value }}'
   - alert: kafka_topic_partition_in_sync_replica
     expr: kafka_topic_partition_in_sync_replica != 3
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: kafka_topic_partition_in_sync_replica != 3
@@ -49,7 +49,7 @@ groups:
       value: '{{ $value }}'
   - alert: kafka_topic_partition_leader_change
     expr: changes(kafka_topic_partition_leader[10m]) >= 1
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: changes(kafka_topic_partition_leader[10m]) >= 1

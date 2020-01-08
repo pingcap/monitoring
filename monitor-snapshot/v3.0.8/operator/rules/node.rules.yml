@@ -33,7 +33,7 @@ groups:
       value: '{{ $value }}'
   - alert: NODE_disk_readonly
     expr: node_filesystem_readonly{fstype=~"(ext.|xfs)"} == 1
-    for: 5m
+    for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: node_filesystem_readonly{fstype=~"(ext.|xfs)"} == 1
