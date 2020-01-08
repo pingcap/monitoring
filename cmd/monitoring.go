@@ -73,7 +73,7 @@ func main() {
 					fmt.Println("Done.")
 				}
 			}()
-			stepUp()
+			common.CheckErr(stepUp(), "init env failed")
 			common.CheckErr(Start(), "generate monitoring configuration failed")
 		},
 		FParseErrWhitelist: cobra.FParseErrWhitelist{
@@ -87,31 +87,11 @@ func main() {
 	rootCmd.Flags().StringVar(&platformMonitoringDir, "platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
 	rootCmd.Flags().BoolVar(&autoPush, "auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
-	//rootCmd.MarkFlagRequired("tag")
 
 	rootCmd.Execute()
 }
 
-func stepUp() {
-	outputDir = removeLastSlash(outputDir)
-	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", outputDir, filepath.Separator, filepath.Separator, tag)
-	common.CheckErr(os.RemoveAll(baseTagDir), "delete path filed")
-	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path="+baseTagDir)
-
-	// ansible directory
-	ansibleGrafanaDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Grfana_Dir)
-	common.CheckErr(os.MkdirAll(ansibleGrafanaDir, os.ModePerm), "create dir failed, path="+ansibleGrafanaDir)
-	ansibleRuleDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Rule_Dir)
-	common.CheckErr(os.MkdirAll(ansibleRuleDir, os.ModePerm), "create dir failed, path="+ansibleRuleDir)
-
-	// operator direcotry
-	operatorGrafanaDir = fmt.Sprintf("%s%cdashboards", getOperatorDir(baseTagDir), filepath.Separator)
-	common.CheckErr(os.MkdirAll(operatorGrafanaDir, os.ModePerm), "create dir failed, path="+operatorGrafanaDir)
-	operatorRuleDir = fmt.Sprintf("%s%crules", getOperatorDir(baseTagDir), filepath.Separator)
-	common.CheckErr(os.MkdirAll(operatorRuleDir, os.ModePerm), "create dir failed, path="+operatorRuleDir)
-}
-
-func Start() error {
+func stepUp() error {
 	content, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		return err
@@ -133,6 +113,27 @@ func Start() error {
 		useGlobalTag = false
 	}
 
+	outputDir = removeLastSlash(outputDir)
+	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", outputDir, filepath.Separator, filepath.Separator, tag)
+	common.CheckErr(os.RemoveAll(baseTagDir), "delete path filed")
+	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path="+baseTagDir)
+
+	// ansible directory
+	ansibleGrafanaDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Grfana_Dir)
+	common.CheckErr(os.MkdirAll(ansibleGrafanaDir, os.ModePerm), "create dir failed, path="+ansibleGrafanaDir)
+	ansibleRuleDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Rule_Dir)
+	common.CheckErr(os.MkdirAll(ansibleRuleDir, os.ModePerm), "create dir failed, path="+ansibleRuleDir)
+
+	// operator direcotry
+	operatorGrafanaDir = fmt.Sprintf("%s%cdashboards", getOperatorDir(baseTagDir), filepath.Separator)
+	common.CheckErr(os.MkdirAll(operatorGrafanaDir, os.ModePerm), "create dir failed, path="+operatorGrafanaDir)
+	operatorRuleDir = fmt.Sprintf("%s%crules", getOperatorDir(baseTagDir), filepath.Separator)
+	common.CheckErr(os.MkdirAll(operatorRuleDir, os.ModePerm), "create dir failed, path="+operatorRuleDir)
+
+	return nil
+}
+
+func Start() error {
 	rservice, err := RepoService(cfg)
 	if err != nil {
 		return err
@@ -341,11 +342,7 @@ func getPlatFormConfigDir() string {
 }
 
 func removeLastSlash(str string) string {
-	if str[len(str)-1] == filepath.Separator {
-		str = str[0 : len(str)-1]
-	}
-
-	return str
+	return strings.TrimRight(str, "/")
 }
 
 // Load parses the YAML input s into a Config.
