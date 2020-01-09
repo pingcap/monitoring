@@ -13,7 +13,7 @@ components:
     rule_path: "metrics/alertmanager"
 
 platform_monitoring:
-    repo_name: "monitoirng"
+    repo_name: "monitoring"
 
 
 
