@@ -1,0 +1,19 @@
+user_name: "USERNAME"
+password: "AUTH"
+components:
+  - repo_name: "tidb"
+    monitor_path: "metrics/grafana"
+    rule_path: "metrics/alertmanager"
+  - repo_name: "tikv"
+    owner: "tikv"
+    monitor_path: "metrics/grafana"
+    rule_path: "metrics/alertmanager"
+  - repo_name: "pd"
+    monitor_path: "metrics/grafana"
+    rule_path: "metrics/alertmanager"
+
+platform_monitoring:
+    repo_name: "monitoring"
+
+
+
