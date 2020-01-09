@@ -30,7 +30,7 @@ platform-monitoring/
 The binary will automate load platform monitoring based on the above directory structure to different deployment directory.
 ## How to use it
 ```$xslt
-go build -o pull-monitoirng  cmd/monitoring.go
+go build -o pull-monitoring  cmd/monitoring.go
 
 ./pull-monitoring
 Error: required flag(s) "config" not set
