@@ -52,6 +52,7 @@ var (
 	operatorFiles = map[string]string{
 		"datasource": "datasources",
 		"grafana":    "dashboards",
+		"rule":       "rules",
 		"Dockerfile": ".",
 		"init.sh":    ".",
 	}
