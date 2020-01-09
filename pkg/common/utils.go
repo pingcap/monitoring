@@ -16,12 +16,12 @@ import (
 const (
 	Monitoring_Owner = "pingcap"
 	Monitoirng_Repo  = "monitoring"
-	Commit_Message   = "auto generate monitoring configurations for %s"
+	Commit_Message   = "Automatically generate monitoring configurations for %s"
 )
 
 var (
-	PR_Subject            = "Automated generate monitoring configurations for %s"
-	PR_Description        = "Automated generate monitoring configurations"
+	PR_Subject            = "Automatically generate monitoring configurations for %s"
+	PR_Description        = "Automatically generate monitoring configurations"
 	Monitoring_Base_Brach = "master"
 )
 

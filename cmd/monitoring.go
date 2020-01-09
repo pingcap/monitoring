@@ -28,15 +28,19 @@ const (
 	Ansible_Grfana_Dir = "tidb-monitor"
 	Ansible_Rule_Dir   = "tidb-rule"
 	Commit_Branch      = "auto-generate-for-%s"
+
+	Platform_Monitoring_Repo_Owner = "pingcap"
+	Platform_Monitoring_Repo_Name  = "monitoring"
+	Platform_Monitoring_Repo_Ref   = "master"
+	Platform_Monitoring_Repo_Path  = "platform-monitoring"
 )
 
 var (
-	platformMonitoringDir string
-	configFile            string
-	outputDir             string
-	autoPush              bool
-	cfg                   *Config
-	tag                   string
+	configFile string
+	outputDir  string
+	autoPush   bool
+	cfg        *Config
+	tag        string
 
 	baseTagDir         string
 	ansibleGrafanaDir  string
@@ -84,7 +88,6 @@ func main() {
 	rootCmd.Flags().StringVar(&configFile, "config", "", "the monitoring configuration file.")
 	rootCmd.Flags().StringVar(&tag, "tag", "", "the tag of pull monitoring repo.")
 	rootCmd.Flags().StringVar(&outputDir, "output-dir", ".", "the base directory of the program")
-	rootCmd.Flags().StringVar(&platformMonitoringDir, "platform-monitoring-dir", "platform-config", "the direcotry of platform-config in monitoring repo")
 	rootCmd.Flags().BoolVar(&autoPush, "auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
 
@@ -151,7 +154,7 @@ func Start() error {
 
 	// copy ansible platform config
 	stream.FromMapEntries(ansibleFiles).Each(func(entry stream.MapEntry) {
-		copyAnsibleLocalFiles(entry.Key.(reflect.Value).String(), entry.Value.(string))
+		copyAnsibleLocalFiles(rservice, entry.Key.(reflect.Value).String(), entry.Value.(string))
 	})
 
 	err = ansible.Compress(fmt.Sprintf("%s%c%s", baseTagDir, filepath.Separator, Ansible), fmt.Sprintf("%s%c%s", baseTagDir, filepath.Separator, "ansible-monitor.tar.gz"))
@@ -160,7 +163,7 @@ func Start() error {
 
 	// copy operator platform config
 	stream.FromMapEntries(operatorFiles).Each(func(entry stream.MapEntry) {
-		copyOperatorLocalfiles(entry.Key.(reflect.Value).String(), entry.Value.(string))
+		copyOperatorLocalfiles(rservice, entry.Key.(reflect.Value).String(), entry.Value.(string))
 	})
 
 	if autoPush {
@@ -215,7 +218,7 @@ func PushPullRequest() error {
 }
 
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
-	_, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
+	fileContent, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
 		Ref: func() string {
 			if useGlobalTag {
 				return tag
@@ -225,9 +228,14 @@ func fetchDirectory(rservice *common.GitRepoService, owner string, repoName stri
 		}(),
 	})
 
-	common.CheckErr(err, "")
-	if len(monitorDirectory) == 0 {
-		common.CheckErr(errors.New("empty monitoring configurations"), "")
+	common.CheckErr(err, fmt.Sprintf("owner=%s, repo=%s, path=%s, ref=%s", owner, repoName, path, ref))
+
+	if fileContent == nil && monitorDirectory == nil {
+		return []*common.RepositoryContent{}
+	}
+
+	if monitorDirectory == nil {
+		return []*common.RepositoryContent{fileContent}
 	}
 
 	return monitorDirectory
@@ -304,41 +312,67 @@ func RepoService(cfg *Config) (*common.GitRepoService, error) {
 	return common.NewGitRepoService()
 }
 
-func copyOperatorLocalfiles(sourcePath string, dstPath string) {
-	operatorConfig := fmt.Sprintf("%s%c%s", getPlatFormConfigDir(), filepath.Separator, Opertaor)
-	files := common.ListAllFiles(fmt.Sprintf("%s%c%s", operatorConfig, filepath.Separator, sourcePath))
+func copyOperatorLocalfiles(service *common.GitRepoService, sourcePath string, dstPath string) {
+	path := fmt.Sprintf("%s/%s/%s", getValue(Platform_Monitoring_Repo_Path, cfg.PlatformMonitoringConfig.PlatformMonitoringPath), Opertaor, sourcePath)
+	contents := fetchDirectory(service, getValue(Platform_Monitoring_Repo_Owner, cfg.PlatformMonitoringConfig.Owner), getValue(Platform_Monitoring_Repo_Name, cfg.PlatformMonitoringConfig.RepoName),
+		path, getValue(Platform_Monitoring_Repo_Ref, cfg.PlatformMonitoringConfig.Ref))
 
-	stream.FromArray(files).Each(func(file string) {
-		df, err := ioutil.ReadFile(file)
-		common.CheckErr(err, fmt.Sprintf("read file failed, file=%s", file))
+	name := ""
+	stream.FromArray(contents).Map(func(file *common.RepositoryContent) string {
+		name = *file.Name
+		content, err := service.DownloadContents(file)
+		common.CheckErr(err, "")
 
+		if content == nil {
+			return ""
+		}
+
+		return string(content)
+	}).Filter(func(content string) bool {
+		return content != ""
+	}).Each(func(content string) {
 		dstDir := fmt.Sprintf("%s%c%s%c%s", baseTagDir, filepath.Separator, Opertaor, filepath.Separator, dstPath)
 		if !common.PathExist(dstDir) {
 			os.MkdirAll(dstDir, os.ModePerm)
 		}
-		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, common.ExtractFromPath(file)), df, os.ModePerm), "create file failed")
+		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, name), []byte(content), os.ModePerm), "create file failed")
 	})
 }
 
-func copyAnsibleLocalFiles(sourcePath string, dstPath string) {
-	ansibleConfig := fmt.Sprintf("%s%c%s", getPlatFormConfigDir(), filepath.Separator, Ansible)
+func getValue(defaultValue string, value string) string {
+	if value == "" {
+		return defaultValue
+	}
 
-	files := common.ListAllFiles(fmt.Sprintf("%s%c%s", ansibleConfig, filepath.Separator, sourcePath))
+	return value
+}
 
-	stream.FromArray(files).Each(func(file string) {
-		df, err := ioutil.ReadFile(file)
-		common.CheckErr(err, fmt.Sprintf("read file failed, file=%s", file))
+func copyAnsibleLocalFiles(service *common.GitRepoService, sourcePath string, dstPath string) {
+	path := fmt.Sprintf("%s/%s/%s", getValue(Platform_Monitoring_Repo_Path, cfg.PlatformMonitoringConfig.PlatformMonitoringPath), Ansible, sourcePath)
+	contents := fetchDirectory(service, getValue(Platform_Monitoring_Repo_Owner, cfg.PlatformMonitoringConfig.Owner), getValue(Platform_Monitoring_Repo_Name, cfg.PlatformMonitoringConfig.RepoName),
+		path, getValue(Platform_Monitoring_Repo_Ref, cfg.PlatformMonitoringConfig.Ref))
+
+	name := ""
+	stream.FromArray(contents).Map(func(file *common.RepositoryContent) string {
+		name = *file.Name
+		content, err := service.DownloadContents(file)
+		common.CheckErr(err, "")
+
+		if content == nil {
+			return ""
+		}
+
+		return string(content)
+	}).Filter(func(content string) bool {
+		return content != ""
+	}).Each(func(content string) {
 
 		dstDir := fmt.Sprintf("%s%c%s%c%s", baseTagDir, filepath.Separator, Ansible, filepath.Separator, dstPath)
 		if !common.PathExist(dstDir) {
 			os.MkdirAll(dstDir, os.ModePerm)
 		}
-		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, common.ExtractFromPath(file)), df, os.ModePerm), "create file failed")
+		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, name), []byte(content), os.ModePerm), "create file failed")
 	})
-}
-
-func getPlatFormConfigDir() string {
-	return removeLastSlash(platformMonitoringDir)
 }
 
 func removeLastSlash(str string) string {
@@ -358,12 +392,13 @@ func Load(s string) (*Config, error) {
 }
 
 type Config struct {
-	UserName         string            `yaml:"user_name,omitempty"`
-	Password         string            `yaml:"password,omitempty"`
-	Email            string            `yaml:"email"`
-	Token            string            `yaml:"token,omitempty"`
-	ComponentConfigs []ComponentConfig `yaml:"components"`
-	OperatorConfig   OperatorConfig    `yaml:"operator"`
+	UserName                 string                   `yaml:"user_name,omitempty"`
+	Password                 string                   `yaml:"password,omitempty"`
+	Email                    string                   `yaml:"email"`
+	Token                    string                   `yaml:"token,omitempty"`
+	ComponentConfigs         []ComponentConfig        `yaml:"components"`
+	PlatformMonitoringConfig PlatformMonitoringConfig `yaml:"platform_monitoring"`
+	OperatorConfig           OperatorConfig           `yaml:"operator"`
 }
 
 type ComponentConfig struct {
@@ -381,4 +416,11 @@ type OperatorConfig struct {
 type ReplaceExpr struct {
 	RuleName string `yaml:"rule_name"`
 	NewExpr  string `yaml:"expr"`
+}
+
+type PlatformMonitoringConfig struct {
+	RepoName               string `yaml:"repo_name"`
+	Ref                    string `yaml:"ref"`
+	Owner                  string `yaml:"owner,omitempty"`
+	PlatformMonitoringPath string `yaml:"platform_monitoring_path"`
 }
