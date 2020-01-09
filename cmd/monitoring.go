@@ -320,6 +320,11 @@ func copyOperatorLocalfiles(service *common.GitRepoService, sourcePath string, d
 	name := ""
 	stream.FromArray(contents).Map(func(file *common.RepositoryContent) string {
 		name = *file.Name
+
+		if strings.HasPrefix(name, ".") {
+			return ""
+		}
+
 		content, err := service.DownloadContents(file)
 		common.CheckErr(err, "")
 
@@ -355,6 +360,11 @@ func copyAnsibleLocalFiles(service *common.GitRepoService, sourcePath string, ds
 	name := ""
 	stream.FromArray(contents).Map(func(file *common.RepositoryContent) string {
 		name = *file.Name
+
+		if strings.HasPrefix(name, ".") {
+			return ""
+		}
+
 		content, err := service.DownloadContents(file)
 		common.CheckErr(err, "")
 
