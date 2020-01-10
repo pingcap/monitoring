@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/oauth2"
+
 	"github.com/google/go-github/github"
 	"github.com/pingcap/monitoring/pkg/ansible"
 	"github.com/pingcap/monitoring/pkg/common"
@@ -33,6 +35,9 @@ const (
 	Platform_Monitoring_Repo_Name  = "monitoring"
 	Platform_Monitoring_Repo_Ref   = "master"
 	Platform_Monitoring_Repo_Path  = "platform-monitoring"
+
+	CommitAuthor = "bot"
+	CommitEmal   = "bot@pingcap.com"
 )
 
 var (
@@ -178,13 +183,13 @@ func PushPullRequest() error {
 	client := func() *github.Client {
 		var tp github.BasicAuthTransport
 		if cfg.Token != "" {
-			tp = github.BasicAuthTransport{
-				Username: strings.TrimSpace(cfg.UserName),
-				Password: strings.TrimSpace(cfg.Password),
-			}
+			ctx := context.Background()
+			ts := oauth2.StaticTokenSource(
+				&oauth2.Token{AccessToken: cfg.Token})
+			return github.NewClient(oauth2.NewClient(ctx, ts))
 		}
 
-		if cfg.UserName != "" || cfg.Password == "" {
+		if cfg.UserName != "" || cfg.Password != "" {
 			tp = github.BasicAuthTransport{
 				Username: strings.TrimSpace(cfg.UserName),
 				Password: strings.TrimSpace(cfg.Password),
@@ -211,7 +216,7 @@ func PushPullRequest() error {
 		return err
 	}
 
-	if err := common.PushCommit(client, ref, tree, ctx, tag, cfg.UserName, cfg.Email); err != nil {
+	if err := common.PushCommit(client, ref, tree, ctx, tag, CommitAuthor, CommitEmal); err != nil {
 		return err
 	}
 
@@ -298,9 +303,7 @@ func getOperatorDir(baseTagDir string) string {
 
 func RepoService(cfg *Config) (*common.GitRepoService, error) {
 	if cfg.Token != "" {
-		return common.NewGitRepoServiceWithAuth(common.BasicAuthTransport{
-			OTP: cfg.Token,
-		})
+		return common.NewGitRepoServiceWithToken(cfg.Token)
 	}
 
 	if cfg.UserName != "" || cfg.Password == "" {

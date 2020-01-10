@@ -20,6 +20,7 @@ require (
 	github.com/tidwall/gjson v1.3.2
 	github.com/tidwall/sjson v1.0.4
 	github.com/wushilin/stream v0.0.0-20160517090247-4c9093559eef
+	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	gopkg.in/src-d/go-git.v4 v4.12.0
 	gopkg.in/yaml.v2 v2.2.2
 	k8s.io/apiextensions-apiserver v0.0.0-20190721103949-a013b2d4e1dd // indirect

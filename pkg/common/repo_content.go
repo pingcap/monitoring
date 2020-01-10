@@ -2,6 +2,7 @@ package common
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,6 +12,8 @@ import (
 	"net/url"
 	"reflect"
 	"strings"
+
+	"golang.org/x/oauth2"
 
 	"github.com/google/go-querystring/query"
 )
@@ -79,6 +82,23 @@ func NewGitRepoServiceWithAuth(auth BasicAuthTransport) (*GitRepoService, error)
 	return &GitRepoService{
 		baseURL: url,
 		client:  auth.Client(),
+	}, nil
+}
+
+func NewGitRepoServiceWithToken(token string) (*GitRepoService, error) {
+	url, err := url.Parse(defaultBaseURL)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token})
+	tc := oauth2.NewClient(ctx, ts)
+
+	return &GitRepoService{
+		baseURL: url,
+		client:  tc,
 	}, nil
 }
 
