@@ -1,5 +1,4 @@
-user_name: "USERNAME"
-password: "AUTH"
+token: ""
 components:
   - repo_name: "tidb"
     monitor_path: "metrics/grafana"
@@ -9,6 +8,12 @@ components:
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
   - repo_name: "pd"
+    monitor_path: "metrics/grafana"
+    rule_path: "metrics/alertmanager"
+  - repo_name: "tidb-binlog"
+    monitor_path: "metrics/grafana"
+    rule_path: "metrics/alertmanager"
+  - repo_name: "tidb-lightning"
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
 
