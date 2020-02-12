@@ -205,6 +205,8 @@ data:
       - source_labels: [__meta_kubernetes_pod_label_app]
         regex: node-exporter
         action: keep
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        target_label: kubernetes_node
 
     - job_name: pod
       kubernetes_sd_configs:

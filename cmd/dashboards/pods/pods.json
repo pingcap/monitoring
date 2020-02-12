@@ -173,21 +173,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kubelet_volume_stats_capacity_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Total",
               "refId": "A"
             },
             {
-              "expr": "kubelet_volume_stats_used_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_used_bytes{persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Used",
               "refId": "B"
             },
             {
-              "expr": "kubelet_volume_stats_available_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_available_bytes{persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Free",
@@ -443,7 +443,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 29
       },
       "id": 5,
       "links": [],
@@ -466,7 +466,7 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "mappingType": 1,
-          "pattern": "/Time|instance|uid|__name__|created_by_kind|created_by_name|job|endpoint|host_ip|namespace|service/",
+          "pattern": "/Time|instance|uid|__name__|created_by_kind|created_by_name|job|endpoint|namespace|service/",
           "thresholds": [],
           "type": "hidden",
           "unit": "short"
@@ -485,7 +485,7 @@
           "linkTargetBlank": false,
           "linkUrl": "/d/fa49a4706d07a042595b664c87fb33ea/nodes-info?orgId=1&var-cluster=&var-node=${__cell}&var-port=$port",
           "mappingType": 1,
-          "pattern": "node_ip",
+          "pattern": "host_ip",
           "thresholds": [],
           "type": "number",
           "unit": "short"
@@ -509,7 +509,7 @@
       ],
       "targets": [
         {
-          "expr": "((label_replace(label_replace(node_uname_info, \"node_ip\", \"$1\", \"instance\", \"(.*):.*\"), \"node\", \"$0\", \"nodename\", \".*\") * on (node) group_right(node_ip) kube_pod_info{namespace=\"$namespace\", pod=\"$pod\"}) * on(namespace, pod) group_left(phase) (kube_pod_status_phase{namespace=\"$namespace\", pod=\"$pod\"} == 1)) * on (namespace, pod) group_left(Value) kube_pod_start_time{namespace=\"$namespace\", pod=\"$pod\"} * 1000",
+          "expr": "(label_replace(node_uname_info, \"host_ip\", \"$1\", \"instance\", \"(.*):.*\")) * on (host_ip) group_right kube_pod_info{namespace=\"$namespace\", pod=\"$pod\"} * on(namespace, pod) group_left(phase) (kube_pod_status_phase{namespace=\"$namespace\", pod=\"$pod\"} == 1) * on (namespace, pod) group_left(Value) kube_pod_start_time{namespace=\"$namespace\", pod=\"$pod\"} * 1000",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -682,21 +682,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", image!=\"\", pod_name=\"$pod\", container_name=~\"$container\", container_name!=\"POD\"}[1m]))",
+          "expr": "sum by (container_name) (rate(container_cpu_usage_seconds_total{cluster=\"$cluster\", namespace=\"$namespace\", image!=\"\", pod_name=\"$pod\", container_name=~\"$container\", container_name!=\"POD\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Current: {{ container_name }}",
           "refId": "A"
         },
         {
-          "expr": "sum by(container) (kube_pod_container_resource_requests{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
+          "expr": "sum by(container) (kube_pod_container_resource_requests{cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Requested: {{ container }}",
           "refId": "B"
         },
         {
-          "expr": "sum by(container) (kube_pod_container_resource_limits{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
+          "expr": "sum by(container) (kube_pod_container_resource_limits{cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Limit: {{ container }}",
@@ -785,14 +785,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sort_desc(sum by (pod_name) (rate(container_network_receive_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
+          "expr": "sort_desc(sum by (pod_name) (rate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RX",
           "refId": "A"
         },
         {
-          "expr": "sort_desc(sum by (pod_name) (rate(container_network_transmit_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
+          "expr": "sort_desc(sum by (pod_name) (rate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "TX",
@@ -1039,14 +1039,14 @@
           "value": "9100"
         },
         "datasource": "k8s-cluster",
-        "definition": "label_values(node_boot_time_seconds{cluster=\"$cluster\", job=\"node-exporter\"}, instance)",
+        "definition": "label_values(node_boot_time_seconds{cluster=\"$cluster\"}, instance)",
         "hide": 2,
         "includeAll": false,
         "label": null,
         "multi": false,
         "name": "port",
         "options": [],
-        "query": "label_values(node_boot_time_seconds{cluster=\"$cluster\", job=\"node-exporter\"}, instance)",
+        "query": "label_values(node_boot_time_seconds{cluster=\"$cluster\"}, instance)",
         "refresh": 2,
         "regex": "/.*:(\\d+)/",
         "skipUrlSync": false,
