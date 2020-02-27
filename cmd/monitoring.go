@@ -46,6 +46,7 @@ var (
 	autoPush   bool
 	cfg        *Config
 	tag        string
+	token      string
 
 	baseTagDir         string
 	ansibleGrafanaDir  string
@@ -94,6 +95,7 @@ func main() {
 	rootCmd.Flags().StringVar(&configFile, "config", "", "the monitoring configuration file.")
 	rootCmd.Flags().StringVar(&tag, "tag", "", "the tag of pull monitoring repo.")
 	rootCmd.Flags().StringVar(&outputDir, "output-dir", ".", "the base directory of the program")
+	rootCmd.Flags().StringVar(&token, "token", ".", "the token of github")
 	rootCmd.Flags().BoolVar(&autoPush, "auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
 
@@ -109,6 +111,10 @@ func stepUp() error {
 	cfg, err = Load(string(content))
 	if err != nil {
 		return err
+	}
+
+	if token != "" {
+		cfg.Token = token
 	}
 
 	if tag == "" {
