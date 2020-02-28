@@ -159,9 +159,9 @@ func Start() error {
 	})
 
 	stream.FromArray(cfg.ComponentConfigs).Peek(func(component ComponentConfig) {
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, component.Ref), rservice)
+		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref)), rservice)
 	}).Each(func(component ComponentConfig) {
-		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, component.Ref), rservice)
+		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref)), rservice)
 	})
 
 	// copy ansible platform config
@@ -229,15 +229,17 @@ func PushPullRequest() error {
 	return common.CreatePR(client, commitBrach, ctx, tag)
 }
 
+func getTag(defaultTag string) string {
+	if useGlobalTag {
+		return tag
+	}
+
+	return defaultTag
+}
+
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
 	fileContent, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
-		Ref: func() string {
-			if useGlobalTag {
-				return tag
-			}
-
-			return ref
-		}(),
+		Ref: ref,
 	})
 
 	common.CheckErr(err, fmt.Sprintf("owner=%s, repo=%s, path=%s, ref=%s", owner, repoName, path, ref))
