@@ -30,6 +30,8 @@ var (
 		"tikv_pull.json":             "Test-Cluster-TiKV",
 		"overview_pull.json":         "Test-Cluster-Overview",
 		"lightning.json":             "Test-Cluster-Lightning",
+		"tiflash_summary.json":       "Test-Cluster-TiFlash-Summary",
+		"tiflash_proxy_summary.json": "Test-Cluster-TiFlash-Proxy-Summary",
 	}
 )
 

@@ -16,6 +16,6 @@ func NewErrorResponse(message string) *ErrorResponse {
 	return &ErrorResponse{ErrorCode: http.StatusBadRequest, ErrorMessage: message}
 }
 
-func GetHttpParameter(gpf GetParameterFunc, name string) string {
+func niGetHttpParameter(gpf GetParameterFunc, name string) string {
 	return strings.TrimSpace(gpf(name))
 }
