@@ -40,6 +40,7 @@ cp /tmp/tiflash_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Summary/g'  $GF_PROVISIONING_PATH/dashboards/tiflash_summary.json
 cp /tmp/tiflash_proxy_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Proxy-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Summary/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
+sed -i 's%job=\\\"tiflash\\\"%job=\\"tiflash-proxy\\"%g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
 
 # Rules
 if [ ! -d $PROM_CONFIG_PATH/rules  ];then
