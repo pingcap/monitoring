@@ -193,3 +193,15 @@ groups:
         $labels.instance }}, values: {{ $value }}'
       summary: PD_no_store_for_making_replica
       value: '{{ $value }}'
+  - alert: PD_node_restart
+    expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD server has been restarted
+      value: '{{ $value }}'
