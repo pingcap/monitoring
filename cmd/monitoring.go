@@ -230,7 +230,7 @@ func PushPullRequest() error {
 }
 
 func getTag(defaultTag string) string {
-	if useGlobalTag {
+	if useGlobalTag && defaultTag == "" {
 		return tag
 	}
 

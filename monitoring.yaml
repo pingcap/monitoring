@@ -19,6 +19,12 @@ components:
   - repo_name: "tics"
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
+  - repo_name: "dm"
+    monitor_path: "dm/dm-ansible/scripts"
+    rule_path: "dm/dm-ansible/conf"
+    ref: v2.0.0
+# if the option ref: of repo is not setted in here, the default tag of repo will be setted by CLI --tag flag when running monitoring.
+# if the option ref: of repo is setted in here, the default tag of repo will be this ref: .
 
 platform_monitoring:
     repo_name: "monitoring"

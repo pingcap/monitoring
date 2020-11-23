@@ -41,6 +41,10 @@ sed -i 's/Test-Cluster-TiFlash-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Summary/g'  
 cp /tmp/tiflash_proxy_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Proxy-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Summary/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
 
+# DM
+cp /tmp/dm.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-DM/'$DM_CLUSTER_NAME'-DM/g'  $GF_PROVISIONING_PATH/dashboards/dm.json
+
 # Rules
 if [ ! -d $PROM_CONFIG_PATH/rules  ];then
     mkdir -p $PROM_CONFIG_PATH/rules
