@@ -40,19 +40,7 @@ cp /tmp/tiflash_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Summary/g'  $GF_PROVISIONING_PATH/dashboards/tiflash_summary.json
 cp /tmp/tiflash_proxy_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Proxy-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Summary/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
-
-# To support monitoring multiple clusters with one TidbMonitor, change the job label to component
-sed -i 's%job=\\\"tiflash\\\"%component=\\"tiflash\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
-sed -i 's%job=\\\"tikv-importer\\\"%component=\\"importer\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
-sed -i 's%job=\\\"lightning\\\"%component=\\"tidb-lightning\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
-fs=`ls $GF_PROVISIONING_PATH/dashboards/*.json`
-for f in $fs
-do
-  if [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/nodes.json" ] &&
-     [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/pods.json" ]; then
-    sed -i 's%job=%component=%g' ${f}
-  fi
-done
+sed -i 's%job=\\\"tiflash\\\"%job=\\"tiflash-proxy\\"%g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
 
 # Rules
 if [ ! -d $PROM_CONFIG_PATH/rules  ];then
