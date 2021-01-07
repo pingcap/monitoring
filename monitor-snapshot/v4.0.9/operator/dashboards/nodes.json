@@ -233,7 +233,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(node_network_receive_bytes_total{ job=\"node-exporter\", instance=\"$node:$port\"}[1m])",
+              "expr": "rate(node_network_receive_bytes_total{ component=\"node-exporter\", instance=\"$node:$port\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ device }}",
@@ -321,7 +321,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(node_network_receive_drop_total{ job=\"node-exporter\", instance=\"$node:$port\"}[1m])",
+              "expr": "rate(node_network_receive_drop_total{ component=\"node-exporter\", instance=\"$node:$port\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ device }} - Drop",
@@ -410,7 +410,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(node_network_transmit_bytes_total{ job=\"node-exporter\", instance=\"$node:$port\"}[1m])",
+              "expr": "rate(node_network_transmit_bytes_total{ component=\"node-exporter\", instance=\"$node:$port\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}}",
@@ -498,7 +498,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(node_network_transmit_drop_total{ job=\"node-exporter\", instance=\"$node:$port\"}[1m])",
+              "expr": "rate(node_network_transmit_drop_total{ component=\"node-exporter\", instance=\"$node:$port\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}}",
@@ -602,28 +602,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max(\n  node_memory_MemTotal_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n  - node_memory_MemFree_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n  - node_memory_Buffers_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n  - node_memory_Cached_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n)\n",
+              "expr": "max(\n  node_memory_MemTotal_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n  - node_memory_MemFree_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n  - node_memory_Buffers_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n  - node_memory_Cached_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "memory used",
               "refId": "A"
             },
             {
-              "expr": "max(node_memory_Buffers_bytes{ job=\"node-exporter\", instance=\"$node:$port\"})",
+              "expr": "max(node_memory_Buffers_bytes{ component=\"node-exporter\", instance=\"$node:$port\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "memory buffers",
               "refId": "B"
             },
             {
-              "expr": "max(node_memory_Cached_bytes{ job=\"node-exporter\", instance=\"$node:$port\"})",
+              "expr": "max(node_memory_Cached_bytes{ component=\"node-exporter\", instance=\"$node:$port\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "memory cached",
               "refId": "C"
             },
             {
-              "expr": "max(node_memory_MemFree_bytes{ job=\"node-exporter\", instance=\"$node:$port\"})",
+              "expr": "max(node_memory_MemFree_bytes{ component=\"node-exporter\", instance=\"$node:$port\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "memory free",
@@ -732,7 +732,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "max(\n  (\n    (\n      node_memory_MemTotal_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n    - node_memory_MemFree_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n    - node_memory_Buffers_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n    - node_memory_Cached_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n    )\n    / node_memory_MemTotal_bytes{ job=\"node-exporter\", instance=\"$node:$port\"}\n  ) * 100)\n",
+              "expr": "max(\n  (\n    (\n      node_memory_MemTotal_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n    - node_memory_MemFree_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n    - node_memory_Buffers_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n    - node_memory_Cached_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n    )\n    / node_memory_MemTotal_bytes{ component=\"node-exporter\", instance=\"$node:$port\"}\n  ) * 100)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -810,21 +810,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max(node_load1{ job=\"node-exporter\", instance=\"$node:$port\"})",
+              "expr": "max(node_load1{ component=\"node-exporter\", instance=\"$node:$port\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "load 1m",
               "refId": "A"
             },
             {
-              "expr": "max(node_load5{ job=\"node-exporter\", instance=\"$node:$port\"})",
+              "expr": "max(node_load5{ component=\"node-exporter\", instance=\"$node:$port\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "load 5m",
               "refId": "B"
             },
             {
-              "expr": "max(node_load15{ job=\"node-exporter\", instance=\"$node:$port\"})",
+              "expr": "max(node_load15{ component=\"node-exporter\", instance=\"$node:$port\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "load 15m",
@@ -913,7 +913,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (cpu) (irate(node_cpu_seconds_total{ job=\"node-exporter\", mode!=\"idle\", instance=\"$node:$port\"}[5m]))",
+              "expr": "sum by (cpu) (irate(node_cpu_seconds_total{ component=\"node-exporter\", mode!=\"idle\", instance=\"$node:$port\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{cpu}}",
@@ -1332,7 +1332,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_disk_io_time_seconds_total{ job=\"node-exporter\",  instance=\"$node:$port\"}[2m])",
+          "expr": "rate(node_disk_io_time_seconds_total{ component=\"node-exporter\",  instance=\"$node:$port\"}[2m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{device}} - IO Time",
@@ -1901,14 +1901,14 @@
       {
         "allValue": null,
         "datasource": "k8s-cluster",
-        "definition": "label_values(node_boot_time_seconds{ job=\"node-exporter\"}, instance)",
+        "definition": "label_values(node_boot_time_seconds{ component=\"node-exporter\"}, instance)",
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": false,
         "name": "node",
         "options": [],
-        "query": "label_values(node_boot_time_seconds{ job=\"node-exporter\"}, instance)",
+        "query": "label_values(node_boot_time_seconds{ component=\"node-exporter\"}, instance)",
         "refresh": 2,
         "regex": "/(.*):.*/",
         "skipUrlSync": false,
@@ -1933,7 +1933,7 @@
         "multi": false,
         "name": "port",
         "options": [],
-        "query": "label_values(node_boot_time_seconds{ job=\"node-exporter\"}, instance)",
+        "query": "label_values(node_boot_time_seconds{ component=\"node-exporter\"}, instance)",
         "refresh": 2,
         "regex": "/.*:(\\d+)/",
         "skipUrlSync": false,

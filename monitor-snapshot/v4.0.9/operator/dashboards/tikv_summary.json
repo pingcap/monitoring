@@ -96,7 +96,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_engine_size_bytes{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tikv_engine_size_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -193,7 +193,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_store_size_bytes{EXTERNAL_LABEL, instance=~\"$instance\", type=\"available\"}) by (instance)",
+              "expr": "sum(tikv_store_size_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"available\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -290,7 +290,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_store_size_bytes{EXTERNAL_LABEL, instance=~\"$instance\", type=\"capacity\"}) by (instance)",
+              "expr": "sum(tikv_store_size_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"capacity\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -387,7 +387,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -484,7 +484,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(process_resident_memory_bytes{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "avg(process_resident_memory_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -581,7 +581,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_engine_flow_bytes{EXTERNAL_LABEL, instance=~\"$instance\", db=\"kv\", type=\"wal_file_bytes\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_engine_flow_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", db=\"kv\", type=\"wal_file_bytes\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -590,7 +590,7 @@
               "step": 10
             },
             {
-              "expr": "sum(rate(tikv_engine_flow_bytes{EXTERNAL_LABEL, instance=~\"$instance\", db=\"kv\", type=~\"bytes_read|iter_bytes_read\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_engine_flow_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", db=\"kv\", type=~\"bytes_read|iter_bytes_read\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -689,7 +689,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_grpc_msg_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (instance,type)",
+              "expr": "sum(rate(tikv_grpc_msg_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (instance,type)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -789,7 +789,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_grpc_msg_fail_total{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_grpc_msg_fail_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -798,14 +798,14 @@
               "step": 10
             },
             {
-              "expr": "sum(delta(tikv_pd_heartbeat_message_total{EXTERNAL_LABEL, instance=~\"$instance\", type=\"noop\"}[1m])) by (instance) < 1",
+              "expr": "sum(delta(tikv_pd_heartbeat_message_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"noop\"}[1m])) by (instance) < 1",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-pd-heartbeat",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(tikv_critical_error_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tikv_critical_error_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -906,7 +906,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_raftstore_region_count{EXTERNAL_LABEL, instance=~\"$instance\", type=\"leader\"}) by (instance)",
+              "expr": "sum(tikv_raftstore_region_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"leader\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -915,7 +915,7 @@
               "step": 10
             },
             {
-              "expr": "delta(tikv_raftstore_region_count{EXTERNAL_LABEL, instance=~\"$instance\", type=\"leader\"}[30s]) < -10",
+              "expr": "delta(tikv_raftstore_region_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"leader\"}[1m]) < -10",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -1010,7 +1010,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_raftstore_region_count{EXTERNAL_LABEL, instance=~\"$instance\", type=\"region\"}) by (instance)",
+              "expr": "sum(tikv_raftstore_region_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"region\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1145,7 +1145,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_critical_error_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tikv_critical_error_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -1248,7 +1248,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_scheduler_too_busy_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_scheduler_too_busy_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "scheduler-{{instance}}",
@@ -1257,7 +1257,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tikv_channel_full_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tikv_channel_full_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "channelfull-{{instance}}-{{type}}",
@@ -1266,7 +1266,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tikv_coprocessor_request_error{EXTERNAL_LABEL, instance=~\"$instance\", type='full'}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_coprocessor_request_error{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type='full'}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "coprocessor-{{instance}}",
@@ -1275,7 +1275,7 @@
               "step": 4
             },
             {
-              "expr": "avg(tikv_engine_write_stall{EXTERNAL_LABEL, instance=~\"$instance\", type=\"write_stall_percentile99\"}) by (instance)",
+              "expr": "avg(tikv_engine_write_stall{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"write_stall_percentile99\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "stall-{{instance}}",
@@ -1407,7 +1407,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_server_report_failure_msg_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type,instance,store_id)",
+              "expr": "sum(rate(tikv_server_report_failure_msg_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type,instance,store_id)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - {{type}} - to - {{store_id}}",
@@ -1515,7 +1515,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_storage_engine_async_request_total{EXTERNAL_LABEL, instance=~\"$instance\", status!~\"success|all\"}[1m])) by (instance, status)",
+              "expr": "sum(rate(tikv_storage_engine_async_request_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", status!~\"success|all\"}[1m])) by (instance, status)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{status}}",
@@ -1615,7 +1615,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_scheduler_stage_total{EXTERNAL_LABEL, instance=~\"$instance\", stage=~\"snapshot_err|prepare_write_err\"}[1m])) by (instance, stage)",
+              "expr": "sum(rate(tikv_scheduler_stage_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", stage=~\"snapshot_err|prepare_write_err\"}[1m])) by (instance, stage)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{stage}}",
@@ -1715,7 +1715,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_coprocessor_request_error{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, reason)",
+              "expr": "sum(rate(tikv_coprocessor_request_error{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, reason)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{reason}}",
@@ -1815,7 +1815,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_grpc_msg_fail_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tikv_grpc_msg_fail_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -1920,7 +1920,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(delta(tikv_raftstore_region_count{EXTERNAL_LABEL, instance=~\"$instance\", type=\"leader\"}[1m])) by (instance)",
+              "expr": "sum(delta(tikv_raftstore_region_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"leader\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2024,7 +2024,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_raftstore_leader_missing{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tikv_raftstore_leader_missing{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2135,7 +2135,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_engine_size_bytes{EXTERNAL_LABEL, instance=~\"$instance\"}) by (type)",
+              "expr": "sum(tikv_engine_size_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -2232,7 +2232,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tikv_engine_size_bytes{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tikv_engine_size_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2298,7 +2298,7 @@
                 "query": {
                   "datasourceId": 1,
                   "model": {
-                    "expr": "sum(rate(tikv_channel_full_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
+                    "expr": "sum(rate(tikv_channel_full_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, type)",
                     "intervalFactor": 2,
                     "legendFormat": "{{instance}} - {{type}}",
                     "metric": "",
@@ -2372,7 +2372,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_channel_full_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tikv_channel_full_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - {{type}}",
@@ -2510,7 +2510,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tikv_raftstore_region_size_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tikv_raftstore_region_size_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99%",
@@ -2519,7 +2519,7 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tikv_raftstore_region_size_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tikv_raftstore_region_size_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95%",
@@ -2528,7 +2528,7 @@
               "step": 10
             },
             {
-              "expr": "sum(rate(tikv_raftstore_region_size_sum{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) / sum(rate(tikv_raftstore_region_size_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) ",
+              "expr": "sum(rate(tikv_raftstore_region_size_sum{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) / sum(rate(tikv_raftstore_region_size_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "avg",
@@ -2638,7 +2638,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_grpc_msg_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (type)",
+              "expr": "sum(rate(tikv_grpc_msg_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -2730,7 +2730,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_grpc_msg_fail_total{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (type)",
+              "expr": "sum(rate(tikv_grpc_msg_fail_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -2826,7 +2826,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tikv_grpc_msg_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tikv_grpc_msg_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"kv_gc\"}[1m])) by (le, type))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2921,7 +2921,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_grpc_msg_duration_seconds_sum{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type) / sum(rate(tikv_grpc_msg_duration_seconds_count[1m])) by (type)",
+              "expr": "sum(rate(tikv_grpc_msg_duration_seconds_sum{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type) / sum(rate(tikv_grpc_msg_duration_seconds_count[1m])) by (type)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -3002,7 +3002,7 @@
                 "query": {
                   "datasourceId": 1,
                   "model": {
-                    "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
+                    "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
                     "intervalFactor": 2,
                     "legendFormat": "{{instance}}",
                     "metric": "tikv_thread_cpu_seconds_total",
@@ -3078,7 +3078,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3219,7 +3219,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"apply_[0-9]+\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"apply_[0-9]+\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3362,7 +3362,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"sched_.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"sched_.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3500,7 +3500,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"grpc.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"grpc.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3640,7 +3640,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"cop_normal.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"cop_normal.*\"}[1m])) by (instance)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -3649,7 +3649,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"cop_high.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"cop_high.*\"}[1m])) by (instance)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -3658,7 +3658,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"cop_low.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"cop_low.*\"}[1m])) by (instance)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -3801,7 +3801,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"store_read_norm.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"store_read_norm.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - normal",
@@ -3810,7 +3810,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"store_read_high.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"store_read_high.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - high",
@@ -3819,7 +3819,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"store_read_low.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"store_read_low.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - low",
@@ -3925,7 +3925,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"split_check\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"split_check\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4023,7 +4023,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"rocksdb.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"rocksdb.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4132,7 +4132,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"gc_worker.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"gc_worker.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4230,7 +4230,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"snapshot_worker\"}[1m])) by (instance)",
+              "expr": "sum(rate(tikv_thread_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", name=~\"snapshot_worker\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4338,7 +4338,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_pd_request_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tikv_pd_request_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -4429,7 +4429,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_pd_request_duration_seconds_sum{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type) / sum(rate(tikv_pd_request_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tikv_pd_request_duration_seconds_sum{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type) / sum(rate(tikv_pd_request_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -4520,7 +4520,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_pd_heartbeat_message_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tikv_pd_heartbeat_message_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -4611,7 +4611,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_pd_validate_peer_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tikv_pd_validate_peer_total{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -4675,6 +4675,94 @@
     "list": [
       {
         "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tenant_info,name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "tenant_name",
+        "query": "label_values(dbaas_tenant_info,name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tenant_info{name=\"$tenant_name\"},tenant)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "tenant_id",
+        "query": "label_values(dbaas_tenant_info{name=\"$tenant_name\"},tenant)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\"},name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster_name",
+        "options": [
+          {
+            "selected": true,
+            "text": "Ghim-Test",
+            "value": "Ghim-Test"
+          }
+        ],
+        "query": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\"},name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\",name=\"$cluster_name\"},cluster_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster_id",
+        "options": [],
+        "query": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\",name=\"$cluster_name\"},cluster_id)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
         "current": {},
         "datasource": "tidb-cluster",
         "definition": "",
@@ -4684,7 +4772,7 @@
         "multi": true,
         "name": "db",
         "options": [],
-        "query": "label_values(tikv_engine_block_cache_size_bytes, db)",
+        "query": "label_values(tikv_engine_block_cache_size_bytes{kubernetes_namespace=~\".*$cluster_id\"}, db)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -4706,7 +4794,7 @@
         "multi": true,
         "name": "command",
         "options": [],
-        "query": "label_values(tikv_storage_command_total, type)",
+        "query": "label_values(tikv_storage_command_total{kubernetes_namespace=~\".*$cluster_id\"}, type)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -4728,7 +4816,7 @@
         "multi": false,
         "name": "instance",
         "options": [],
-        "query": "label_values(tikv_engine_size_bytes, instance)",
+        "query": "label_values(tikv_engine_size_bytes{kubernetes_namespace=~\".*$cluster_id\"}, instance)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -4771,7 +4859,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Test-Cluster-TiKV-Summary",
+  "title": "TiKV-Summary",
   "uid": "X7VQmEzZk",
   "version": 5
 }

@@ -91,28 +91,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80",
@@ -209,7 +209,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_server_query_total{EXTERNAL_LABEL}[1m])) by (result)",
+              "expr": "sum(rate(tidb_server_query_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (result)",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -218,7 +218,7 @@
               "step": 60
             },
             {
-              "expr": "sum(rate(tidb_server_query_total{EXTERNAL_LABEL, result=\"OK\"}[1m]  offset 1d))",
+              "expr": "sum(rate(tidb_server_query_total{kubernetes_namespace=~\".*$cluster_id\", result=\"OK\"}[1m]  offset 1d))",
               "format": "time_series",
               "hide": true,
               "instant": false,
@@ -228,7 +228,7 @@
               "step": 90
             },
             {
-              "expr": "sum(tidb_server_connections{EXTERNAL_LABEL}) * sum(rate(tidb_server_handle_query_duration_seconds_count{EXTERNAL_LABEL}[1m])) / sum(rate(tidb_server_handle_query_duration_seconds_sum{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(tidb_server_connections{kubernetes_namespace=~\".*$cluster_id\"}) * sum(rate(tidb_server_handle_query_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) / sum(rate(tidb_server_handle_query_duration_seconds_sum{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "hide": true,
               "instant": false,
@@ -328,7 +328,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_executor_statement_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_executor_statement_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -336,7 +336,7 @@
               "step": 30
             },
             {
-              "expr": "sum(rate(tidb_executor_statement_total{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_executor_statement_total{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "total",
@@ -439,7 +439,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(tidb_server_query_total{EXTERNAL_LABEL}[1m])",
+              "expr": "rate(tidb_server_query_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} {{type}} {{result}}",
@@ -533,7 +533,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_server_execute_error_total{EXTERNAL_LABEL}[1m])) by (type, instance)",
+              "expr": "sum(increase(tidb_server_execute_error_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type, instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": " {{type}}-{{instance}}",
@@ -619,21 +619,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_slow_query_process_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_slow_query_process_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "all_proc",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_slow_query_cop_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_slow_query_cop_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "all_cop_proc",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_slow_query_wait_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_slow_query_wait_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "all_cop_wait",
@@ -719,7 +719,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{EXTERNAL_LABEL, in_txn='1'}[1m])) by (le,in_txn))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", in_txn='1'}[1m])) by (le,in_txn))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -727,7 +727,7 @@
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{EXTERNAL_LABEL, in_txn='0'}[1m])) by (le,in_txn))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", in_txn='0'}[1m])) by (le,in_txn))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -735,7 +735,7 @@
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{EXTERNAL_LABEL, in_txn='1'}[1m])) by (le,in_txn))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", in_txn='1'}[1m])) by (le,in_txn))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -743,7 +743,7 @@
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{EXTERNAL_LABEL, in_txn='0'}[1m])) by (le,in_txn))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", in_txn='0'}[1m])) by (le,in_txn))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -751,7 +751,7 @@
               "refId": "D"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{EXTERNAL_LABEL, in_txn='1'}[1m])) by (le,in_txn))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", in_txn='1'}[1m])) by (le,in_txn))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -759,7 +759,7 @@
               "refId": "E"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{EXTERNAL_LABEL, in_txn='0'}[1m])) by (le,in_txn))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_conn_idle_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", in_txn='0'}[1m])) by (le,in_txn))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -847,7 +847,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le,sql_type))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le,sql_type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{sql_type}}",
@@ -933,7 +933,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le,sql_type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le,sql_type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{sql_type}}",
@@ -1019,7 +1019,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le,sql_type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le,sql_type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{sql_type}}",
@@ -1105,7 +1105,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le,sql_type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le,sql_type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{sql_type}}",
@@ -1212,7 +1212,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -1308,7 +1308,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ instance }}",
@@ -1403,7 +1403,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1496,7 +1496,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_server_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_server_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1589,7 +1589,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "increase(tidb_server_execute_error_total{EXTERNAL_LABEL}[1m])",
+              "expr": "increase(tidb_server_execute_error_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}} @ {{instance}}",
@@ -1680,7 +1680,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_session_restricted_sql_total{EXTERNAL_LABEL}[30s]))",
+              "expr": "sum(rate(tidb_session_restricted_sql_total{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -1797,7 +1797,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(time() - process_start_time_seconds{EXTERNAL_LABEL, job=\"tidb\"})",
+              "expr": "(time() - process_start_time_seconds{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"})",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -1894,14 +1894,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "process_resident_memory_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "process-{{instance}}",
               "refId": "A"
             },
             {
-              "expr": "go_memstats_heap_sys_bytes{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "go_memstats_heap_sys_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -1909,14 +1909,14 @@
               "refId": "B"
             },
             {
-              "expr": "go_memstats_heap_inuse_bytes{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "go_memstats_heap_inuse_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "HeapInuse-{{instance}}",
               "refId": "C"
             },
             {
-              "expr": "go_memstats_heap_alloc_bytes{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "go_memstats_heap_alloc_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -1924,7 +1924,7 @@
               "refId": "D"
             },
             {
-              "expr": "go_memstats_heap_idle_bytes{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "go_memstats_heap_idle_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -1932,7 +1932,7 @@
               "refId": "E"
             },
             {
-              "expr": "go_memstats_heap_released_bytes{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "go_memstats_heap_released_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "hide": true,
               "interval": "",
               "legendFormat": "HeapReleased-{{instance}}",
@@ -2036,7 +2036,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(process_cpu_seconds_total{EXTERNAL_LABEL, job=\"tidb\"}[30s])",
+              "expr": "irate(process_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}[1m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -2046,7 +2046,7 @@
             },
             {
               "refId": "B",
-              "expr": "tidb_server_maxprocs{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "tidb_server_maxprocs{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "legendFormat": "limit-{{instance}}"
             }
           ],
@@ -2141,7 +2141,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tidb_server_connections{EXTERNAL_LABEL}",
+              "expr": "tidb_server_connections{kubernetes_namespace=~\".*$cluster_id\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2149,7 +2149,7 @@
               "step": 40
             },
             {
-              "expr": "sum(tidb_server_connections{EXTERNAL_LABEL})",
+              "expr": "sum(tidb_server_connections{kubernetes_namespace=~\".*$cluster_id\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "total",
@@ -2239,7 +2239,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_open_fds{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": "process_open_fds{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2327,7 +2327,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": " go_threads{EXTERNAL_LABEL, job=\"tidb\"}",
+              "expr": " go_threads{kubernetes_namespace=~\".*$cluster_id\", component=\"tidb\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2415,7 +2415,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "increase(tidb_server_event_total{EXTERNAL_LABEL}[10m])",
+              "expr": "increase(tidb_server_event_total{kubernetes_namespace=~\".*$cluster_id\"}[10m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-server {{type}}",
@@ -2503,7 +2503,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_monitor_keep_alive_total{EXTERNAL_LABEL}[1m])) by (instance)",
+              "expr": "sum(increase(tidb_monitor_keep_alive_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2600,7 +2600,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tidb_server_prepared_stmts{EXTERNAL_LABEL}",
+              "expr": "tidb_server_prepared_stmts{kubernetes_namespace=~\".*$cluster_id\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2608,7 +2608,7 @@
               "step": 40
             },
             {
-              "expr": "sum(tidb_server_prepared_stmts{EXTERNAL_LABEL})",
+              "expr": "sum(tidb_server_prepared_stmts{kubernetes_namespace=~\".*$cluster_id\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "total",
@@ -2698,7 +2698,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_monitor_time_jump_back_total{EXTERNAL_LABEL}[1m])) by (instance)",
+              "expr": "sum(increase(tidb_monitor_time_jump_back_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -2786,7 +2786,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "increase(tidb_server_panic_total{EXTERNAL_LABEL}[1m])",
+              "expr": "increase(tidb_server_panic_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2794,7 +2794,7 @@
               "refId": "A"
             },
             {
-              "expr": "increase(tidb_server_critical_error_total{EXTERNAL_LABEL}[1m])",
+              "expr": "increase(tidb_server_critical_error_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2883,7 +2883,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tidb_server_critical_error_total{EXTERNAL_LABEL}",
+              "expr": "tidb_server_critical_error_total{kubernetes_namespace=~\".*$cluster_id\"}",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -2970,7 +2970,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_get_token_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_server_get_token_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99",
@@ -3058,7 +3058,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_server_handshake_error_total{EXTERNAL_LABEL}[1m])) by (instance)",
+              "expr": "sum(increase(tidb_server_handshake_error_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3169,7 +3169,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_session_transaction_duration_seconds_count{EXTERNAL_LABEL}[1m])) by (type, txn_mode)",
+              "expr": "sum(rate(tidb_session_transaction_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type, txn_mode)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{txn_mode}}",
@@ -3263,21 +3263,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_transaction_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, txn_mode))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_transaction_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, txn_mode))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99-{{txn_mode}}",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_transaction_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, txn_mode))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_transaction_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, txn_mode))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95-{{txn_mode}}",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_session_transaction_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, txn_mode))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_session_transaction_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, txn_mode))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80-{{txn_mode}}",
@@ -3369,14 +3369,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_transaction_statement_num_bucket{EXTERNAL_LABEL}[30s])) by (le, txn_mode))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_transaction_statement_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, txn_mode))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99-{{txn_mode}}",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_session_transaction_statement_num_bucket{EXTERNAL_LABEL}[30s])) by (le, txn_mode))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_session_transaction_statement_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, txn_mode))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80-{{txn_mode}}",
@@ -3471,7 +3471,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1.0, sum(rate(tidb_session_retry_num_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(1.0, sum(rate(tidb_session_retry_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100",
@@ -3479,14 +3479,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_retry_num_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_retry_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_session_retry_num_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_session_retry_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -3580,7 +3580,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_session_retry_error_total{EXTERNAL_LABEL}[30s])) by (type, sql_type)",
+              "expr": "sum(rate(tidb_session_retry_error_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type, sql_type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{sql_type}}",
@@ -3674,21 +3674,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_batch_executor_token_wait_duration_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_batch_executor_token_wait_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_batch_executor_token_wait_duration_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_batch_executor_token_wait_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_batch_executor_token_wait_duration_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_batch_executor_token_wait_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80",
@@ -3783,7 +3783,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_count{EXTERNAL_LABEL}[1m])) by (instance)",
+              "expr": "sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -3877,21 +3877,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99-{{type}}",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95-{{type}}",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_txn_cmd_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80-{{type}}",
@@ -3986,7 +3986,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_tikvclient_txn_regions_num_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_tikvclient_txn_regions_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4085,7 +4085,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_tikvclient_txn_write_kv_num_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_tikvclient_txn_write_kv_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100 {{instance}}",
@@ -4184,7 +4184,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_tikvclient_txn_write_size_bytes_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_tikvclient_txn_write_size_bytes_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4281,7 +4281,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1.0, sum(rate(tidb_session_statement_lock_keys_count_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(1.0, sum(rate(tidb_session_statement_lock_keys_count_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100",
@@ -4289,14 +4289,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_statement_lock_keys_count_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_statement_lock_keys_count_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_session_statement_lock_keys_count_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_session_statement_lock_keys_count_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -4394,7 +4394,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_txn_heart_beat_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_txn_heart_beat_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80-{{type}}",
@@ -4402,14 +4402,14 @@
               "step": 40
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_txn_heart_beat_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_txn_heart_beat_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95-{{type}}",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_txn_heart_beat_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_txn_heart_beat_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99-{{type}}",
@@ -4505,7 +4505,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_ttl_lifetime_reach_total{EXTERNAL_LABEL}[1m])) by (instance)",
+              "expr": "sum(rate(tidb_tikvclient_ttl_lifetime_reach_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -4603,7 +4603,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_load_safepoint_total{EXTERNAL_LABEL, type=\"ok\"}[1m])) by (instance)",
+              "expr": "sum(rate(tidb_tikvclient_load_safepoint_total{kubernetes_namespace=~\".*$cluster_id\", type=\"ok\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -4702,7 +4702,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_pessimistic_lock_keys_duration_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_pessimistic_lock_keys_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80-{{type}}",
@@ -4710,14 +4710,14 @@
               "step": 40
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_pessimistic_lock_keys_duration_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_pessimistic_lock_keys_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95-{{type}}",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_pessimistic_lock_keys_duration_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_pessimistic_lock_keys_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99-{{type}}",
@@ -4813,7 +4813,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1.0, sum(rate(tidb_session_statement_pessimistic_retry_count_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(1.0, sum(rate(tidb_session_statement_pessimistic_retry_count_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100",
@@ -4821,14 +4821,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_statement_pessimistic_retry_count_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_session_statement_pessimistic_retry_count_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_session_statement_pessimistic_retry_count_bucket{EXTERNAL_LABEL}[30s])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_session_statement_pessimistic_retry_count_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -4942,7 +4942,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_parse_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, sql_type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_parse_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, sql_type))",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -5043,7 +5043,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_compile_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, sql_type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_compile_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, sql_type))",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -5144,7 +5144,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_execute_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, sql_type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_session_execute_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, sql_type))",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -5244,7 +5244,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_executor_expensive_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_executor_expensive_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -5342,7 +5342,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_server_plan_cache_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_server_plan_cache_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -5455,14 +5455,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999-{{type}}",
               "refId": "D"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -5472,14 +5472,14 @@
               "step": 4
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90-{{type}}",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.50, sum(rate(tidb_distsql_handle_query_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -5571,7 +5571,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_distsql_handle_query_duration_seconds_count{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_distsql_handle_query_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -5664,7 +5664,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_distsql_scan_keys_partial_num_count{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_distsql_scan_keys_partial_num_count{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -5753,21 +5753,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_scan_keys_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_scan_keys_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_scan_keys_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_scan_keys_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(tidb_distsql_scan_keys_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(tidb_distsql_scan_keys_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50",
@@ -5853,21 +5853,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_scan_keys_partial_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_scan_keys_partial_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_scan_keys_partial_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_scan_keys_partial_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_distsql_scan_keys_partial_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_distsql_scan_keys_partial_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50",
@@ -5953,21 +5953,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_partial_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_partial_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "100",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_partial_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_distsql_partial_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(tidb_distsql_partial_num_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(tidb_distsql_partial_num_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50",
@@ -6060,7 +6060,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_copr_cache_buckets{EXTERNAL_LABEL}[1m])) by (type))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_distsql_copr_cache_buckets{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -6155,7 +6155,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_tikvclient_cop_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_tikvclient_cop_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -6266,7 +6266,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_tikvclient_backoff_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_tikvclient_backoff_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999",
@@ -6274,14 +6274,14 @@
               "step": 40
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_backoff_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_backoff_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_backoff_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_tikvclient_backoff_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80",
@@ -6376,7 +6376,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_region_err_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikvclient_region_err_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -6385,7 +6385,7 @@
               "step": 40
             },
             {
-              "expr": "sum(rate(tidb_tikvclient_region_err_total{EXTERNAL_LABEL, type=\"server_is_busy\"}[1m]))",
+              "expr": "sum(rate(tidb_tikvclient_region_err_total{kubernetes_namespace=~\".*$cluster_id\", type=\"server_is_busy\"}[1m]))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -6477,7 +6477,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_backoff_seconds_count{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikvclient_backoff_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -6570,7 +6570,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_lock_resolver_actions_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikvclient_lock_resolver_actions_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -6666,7 +6666,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_lock_cleanup_task_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikvclient_lock_cleanup_task_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "cleanup_secondary_failure_{{type}}",
@@ -6675,7 +6675,7 @@
               "step": 40
             },
             {
-              "expr": "sum(rate(tidb_tikvclient_load_safepoint_total{EXTERNAL_LABEL, type=\"fail\"}[1m]))",
+              "expr": "sum(rate(tidb_tikvclient_load_safepoint_total{kubernetes_namespace=~\".*$cluster_id\", type=\"fail\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "load_safepoint_failure",
@@ -6783,7 +6783,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_request_seconds_count{EXTERNAL_LABEL}[1m])) by (instance, type)",
+              "expr": "sum(rate(tidb_tikvclient_request_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -6878,7 +6878,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_request_seconds_bucket{EXTERNAL_LABEL, store!=\"0\"}[1m])) by (le, store))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_request_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", store!=\"0\"}[1m])) by (le, store))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "store-{{store}}",
@@ -6973,7 +6973,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_request_seconds_bucket{EXTERNAL_LABEL, store!=\"0\"}[1m])) by (le,type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_request_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", store!=\"0\"}[1m])) by (le,type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -7082,7 +7082,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(pd_client_cmd_handle_cmds_duration_seconds_count{EXTERNAL_LABEL, type!=\"tso\"}[1m])) by (type)",
+              "expr": "sum(rate(pd_client_cmd_handle_cmds_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", type!=\"tso\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -7175,7 +7175,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{EXTERNAL_LABEL, type!~\"tso|tso_async_wait\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.999, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type!~\"tso|tso_async_wait\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999-{{type}}",
@@ -7183,14 +7183,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{EXTERNAL_LABEL, type!~\"tso|tso_async_wait\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type!~\"tso|tso_async_wait\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99-{{type}}",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{EXTERNAL_LABEL, type!~\"tso|tso_async_wait\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.90, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type!~\"tso|tso_async_wait\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90-{{type}}",
@@ -7282,7 +7282,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(pd_client_cmd_handle_failed_cmds_duration_seconds_count{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(pd_client_cmd_handle_failed_cmds_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -7373,14 +7373,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(pd_client_cmd_handle_cmds_duration_seconds_count{EXTERNAL_LABEL, type=\"tso\"}[1m]))",
+              "expr": "sum(rate(pd_client_cmd_handle_cmds_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", type=\"tso\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "cmd",
               "refId": "C"
             },
             {
-              "expr": "sum(rate(pd_client_request_handle_requests_duration_seconds_count{EXTERNAL_LABEL, type=\"tso\"}[1m]))",
+              "expr": "sum(rate(pd_client_request_handle_requests_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", type=\"tso\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "request",
@@ -7470,7 +7470,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{EXTERNAL_LABEL, type=\"wait\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type=\"wait\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999",
@@ -7478,14 +7478,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{EXTERNAL_LABEL, type=\"wait\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type=\"wait\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{EXTERNAL_LABEL, type=\"wait\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(pd_client_cmd_handle_cmds_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type=\"wait\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -7575,7 +7575,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{EXTERNAL_LABEL, type=\"tso\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type=\"tso\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999",
@@ -7583,14 +7583,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{EXTERNAL_LABEL, type=\"tso\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type=\"tso\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{EXTERNAL_LABEL, type=\"tso\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", type=\"tso\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -7680,7 +7680,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tidb_pdclient_ts_future_wait_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tidb_pdclient_ts_future_wait_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "999",
@@ -7688,14 +7688,14 @@
               "step": 10
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_pdclient_ts_future_wait_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_pdclient_ts_future_wait_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_pdclient_ts_future_wait_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_pdclient_ts_future_wait_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
@@ -7803,7 +7803,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_domain_load_schema_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_domain_load_schema_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -7902,7 +7902,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_domain_load_schema_total{EXTERNAL_LABEL}[1m])) by (instance,type)",
+              "expr": "sum(rate(tidb_domain_load_schema_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance,type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -7999,7 +7999,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_session_schema_lease_error_total{EXTERNAL_LABEL}[1m])) by (instance)",
+              "expr": "sum(increase(tidb_session_schema_lease_error_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -8098,7 +8098,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_domain_load_privilege_total{EXTERNAL_LABEL}[1m])) by (instance,type)",
+              "expr": "sum(rate(tidb_domain_load_privilege_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (instance,type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -8208,7 +8208,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_ddl_handle_job_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_ddl_handle_job_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -8300,14 +8300,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_batch_add_idx_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_batch_add_idx_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tidb_ddl_add_index_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_ddl_add_index_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -8397,7 +8397,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tidb_ddl_waiting_jobs{EXTERNAL_LABEL}",
+              "expr": "tidb_ddl_waiting_jobs{kubernetes_namespace=~\".*$cluster_id\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -8485,7 +8485,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "increase(tidb_ddl_worker_operation_total{EXTERNAL_LABEL}[1m])",
+              "expr": "increase(tidb_ddl_worker_operation_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{type}}",
@@ -8575,7 +8575,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(increase(tidb_ddl_worker_operation_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type, action, result))",
+              "expr": "histogram_quantile(0.99, sum(increase(tidb_ddl_worker_operation_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type, action, result))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{action}}-{{result}}",
@@ -8663,7 +8663,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_deploy_syncer_duration_seconds_bucket{EXTERNAL_LABEL}[2m])) by (le, type, result))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_deploy_syncer_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[2m])) by (le, type, result))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{result}}",
@@ -8751,7 +8751,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_owner_handle_syncer_duration_seconds_bucket{EXTERNAL_LABEL}[2m])) by (le, type, result))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_owner_handle_syncer_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[2m])) by (le, type, result))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{result}}",
@@ -8839,7 +8839,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_update_self_ver_duration_seconds_bucket{EXTERNAL_LABEL}[2m])) by (le, result))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_ddl_update_self_ver_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[2m])) by (le, result))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{result}}",
@@ -8925,14 +8925,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_ddl_handle_job_duration_seconds_count{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_ddl_handle_job_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ type }}",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tidb_ddl_handle_job_duration_seconds_count{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_ddl_handle_job_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "total",
@@ -9021,7 +9021,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tidb_ddl_add_index_percentage_progress{EXTERNAL_LABEL}",
+              "expr": "tidb_ddl_add_index_percentage_progress{kubernetes_namespace=~\".*$cluster_id\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -9123,7 +9123,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_statistics_auto_analyze_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_statistics_auto_analyze_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "auto analyze duration",
@@ -9210,7 +9210,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_statistics_auto_analyze_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_statistics_auto_analyze_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -9297,7 +9297,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_statistics_stats_inaccuracy_rate_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_statistics_stats_inaccuracy_rate_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
@@ -9305,14 +9305,14 @@
               "step": 30
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(tidb_statistics_stats_inaccuracy_rate_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(tidb_statistics_stats_inaccuracy_rate_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(tidb_statistics_stats_inaccuracy_rate_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(tidb_statistics_stats_inaccuracy_rate_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50",
@@ -9398,7 +9398,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_statistics_pseudo_estimation_total{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_statistics_pseudo_estimation_total{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Pseudo OPS",
@@ -9485,7 +9485,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_statistics_dump_feedback_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_statistics_dump_feedback_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -9572,7 +9572,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_statistics_store_query_feedback_total{EXTERNAL_LABEL}[1m])) by (type) ",
+              "expr": "sum(rate(tidb_statistics_store_query_feedback_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -9659,7 +9659,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_statistics_high_error_rate_feedback_total{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_statistics_high_error_rate_feedback_total{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -9746,7 +9746,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_statistics_update_stats_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(rate(tidb_statistics_update_stats_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -9840,7 +9840,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(1, sum(rate(tidb_statistics_fast_analyze_status_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(1, sum(rate(tidb_statistics_fast_analyze_status_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -9949,7 +9949,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_owner_new_session_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, instance, result))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_owner_new_session_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance, result))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}-{{result}}",
@@ -10037,7 +10037,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_owner_watch_owner_total{EXTERNAL_LABEL}[1m])) by (type, result, instance)",
+              "expr": "sum(rate(tidb_owner_watch_owner_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type, result, instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{result}}-{{instance}}",
@@ -10123,7 +10123,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_owner_watch_owner_total{EXTERNAL_LABEL}[1m])) by (type, result, instance)",
+              "expr": "sum(rate(tidb_owner_watch_owner_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type, result, instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{result}}-{{instance}}",
@@ -10227,7 +10227,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_autoid_operation_duration_seconds_count{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(rate(tidb_autoid_operation_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "AutoID QPS",
@@ -10315,14 +10315,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_autoid_operation_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_autoid_operation_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99-{{type}}",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tidb_autoid_operation_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_autoid_operation_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "80-{{type}}",
@@ -10408,7 +10408,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tidb_tikvclient_region_cache_operations_total{EXTERNAL_LABEL, result=\"err\"}[1m])) by (type)",
+              "expr": "sum(rate(tidb_tikvclient_region_cache_operations_total{kubernetes_namespace=~\".*$cluster_id\", result=\"err\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -10497,7 +10497,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_meta_operation_duration_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_meta_operation_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -10601,7 +10601,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_tikvclient_gc_worker_actions_total{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(increase(tidb_tikvclient_gc_worker_actions_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -10690,7 +10690,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_gc_seconds_bucket{EXTERNAL_LABEL}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tidb_tikvclient_gc_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99",
@@ -10778,7 +10778,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max(tidb_tikvclient_gc_config{EXTERNAL_LABEL}) by (type)",
+              "expr": "max(tidb_tikvclient_gc_config{kubernetes_namespace=~\".*$cluster_id\"}) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -10864,7 +10864,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_tikvclient_gc_failure{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(increase(tidb_tikvclient_gc_failure{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -10952,7 +10952,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_tikvclient_gc_unsafe_destroy_range_failures{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(increase(tidb_tikvclient_gc_unsafe_destroy_range_failures{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -11038,7 +11038,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_tikvclient_gc_region_too_many_locks{EXTERNAL_LABEL}[1m]))",
+              "expr": "sum(increase(tidb_tikvclient_gc_region_too_many_locks{kubernetes_namespace=~\".*$cluster_id\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Locks Error OPM",
@@ -11124,7 +11124,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tidb_tikvclient_gc_action_result{EXTERNAL_LABEL}[1m])) by (type)",
+              "expr": "sum(increase(tidb_tikvclient_gc_action_result{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -11221,7 +11221,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tidb_tikvclient_range_task_stats{EXTERNAL_LABEL}) by (type, result)",
+              "expr": "sum(tidb_tikvclient_range_task_stats{kubernetes_namespace=~\".*$cluster_id\"}) by (type, result)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}-{{result}}",
@@ -11314,7 +11314,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_range_task_push_duration_bucket{EXTERNAL_LABEL}[1m])) by (le, instance))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_range_task_push_duration_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -11418,7 +11418,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "delta(tidb_tikvclient_batch_client_no_available_connection_total{EXTERNAL_LABEL}[30s])",
+              "expr": "delta(tidb_tikvclient_batch_client_no_available_connection_total{kubernetes_namespace=~\".*$cluster_id\"}[1m])",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -11509,7 +11509,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_batch_client_unavailable_seconds_bucket{EXTERNAL_LABEL}[30s])) by (le, instance))",
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_tikvclient_batch_client_unavailable_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -11603,7 +11603,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.9999, sum(rate(tidb_tikvclient_batch_client_wait_connection_establish_bucket{EXTERNAL_LABEL}[30s])) by (le, instance))",
+              "expr": "histogram_quantile(0.9999, sum(rate(tidb_tikvclient_batch_client_wait_connection_establish_bucket{kubernetes_namespace=~\".*$cluster_id\"}[1m])) by (le, instance))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -11662,6 +11662,98 @@
   "schemaVersion": 20,
   "style": "dark",
   "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tenant_info,name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "tenant_name",
+        "query": "label_values(dbaas_tenant_info,name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tenant_info{name=\"$tenant_name\"},tenant)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "tenant_id",
+        "query": "label_values(dbaas_tenant_info{name=\"$tenant_name\"},tenant)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\"},name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster_name",
+        "options": [
+          {
+            "selected": true,
+            "text": "Ghim-Test",
+            "value": "Ghim-Test"
+          }
+        ],
+        "query": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\"},name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\",name=\"$cluster_name\"},cluster_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster_id",
+        "options": [],
+        "query": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\",name=\"$cluster_name\"},cluster_id)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
   "time": {
     "from": "now-1h",
     "to": "now"
@@ -11692,7 +11784,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Test-Cluster-TiDB",
+  "title": "TiDB-Detail",
   "uid": "000000011",
   "version": 1
 }

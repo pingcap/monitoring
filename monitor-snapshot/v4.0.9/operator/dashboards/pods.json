@@ -173,21 +173,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kubelet_volume_stats_capacity_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_capacity_bytes{component=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Total",
               "refId": "A"
             },
             {
-              "expr": "kubelet_volume_stats_used_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_used_bytes{component=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Used",
               "refId": "B"
             },
             {
-              "expr": "kubelet_volume_stats_available_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_available_bytes{component=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Free",
@@ -682,21 +682,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", image!=\"\", pod_name=\"$pod\", container_name=~\"$container\", container_name!=\"POD\"}[1m]))",
+          "expr": "sum by (container_name) (rate(container_cpu_usage_seconds_total{component=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", image!=\"\", pod_name=\"$pod\", container_name=~\"$container\", container_name!=\"POD\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Current: {{ container_name }}",
           "refId": "A"
         },
         {
-          "expr": "sum by(container) (kube_pod_container_resource_requests{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
+          "expr": "sum by(container) (kube_pod_container_resource_requests{component=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Requested: {{ container }}",
           "refId": "B"
         },
         {
-          "expr": "sum by(container) (kube_pod_container_resource_limits{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
+          "expr": "sum by(container) (kube_pod_container_resource_limits{component=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", resource=\"cpu\", pod=\"$pod\", container=~\"$container\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Limit: {{ container }}",
@@ -785,14 +785,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sort_desc(sum by (pod_name) (rate(container_network_receive_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
+          "expr": "sort_desc(sum by (pod_name) (rate(container_network_receive_bytes_total{component=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RX",
           "refId": "A"
         },
         {
-          "expr": "sort_desc(sum by (pod_name) (rate(container_network_transmit_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
+          "expr": "sort_desc(sum by (pod_name) (rate(container_network_transmit_bytes_total{component=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "TX",
@@ -1039,14 +1039,14 @@
           "value": "9100"
         },
         "datasource": "k8s-cluster",
-        "definition": "label_values(node_boot_time_seconds{cluster=\"$cluster\", job=\"node-exporter\"}, instance)",
+        "definition": "label_values(node_boot_time_seconds{cluster=\"$cluster\", component=\"node-exporter\"}, instance)",
         "hide": 2,
         "includeAll": false,
         "label": null,
         "multi": false,
         "name": "port",
         "options": [],
-        "query": "label_values(node_boot_time_seconds{cluster=\"$cluster\", job=\"node-exporter\"}, instance)",
+        "query": "label_values(node_boot_time_seconds{cluster=\"$cluster\", component=\"node-exporter\"}, instance)",
         "refresh": 2,
         "regex": "/.*:(\\d+)/",
         "skipUrlSync": false,
@@ -1089,7 +1089,7 @@
     ]
   },
   "timezone": "",
-  "title": "Test-Cluster-Pods-Info",
+  "title": "Pods-Info",
   "uid": "qVGH-XKWz",
   "version": 8
 }

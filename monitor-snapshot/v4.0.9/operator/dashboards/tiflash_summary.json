@@ -102,7 +102,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_system_current_metric_StoreSizeUsed{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_system_current_metric_StoreSizeUsed{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -199,7 +199,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_system_current_metric_StoreSizeAvailable{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_system_current_metric_StoreSizeAvailable{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -296,7 +296,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_system_current_metric_StoreSizeCapacity{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_system_current_metric_StoreSizeCapacity{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -397,7 +397,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tiflash_system_asynchronous_metric_Uptime{EXTERNAL_LABEL, instance=~\"$instance\"}",
+              "expr": "tiflash_system_asynchronous_metric_Uptime{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -488,7 +488,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_retained{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_retained{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -496,7 +496,7 @@
               "refId": "A"
             },
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_mapped{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_mapped{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -504,7 +504,7 @@
               "refId": "B"
             },
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_resident{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_resident{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -512,7 +512,7 @@
               "refId": "C"
             },
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_allocated{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_allocated{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -520,7 +520,7 @@
               "refId": "D"
             },
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_active{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_active{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -528,7 +528,7 @@
               "refId": "E"
             },
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_metadata_thp{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_metadata_thp{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -536,7 +536,7 @@
               "refId": "F"
             },
             {
-              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_metadata{EXTERNAL_LABEL, instance=~\"$instance\"})",
+              "expr": "sum(tiflash_system_asynchronous_metric_jemalloc_metadata{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"})",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -544,7 +544,7 @@
               "refId": "G"
             },
             {
-              "expr": "tiflash_proxy_process_resident_memory_bytes{EXTERNAL_LABEL, job=\"tiflash\"}",
+              "expr": "tiflash_proxy_process_resident_memory_bytes{kubernetes_namespace=~\".*$cluster_id\", component=\"tiflash\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -641,7 +641,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(tiflash_proxy_process_cpu_seconds_total{EXTERNAL_LABEL, job=\"tiflash\"}[1m])",
+              "expr": "rate(tiflash_proxy_process_cpu_seconds_total{kubernetes_namespace=~\".*$cluster_id\", component=\"tiflash\"}[1m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -733,7 +733,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_system_profile_event_FileFSync{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_system_profile_event_FileFSync{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -824,14 +824,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_system_profile_event_FileOpen{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_system_profile_event_FileOpen{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Newly Open-{{instance}}",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_FileOpenFailed{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_system_profile_event_FileOpenFailed{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Newly Open Failed-{{instance}}",
@@ -921,7 +921,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "tiflash_proxy_process_open_fds{EXTERNAL_LABEL, job=\"tiflash\"}",
+              "expr": "tiflash_proxy_process_open_fds{kubernetes_namespace=~\".*$cluster_id\", component=\"tiflash\"}",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -929,7 +929,7 @@
               "refId": "A"
             },
             {
-              "expr": "sum(tiflash_system_current_metric_OpenFileForWrite{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_system_current_metric_OpenFileForWrite{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -937,7 +937,7 @@
               "refId": "B"
             },
             {
-              "expr": "sum(tiflash_system_current_metric_OpenFileForRead{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_system_current_metric_OpenFileForRead{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -1040,7 +1040,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_coprocessor_request_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_coprocessor_request_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
@@ -1128,7 +1128,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_coprocessor_executor_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_coprocessor_executor_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
@@ -1215,28 +1215,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "999",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_coprocessor_request_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "80",
@@ -1323,7 +1323,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_coprocessor_request_error{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (reason)",
+              "expr": "sum(rate(tiflash_coprocessor_request_error{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (reason)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{reason}}",
@@ -1410,28 +1410,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "999",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_coprocessor_request_handle_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "80",
@@ -1518,7 +1518,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_coprocessor_response_bytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_coprocessor_response_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -1603,28 +1603,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "999-{{type}}",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99-{{type}}",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95-{{type}}",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le, type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_coprocessor_request_memory_usage_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le, type))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "80-{{type}}",
@@ -1711,7 +1711,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_coprocessor_handling_request_count{EXTERNAL_LABEL, instance=~\"$instance\"}) by (type)",
+              "expr": "sum(tiflash_coprocessor_handling_request_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
@@ -1814,7 +1814,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(tiflash_schema_version{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "avg(tiflash_schema_version{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -1903,14 +1903,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(increase(tiflash_schema_apply_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "avg(increase(tiflash_schema_apply_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
               "refId": "A"
             },
             {
-              "expr": "avg(increase(tiflash_schema_trigger_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "avg(increase(tiflash_schema_trigger_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "triggle-by-{{type}}",
@@ -1999,21 +1999,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(increase(tiflash_schema_internal_ddl_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "avg(increase(tiflash_schema_internal_ddl_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
               "refId": "A"
             },
             {
-              "expr": "sum(increase(tiflash_schema_internal_ddl_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(increase(tiflash_schema_internal_ddl_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "total",
               "refId": "B"
             },
             {
-              "expr": "sum(increase(tiflash_schema_internal_ddl_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type,instance)",
+              "expr": "sum(increase(tiflash_schema_internal_ddl_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type,instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2021,7 +2021,7 @@
               "refId": "C"
             },
             {
-              "expr": "sum(increase(tiflash_schema_internal_ddl_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(increase(tiflash_schema_internal_ddl_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2110,28 +2110,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_schema_apply_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_schema_apply_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "999",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_schema_apply_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_schema_apply_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_schema_apply_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_schema_apply_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_schema_apply_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_schema_apply_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "80",
@@ -2234,14 +2234,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_storage_command_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_storage_command_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_DMWriteBlock{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_system_profile_event_DMWriteBlock{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "write block",
@@ -2331,7 +2331,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max(tiflash_storage_write_amplification{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "max(tiflash_storage_write_amplification{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -2339,7 +2339,7 @@
               "refId": "A"
             },
             {
-              "expr": "sum((rate(tiflash_system_profile_event_PSMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[5m]) + rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[5m]) + rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[5m])) / (rate(tiflash_system_profile_event_DMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[5m]))) by (instance)",
+              "expr": "sum((rate(tiflash_system_profile_event_PSMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m]) + rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m]) + rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m])) / (rate(tiflash_system_profile_event_DMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m]))) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -2347,7 +2347,7 @@
               "refId": "B"
             },
             {
-              "expr": "sum((rate(tiflash_system_profile_event_PSMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[10m]) + rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[10m]) + rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[10m])) / (rate(tiflash_system_profile_event_DMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[10m]))) by (instance)",
+              "expr": "sum((rate(tiflash_system_profile_event_PSMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[10m]) + rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[10m]) + rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[10m])) / (rate(tiflash_system_profile_event_DMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[10m]))) by (instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2355,7 +2355,7 @@
               "refId": "C"
             },
             {
-              "expr": "sum((rate(tiflash_system_profile_event_PSMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[30m]) + rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[30m]) + rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[30m])) / (rate(tiflash_system_profile_event_DMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[30m]))) by (instance)",
+              "expr": "sum((rate(tiflash_system_profile_event_PSMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[30m]) + rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[30m]) + rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[30m])) / (rate(tiflash_system_profile_event_DMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[30m]))) by (instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2445,7 +2445,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_storage_read_tasks_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_storage_read_tasks_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -2547,7 +2547,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg((rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]) - rate(tiflash_system_profile_event_DMFileFilterAftRoughSet{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) / (rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))) by (instance)",
+              "expr": "avg((rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]) - rate(tiflash_system_profile_event_DMFileFilterAftRoughSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) / (rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -2555,7 +2555,7 @@
               "refId": "B"
             },
             {
-              "expr": "avg((rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{EXTERNAL_LABEL, instance=~\"$instance\"}[5m]) - rate(tiflash_system_profile_event_DMFileFilterAftRoughSet{EXTERNAL_LABEL, instance=~\"$instance\"}[5m])) / (rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{EXTERNAL_LABEL, instance=~\"$instance\"}[5m]))) by (instance)",
+              "expr": "avg((rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m]) - rate(tiflash_system_profile_event_DMFileFilterAftRoughSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m])) / (rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[5m]))) by (instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2563,7 +2563,7 @@
               "refId": "C"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_DMFileFilterNoFilter{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_system_profile_event_DMFileFilterNoFilter{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": true,
               "instant": false,
@@ -2572,7 +2572,7 @@
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_system_profile_event_DMFileFilterAftPKAndPackSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": true,
               "instant": false,
@@ -2581,7 +2581,7 @@
               "refId": "D"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_DMFileFilterAftRoughSet{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_system_profile_event_DMFileFilterAftRoughSet{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2672,7 +2672,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_storage_subtask_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_storage_subtask_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
@@ -2766,7 +2766,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le,type))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le,type))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2774,7 +2774,7 @@
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le,type))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le,type))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -2782,7 +2782,7 @@
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le,type))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le,type))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2790,7 +2790,7 @@
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le,type))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_storage_subtask_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le,type))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 1,
@@ -2879,7 +2879,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(tiflash_storage_page_gc_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(increase(tiflash_storage_page_gc_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{type}}",
@@ -2960,7 +2960,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_storage_page_gc_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_storage_page_gc_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -3035,14 +3035,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMWriteIOCalls{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMWriteIOCalls{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Page",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMWriteCalls{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMWriteCalls{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -3050,7 +3050,7 @@
               "refId": "B"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMWritePages{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMWritePages{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -3058,14 +3058,14 @@
               "refId": "C"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWrite{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWrite{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "File Descriptor",
               "refId": "D"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferAIOWrite{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferAIOWrite{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "AIO",
@@ -3156,14 +3156,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMReadIOCalls{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMReadIOCalls{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Page",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMReadCalls{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMReadCalls{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -3171,7 +3171,7 @@
               "refId": "B"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMReadPages{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMReadPages{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "hide": true,
               "intervalFactor": 2,
@@ -3179,14 +3179,14 @@
               "refId": "C"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferFromFileDescriptorRead{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferFromFileDescriptorRead{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "File Descriptor",
               "refId": "D"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferAIORead{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferAIORead{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "AIO",
@@ -3283,7 +3283,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferFromFileDescriptorWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -3292,14 +3292,14 @@
               "step": 10
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Page",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_WriteBufferAIOWriteBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -3396,7 +3396,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferFromFileDescriptorReadBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferFromFileDescriptorReadBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -3405,14 +3405,14 @@
               "step": 10
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_PSMReadBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_PSMReadBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Page",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferAIOReadBytes{EXTERNAL_LABEL, instance=~\"$instance\"}[1m]))",
+              "expr": "sum(rate(tiflash_system_profile_event_ReadBufferAIOReadBytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "AIO",
@@ -3528,7 +3528,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_storage_throughput_bytes{EXTERNAL_LABEL, instance=~\"$instance\", type=\"write\"}[1m]))",
+              "expr": "sum(rate(tiflash_storage_throughput_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"write\"}[1m]))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -3537,21 +3537,21 @@
               "step": 10
             },
             {
-              "expr": "sum(rate(tiflash_storage_throughput_bytes{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"write\"}[1m]))",
+              "expr": "sum(rate(tiflash_storage_throughput_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"write\"}[1m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "throughput_delta-management",
               "refId": "B"
             },
             {
-              "expr": "sum(tiflash_storage_throughput_bytes{EXTERNAL_LABEL, instance=~\"$instance\", type=\"write\"})",
+              "expr": "sum(tiflash_storage_throughput_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"write\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "total_write",
               "refId": "C"
             },
             {
-              "expr": "sum(tiflash_storage_throughput_bytes{EXTERNAL_LABEL, instance=~\"$instance\", type!=\"write\"})",
+              "expr": "sum(tiflash_storage_throughput_bytes{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type!=\"write\"})",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "total_delta-management",
@@ -3644,7 +3644,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_storage_write_stall_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le, type, instance))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_storage_write_stall_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le, type, instance))",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -3735,7 +3735,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(tiflash_system_current_metric_DT_DeltaMerge{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "avg(tiflash_system_current_metric_DT_DeltaMerge{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -3743,7 +3743,7 @@
               "refId": "A"
             },
             {
-              "expr": "avg(tiflash_system_current_metric_DT_SegmentSplit{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "avg(tiflash_system_current_metric_DT_SegmentSplit{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "seg_split-{{instance}}",
@@ -3845,7 +3845,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_raft_read_index_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_raft_read_index_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{instance}}",
@@ -3933,28 +3933,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "999",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_raft_read_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "80",
@@ -4041,28 +4041,28 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.999, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.999, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "999",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "99",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "95",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.80, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.80, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "80",
@@ -4152,7 +4152,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_system_current_metric_RaftNumSnapshotsPendingApply{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_system_current_metric_RaftNumSnapshotsPendingApply{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -4246,7 +4246,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(tiflash_raft_apply_write_command_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(tiflash_raft_apply_write_command_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": " 99%",
@@ -4255,7 +4255,7 @@
               "step": 4
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(tiflash_raft_apply_write_command_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(tiflash_raft_apply_write_command_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95%",
@@ -4263,7 +4263,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tiflash_raft_apply_write_command_duration_seconds_sum{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) / sum(rate(tiflash_raft_apply_write_command_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) ",
+              "expr": "sum(rate(tiflash_raft_apply_write_command_duration_seconds_sum{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) / sum(rate(tiflash_raft_apply_write_command_duration_seconds_count{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "avg",
@@ -4345,7 +4345,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_raft_apply_write_command_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_raft_apply_write_command_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -4410,7 +4410,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_raft_command_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\", type=\"snapshot_predecode\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_raft_command_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"snapshot_predecode\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -4475,7 +4475,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_raft_command_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\", type=\"snapshot_flush\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_raft_command_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"snapshot_flush\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -4556,7 +4556,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_raft_process_keys{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_raft_process_keys{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -4638,7 +4638,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_raft_command_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\", type=\"ingest_sst\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_raft_command_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"ingest_sst\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -4703,7 +4703,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_raft_write_data_to_storage_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\", type=\"decode\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_raft_write_data_to_storage_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"decode\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -4768,7 +4768,7 @@
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "sum(delta(tiflash_raft_write_data_to_storage_duration_seconds_bucket{EXTERNAL_LABEL, instance=~\"$instance\", type=\"write\"}[1m])) by (le)",
+              "expr": "sum(delta(tiflash_raft_write_data_to_storage_duration_seconds_bucket{kubernetes_namespace=~\".*$cluster_id\", instance=~\"$instance\", type=\"write\"}[1m])) by (le)",
               "format": "heatmap",
               "intervalFactor": 2,
               "legendFormat": "{{le}}",
@@ -4815,6 +4815,94 @@
     "list": [
       {
         "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tenant_info,name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "tenant_name",
+        "query": "label_values(dbaas_tenant_info,name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tenant_info{name=\"$tenant_name\"},tenant)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "tenant_id",
+        "query": "label_values(dbaas_tenant_info{name=\"$tenant_name\"},tenant)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\"},name)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster_name",
+        "options": [
+          {
+            "selected": true,
+            "text": "Ghim-Test",
+            "value": "Ghim-Test"
+          }
+        ],
+        "query": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\"},name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "datasource": "prometheus",
+        "definition": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\",name=\"$cluster_name\"},cluster_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster_id",
+        "options": [],
+        "query": "label_values(dbaas_tidb_cluster_info{tenant=\"$tenant_id\",name=\"$cluster_name\"},cluster_id)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
         "current": {},
         "datasource": "tidb-cluster",
         "definition": "label_values(tiflash_system_profile_event_Query, instance)",
@@ -4824,7 +4912,7 @@
         "multi": true,
         "name": "instance",
         "options": [],
-        "query": "label_values(tiflash_system_profile_event_Query, instance)",
+        "query": "label_values(tiflash_system_profile_event_Query{kubernetes_namespace=~\".*$cluster_id\"}, instance)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -4867,7 +4955,7 @@
     ]
   },
   "timezone": "",
-  "title": "Test-Cluster-TiFlash-Summary",
+  "title": "TiFlash-Summary",
   "uid": "SVbh2xUWk",
   "version": 2
 }
