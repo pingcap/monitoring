@@ -172,7 +172,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "1/rate(lightning_chunks{state=\"finished\"}[1m]) ",
+              "expr": "1/rate(lightning_chunks{EXTERNAL_LABEL, state=\"finished\"}[1m]) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -284,7 +284,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "lightning_chunks{state=\"finished\"} / ignoring(state) lightning_chunks{state=\"estimated\"}",
+              "expr": "lightning_chunks{EXTERNAL_LABEL, state=\"finished\"} / ignoring(state) lightning_chunks{EXTERNAL_LABEL, state=\"estimated\"}",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -360,7 +360,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "lightning_tables{state=\"completed\"} / ignoring(state) lightning_tables{state=\"pending\"}",
+              "expr": "lightning_tables{EXTERNAL_LABEL, state=\"completed\"} / ignoring(state) lightning_tables{EXTERNAL_LABEL, state=\"pending\"}",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
@@ -444,7 +444,7 @@
           ],
           "targets": [
             {
-              "expr": "lightning_tables{result=\"failure\"}",
+              "expr": "lightning_tables{EXTERNAL_LABEL, result=\"failure\"}",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -500,14 +500,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{job=\"tikv-importer\"}",
+              "expr": "process_resident_memory_bytes{EXTERNAL_LABEL, job=\"tikv-importer\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "importer RSS",
               "refId": "A"
             },
             {
-              "expr": "go_memstats_heap_inuse_bytes{job=\"lightning\"}",
+              "expr": "go_memstats_heap_inuse_bytes{EXTERNAL_LABEL, job=\"lightning\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "lightning heap",
@@ -582,7 +582,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "go_goroutines{job=\"lightning\"}",
+              "expr": "go_goroutines{EXTERNAL_LABEL, job=\"lightning\"}",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -661,14 +661,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(process_cpu_seconds_total{job=\"lightning\"}[30s])*100",
+              "expr": "rate(process_cpu_seconds_total{EXTERNAL_LABEL, job=\"lightning\"}[30s])*100",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Lightning",
               "refId": "A"
             },
             {
-              "expr": "rate(process_cpu_seconds_total{job=\"tikv-importer\"}[30s])*100",
+              "expr": "rate(process_cpu_seconds_total{EXTERNAL_LABEL, job=\"tikv-importer\"}[30s])*100",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Importer",
@@ -832,21 +832,21 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "lightning_kv_encoder{type=\"open\"} - ignoring(type) lightning_kv_encoder{type=\"closed\"}",
+              "expr": "lightning_kv_encoder{EXTERNAL_LABEL, type=\"open\"} - ignoring(type) lightning_kv_encoder{EXTERNAL_LABEL, type=\"closed\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "KV Encoder",
               "refId": "A"
             },
             {
-              "expr": "lightning_importer_engine{type=\"open\"} - ignoring(type) lightning_importer_engine{type=\"closed\"}",
+              "expr": "lightning_importer_engine{EXTERNAL_LABEL, type=\"open\"} - ignoring(type) lightning_importer_engine{EXTERNAL_LABEL, type=\"closed\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Importer Engines (via Lightning)",
               "refId": "B"
             },
             {
-              "expr": "tikv_import_rpc_duration_count{request=\"open_engine\",result=\"ok\"} - ignoring(request) tikv_import_rpc_duration_count{request=\"close_engine\",result=\"ok\"}",
+              "expr": "tikv_import_rpc_duration_count{EXTERNAL_LABEL, request=\"open_engine\",result=\"ok\"} - ignoring(request) tikv_import_rpc_duration_count{EXTERNAL_LABEL, request=\"close_engine\",result=\"ok\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Importer Engines (via Importer)",
@@ -948,7 +948,7 @@
           ],
           "targets": [
             {
-              "expr": "min(tikv_config_rocksdb{name=\"hard_pending_compaction_bytes_limit\"}) by (instance)",
+              "expr": "min(tikv_config_rocksdb{EXTERNAL_LABEL, name=\"hard_pending_compaction_bytes_limit\"}) by (instance)",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -1011,7 +1011,7 @@
               "refId": "A"
             },
             {
-              "expr": "rate(lightning_apply_worker_seconds_sum{name = \"io\"}[30s]) /rate(lightning_apply_worker_seconds_count{name = \"io\"}[30s]) ",
+              "expr": "rate(lightning_apply_worker_seconds_sum{EXTERNAL_LABEL, name = \"io\"}[30s]) /rate(lightning_apply_worker_seconds_count{EXTERNAL_LABEL, name = \"io\"}[30s]) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "apply worker",
@@ -1276,7 +1276,7 @@
               "refId": "B"
             },
             {
-              "expr": "pd_cluster_status{type=\"storage_size\"} / ignoring(type) pd_config_status{type=\"max_replicas\"}",
+              "expr": "pd_cluster_status{EXTERNAL_LABEL, type=\"storage_size\"} / ignoring(type) pd_config_status{EXTERNAL_LABEL, type=\"max_replicas\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "storage_size / replicas",

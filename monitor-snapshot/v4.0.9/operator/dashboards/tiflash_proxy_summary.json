@@ -96,7 +96,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(node_disk_io_time_seconds_total[1m])",
+              "expr": "rate(node_disk_io_time_seconds_total{EXTERNAL_LABEL}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - {{device}}",
@@ -191,7 +191,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_proxy_tikv_raftstore_region_count{instance=~\"$instance\", type=\"region\"}) by (instance)",
+              "expr": "sum(tiflash_proxy_tikv_raftstore_region_count{EXTERNAL_LABEL, instance=~\"$instance\", type=\"region\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -303,7 +303,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_scheduler_too_busy_total{instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_tikv_scheduler_too_busy_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "scheduler-{{instance}}",
@@ -312,7 +312,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_channel_full_total{instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tiflash_proxy_tikv_channel_full_total{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "channelfull-{{instance}}-{{type}}",
@@ -321,7 +321,7 @@
               "step": 4
             },
             {
-              "expr": "avg(tiflash_proxy_tikv_engine_write_stall{instance=~\"$instance\", type=\"write_stall_percentile99\"}) by (instance)",
+              "expr": "avg(tiflash_proxy_tikv_engine_write_stall{EXTERNAL_LABEL, instance=~\"$instance\", type=\"write_stall_percentile99\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "stall-{{instance}}",
@@ -424,7 +424,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_proxy_tikv_raftstore_leader_missing{instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_proxy_tikv_raftstore_leader_missing{EXTERNAL_LABEL, instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -535,7 +535,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_proxy_tikv_engine_size_bytes{instance=~\"$instance\"}) by (type)",
+              "expr": "sum(tiflash_proxy_tikv_engine_size_bytes{EXTERNAL_LABEL, instance=~\"$instance\"}) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -616,7 +616,7 @@
                 "query": {
                   "datasourceId": 1,
                   "model": {
-                    "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
+                    "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
                     "intervalFactor": 2,
                     "legendFormat": "{{instance}}",
                     "metric": "tiflash_proxy_thread_cpu_seconds_total",
@@ -692,7 +692,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -798,7 +798,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"rocksdb.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"rocksdb.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -911,7 +911,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"split_check\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"split_check\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1011,7 +1011,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"snapshot_worker\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"snapshot_worker\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1105,7 +1105,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"gc_worker.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"gc_worker.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1203,7 +1203,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"region_task.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{EXTERNAL_LABEL, instance=~\"$instance\", name=~\"region_task.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1311,7 +1311,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -1402,7 +1402,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_sum{instance=~\"$instance\"}[1m])) by (type) / sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_sum{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type) / sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{EXTERNAL_LABEL, instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
