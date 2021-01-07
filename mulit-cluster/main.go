@@ -15,7 +15,7 @@ import (
 	"github.com/grafana-tools/sdk"
 )
 
-const ExternalLabel = "External_Label"
+const ExternalLabel = "EXTERNAL_LABEL"
 
 var prefix = os.Getenv("GOPATH") + "/src/github.com/pingcap/monitoring/monitor-snapshot/v4.0.9/operator/dashboards/"
 
@@ -98,8 +98,17 @@ func appendParenthesesToMetricsName(filename string) {
 		panels = append(panels, *panel)
 	}
 
+
+	var targets []sdk.Target
+
+	// for tiflash dashboards
+	if len(board.Rows) > 0 {
+		for _, row := range board.Rows {
+			targets = append(targets, ExtractTargetsFromPanels(row.Panels)...)
+		}
+	}
 	// get all targets from grafana dashboard panels
-	targets := ExtractTargetsFromPanels(panels)
+	targets = append(targets, ExtractTargetsFromPanels(panels)...)
 
 	replaceItems := make(map[string]string)
 	// if expr do not have {}, we will append {} to metrics_name
@@ -141,6 +150,7 @@ func ExtractTargetsFromPanels(panels []sdk.Panel) []sdk.Target {
 	if len(panels) == 0 {
 		return result
 	}
+
 	for _, panel := range panels {
 		targets := panel.GetTargets()
 		if targets != nil {

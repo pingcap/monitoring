@@ -90,14 +90,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(tikv_import_write_chunk_bytes_sum[1m])",
+              "expr": "rate(tikv_import_write_chunk_bytes_sum{EXTERNAL_LABEL}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "write from lightning",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(tikv_import_upload_chunk_bytes_sum[1m]))",
+              "expr": "sum(rate(tikv_import_upload_chunk_bytes_sum{EXTERNAL_LABEL}[1m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "upload to tikv",
@@ -756,7 +756,7 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "lightning_idle_workers",
+              "expr": "lightning_idle_workers{EXTERNAL_LABEL}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{name}}",
@@ -1004,7 +1004,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(lightning_chunk_parser_read_block_seconds_sum[30s]) / rate(lightning_chunk_parser_read_block_seconds_count[30s])",
+              "expr": "rate(lightning_chunk_parser_read_block_seconds_sum{EXTERNAL_LABEL}[30s]) / rate(lightning_chunk_parser_read_block_seconds_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "read block",
@@ -1086,14 +1086,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(lightning_row_encode_seconds_sum[30s]) / rate(lightning_row_encode_seconds_count[30s])",
+              "expr": "rate(lightning_row_encode_seconds_sum{EXTERNAL_LABEL}[30s]) / rate(lightning_row_encode_seconds_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "row encode",
               "refId": "A"
             },
             {
-              "expr": "rate(lightning_block_deliver_seconds_sum[30s]) / rate(lightning_block_deliver_seconds_count[30s])",
+              "expr": "rate(lightning_block_deliver_seconds_sum{EXTERNAL_LABEL}[30s]) / rate(lightning_block_deliver_seconds_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "block deliver",
@@ -1180,14 +1180,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(lightning_block_deliver_bytes_sum[30s])",
+              "expr": "rate(lightning_block_deliver_bytes_sum{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{kind}} deliver rate",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(lightning_block_deliver_bytes_sum[30s]))",
+              "expr": "sum(rate(lightning_block_deliver_bytes_sum{EXTERNAL_LABEL}[30s]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "total deliver rate",
@@ -1262,14 +1262,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "lightning_row_read_bytes_sum",
+              "expr": "lightning_row_read_bytes_sum{EXTERNAL_LABEL}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "parser read size",
               "refId": "A"
             },
             {
-              "expr": "lightning_block_deliver_bytes_sum",
+              "expr": "lightning_block_deliver_bytes_sum{EXTERNAL_LABEL}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{kind}} deliver size",
@@ -1363,14 +1363,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(tikv_import_range_delivery_duration_sum[30s]) / rate(tikv_import_range_delivery_duration_count[30s])",
+              "expr": "rate(tikv_import_range_delivery_duration_sum{EXTERNAL_LABEL}[30s]) / rate(tikv_import_range_delivery_duration_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "range deliver",
               "refId": "A"
             },
             {
-              "expr": "rate(tikv_import_sst_delivery_duration_sum[30s]) / rate(tikv_import_sst_delivery_duration_count[30s])",
+              "expr": "rate(tikv_import_sst_delivery_duration_sum{EXTERNAL_LABEL}[30s]) / rate(tikv_import_sst_delivery_duration_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "SST file deliver",
@@ -1451,14 +1451,14 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(tikv_import_split_sst_duration_sum[30s]) / rate(tikv_import_split_sst_duration_count[30s])",
+              "expr": "rate(tikv_import_split_sst_duration_sum{EXTERNAL_LABEL}[30s]) / rate(tikv_import_split_sst_duration_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Split SST",
               "refId": "C"
             },
             {
-              "expr": "rate(tikv_import_sst_upload_duration_sum[30s]) / rate(tikv_import_sst_upload_duration_count[30s])",
+              "expr": "rate(tikv_import_sst_upload_duration_sum{EXTERNAL_LABEL}[30s]) / rate(tikv_import_sst_upload_duration_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1466,7 +1466,7 @@
               "refId": "D"
             },
             {
-              "expr": "rate(tikv_import_sst_ingest_duration_sum[30s]) / rate(tikv_import_sst_ingest_duration_count[30s])",
+              "expr": "rate(tikv_import_sst_ingest_duration_sum{EXTERNAL_LABEL}[30s]) / rate(tikv_import_sst_ingest_duration_count{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "instant": false,
               "intervalFactor": 2,
@@ -1474,7 +1474,7 @@
               "refId": "E"
             },
             {
-              "expr": "rate(tikv_import_sst_chunk_bytes_sum[30s])",
+              "expr": "rate(tikv_import_sst_chunk_bytes_sum{EXTERNAL_LABEL}[30s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "SST size",
