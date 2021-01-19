@@ -32,6 +32,7 @@ var (
 		"lightning.json":             "Test-Cluster-Lightning",
 		"tiflash_summary.json":       "Test-Cluster-TiFlash-Summary",
 		"tiflash_proxy_summary.json": "Test-Cluster-TiFlash-Proxy-Summary",
+		"ticdc.json":                 "Test-Cluster-TiCDC",
 	}
 )
 
