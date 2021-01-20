@@ -56,7 +56,7 @@ do
      [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/pods.json" ]; then
     sed -i 's%job=%component=%g' ${f}
     sed -i 's%{{job}}%{{component}}%g' ${f}
-    sed -i 's%\(by\s(.*\)job\(.*)\)%\1component\2%g' ${f}
+    sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' ${f}
   fi
 done
 
@@ -74,7 +74,7 @@ for file in $PROM_CONFIG_PATH/rules/*
 do
     sed -i 's/ENV_LABELS_ENV/'$TIDB_CLUSTER_NAME'/g' $file
     sed -i 's%job=%component=%g' $file
-    sed -i 's%\(by\s(.*\)job\(.*)\)%\1component\2%g' $file
+    sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' $file
 done
 
 # Copy Persistent rules to override raw files
