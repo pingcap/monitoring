@@ -55,6 +55,8 @@ do
   if [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/nodes.json" ] &&
      [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/pods.json" ]; then
     sed -i 's%job=%component=%g' ${f}
+    sed -i 's%{{job}}%{{component}}%g' ${f}
+    sed -i 's%\(by\s(.*\)job\(.*)\)%\1component\2%g' ${f}
   fi
 done
 
@@ -71,6 +73,8 @@ cp /tmp/*.rules.yml $PROM_CONFIG_PATH/rules
 for file in $PROM_CONFIG_PATH/rules/*
 do
     sed -i 's/ENV_LABELS_ENV/'$TIDB_CLUSTER_NAME'/g' $file
+    sed -i 's%job=%component=%g' $file
+    sed -i 's%\(by\s(.*\)job\(.*)\)%\1component\2%g' $file
 done
 
 # Copy Persistent rules to override raw files
