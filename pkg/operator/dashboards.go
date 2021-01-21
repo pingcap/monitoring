@@ -33,6 +33,7 @@ var (
 		"tiflash_summary.json":       "Test-Cluster-TiFlash-Summary",
 		"tiflash_proxy_summary.json": "Test-Cluster-TiFlash-Proxy-Summary",
 		"ticdc.json":                 "Test-Cluster-TiCDC",
+		"tiflash_proxy_details.json": "Test-Cluster-TiFlash-Proxy-Details",
 	}
 )
 

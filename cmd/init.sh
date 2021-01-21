@@ -40,6 +40,8 @@ cp /tmp/tiflash_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Summary/g'  $GF_PROVISIONING_PATH/dashboards/tiflash_summary.json
 cp /tmp/tiflash_proxy_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Proxy-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Summary/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
+cp /tmp/tiflash_proxy_details.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiFlash-Proxy-Details/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Details/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_details.json
 
 # TiCDC dashboard
 cp /tmp/ticdc.json $GF_PROVISIONING_PATH/dashboards
