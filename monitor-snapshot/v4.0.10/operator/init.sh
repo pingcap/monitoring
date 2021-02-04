@@ -40,6 +40,12 @@ cp /tmp/tiflash_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Summary/g'  $GF_PROVISIONING_PATH/dashboards/tiflash_summary.json
 cp /tmp/tiflash_proxy_summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiFlash-Proxy-Summary/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Summary/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
+cp /tmp/tiflash_proxy_details.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiFlash-Proxy-Details/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-Details/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_details.json
+
+# TiCDC dashboard
+cp /tmp/ticdc.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiCDC/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
 
 # To support monitoring multiple clusters with one TidbMonitor, change the job label to component
 sed -i 's%job=\\\"tiflash\\\"%component=\\"tiflash\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
@@ -51,6 +57,8 @@ do
   if [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/nodes.json" ] &&
      [ "${f}" != "$GF_PROVISIONING_PATH/dashboards/pods.json" ]; then
     sed -i 's%job=%component=%g' ${f}
+    sed -i 's%{{job}}%{{component}}%g' ${f}
+    sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' ${f}
   fi
 done
 
@@ -67,6 +75,8 @@ cp /tmp/*.rules.yml $PROM_CONFIG_PATH/rules
 for file in $PROM_CONFIG_PATH/rules/*
 do
     sed -i 's/ENV_LABELS_ENV/'$TIDB_CLUSTER_NAME'/g' $file
+    sed -i 's%job=%component=%g' $file
+    sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' $file
 done
 
 # Copy Persistent rules to override raw files
