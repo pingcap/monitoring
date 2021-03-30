@@ -65,7 +65,7 @@
   "gnetId": 159,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1566457258708,
+  "iteration": 1607609624988,
   "links": [],
   "panels": [
     {
@@ -167,11 +167,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "decimals": 1,
           "format": "bytes",
@@ -250,11 +246,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "format": "bytes",
           "gauge": {
@@ -418,11 +410,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "format": "none",
           "gauge": {
@@ -612,11 +600,7 @@
           "colorPostfix": false,
           "colorPrefix": false,
           "colorValue": true,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "description": "When the result is `False`, the swap is off.",
           "format": "percent",
@@ -697,11 +681,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "decimals": 2,
           "format": "short",
@@ -780,11 +760,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "decimals": 2,
           "format": "short",
@@ -863,11 +839,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "decimals": 2,
           "format": "short",
@@ -961,11 +933,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "format": "none",
           "gauge": {
@@ -1045,11 +1013,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "format": "none",
           "gauge": {
@@ -1129,11 +1093,7 @@
           "cacheTimeout": null,
           "colorBackground": false,
           "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
+          "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
           "datasource": "${DS_TIDB-CLUSTER}",
           "decimals": null,
           "format": "none",
@@ -1546,33 +1506,34 @@
           "decimals": 2,
           "editable": true,
           "error": false,
-          "fill": 6,
+          "fill": 8,
           "grid": {},
           "gridPos": {
             "h": 5,
             "w": 24,
             "x": 0,
-            "y": 9
+            "y": 3
           },
           "height": "260px",
           "id": 2,
           "instanceColors": {},
           "legend": {
             "alignAsTable": true,
-            "avg": true,
-            "current": false,
+            "avg": false,
+            "current": true,
             "hideEmpty": false,
             "max": true,
-            "min": true,
+            "min": false,
             "rightSide": true,
             "show": true,
+            "sideWidth": null,
             "sort": "avg",
             "sortDesc": true,
             "total": false,
             "values": true
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [],
           "nullPointMode": "null as zero",
           "percentage": false,
@@ -1631,7 +1592,7 @@
               "logBase": 1,
               "max": null,
               "min": 0,
-              "show": true
+              "show": false
             }
           ],
           "yaxis": {
@@ -1655,7 +1616,11 @@
       "id": 70,
       "panels": [
         {
-          "aliasColors": {},
+          "aliasColors": {
+            "Available": "green",
+            "Total": "red",
+            "Used": "yellow"
+          },
           "bars": false,
           "dashLength": 10,
           "dashes": false,
@@ -1663,24 +1628,24 @@
           "decimals": 2,
           "editable": true,
           "error": false,
-          "fill": 6,
+          "fill": 8,
           "grid": {},
           "gridPos": {
-            "h": 4,
-            "w": 24,
+            "h": 5,
+            "w": 12,
             "x": 0,
-            "y": 5
+            "y": 4
           },
           "height": "",
           "id": 6,
           "instanceColors": {},
           "legend": {
             "alignAsTable": true,
-            "avg": true,
-            "current": false,
+            "avg": false,
+            "current": true,
             "hideEmpty": false,
             "max": true,
-            "min": true,
+            "min": false,
             "rightSide": true,
             "show": true,
             "sort": "min",
@@ -1689,7 +1654,7 @@
             "values": true
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [],
           "nullPointMode": "null as zero",
           "percentage": false,
@@ -1698,17 +1663,8 @@
           "renderer": "flot",
           "seriesOverrides": [
             {
-              "color": "#0A437C",
-              "instance": "Used"
-            },
-            {
-              "color": "#5195CE",
-              "instance": "Available"
-            },
-            {
-              "color": "#052B51",
-              "instance": "Total",
-              "legend": false,
+              "alias": "Total",
+              "fill": 0,
               "stack": false
             }
           ],
@@ -1809,31 +1765,31 @@
           "decimals": 2,
           "editable": true,
           "error": false,
-          "fill": 6,
+          "fill": 8,
           "grid": {},
           "gridPos": {
             "h": 5,
-            "w": 24,
-            "x": 0,
-            "y": 9
+            "w": 12,
+            "x": 12,
+            "y": 4
           },
           "height": "",
           "id": 29,
           "instanceColors": {},
           "legend": {
             "alignAsTable": true,
-            "avg": true,
-            "current": false,
+            "avg": false,
+            "current": true,
             "hideEmpty": false,
             "max": true,
-            "min": true,
+            "min": false,
             "rightSide": true,
             "show": true,
             "total": false,
             "values": true
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [],
           "nullPointMode": "null as zero",
           "percentage": false,
@@ -1949,18 +1905,136 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_TIDB-CLUSTER}",
+          "description": "From /proc/buddyinfo. Low values indicate heavy memory fragmentation.",
+          "fill": 0,
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 9
+          },
+          "id": 196,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": true,
+            "rightSide": true,
+            "show": true,
+            "sideWidth": 250,
+            "sort": "current",
+            "sortDesc": false,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 1,
+          "points": false,
+          "renderer": "flot",
+          "repeat": "buddyinfozone",
+          "repeatDirection": "h",
+          "scopedVars": {
+            "buddyinfozone": {
+              "selected": false,
+              "text": "Normal",
+              "value": "Normal"
+            }
+          },
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "node_buddyinfo_blocks{instance=\"$host\",zone=\"$buddyinfozone\"}",
+              "format": "time_series",
+              "hide": false,
+              "intervalFactor": 1,
+              "legendFormat": "Node {{node}} - Order {{size}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": false,
+              "op": "lt",
+              "value": 10,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "ok",
+              "fill": true,
+              "line": false,
+              "op": "gt",
+              "value": 10,
+              "yaxis": "left"
+            }
+          ],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Available Buddy Pages - Zone $buddyinfozone",
+          "tooltip": {
+            "shared": true,
+            "sort": 1,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 2,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TIDB-CLUSTER}",
           "description": "Inactive: Recently used less memory, priority to be recycled\n\nActive: Recently used memory is not usually recycled unless absolutely necessary",
-          "fill": 1,
+          "fill": 8,
           "gridPos": {
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 14
+            "y": 15
           },
           "id": 142,
           "legend": {
             "alignAsTable": true,
-            "avg": true,
+            "avg": false,
             "current": true,
             "max": true,
             "min": false,
@@ -1970,7 +2044,7 @@
             "values": true
           },
           "lines": true,
-          "linewidth": 1,
+          "linewidth": 0,
           "links": [],
           "nullPointMode": "null",
           "percentage": false,
@@ -1979,7 +2053,7 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
-          "stack": false,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
@@ -2021,7 +2095,7 @@
               "label": "",
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -2030,7 +2104,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ],
           "yaxis": {
@@ -2050,7 +2124,7 @@
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 18
+            "y": 19
           },
           "id": 146,
           "legend": {
@@ -2147,12 +2221,12 @@
           "dashes": false,
           "datasource": "${DS_TIDB-CLUSTER}",
           "description": "Mapped: The memory occupied by a mapped page\n\nShared: The Shared memory",
-          "fill": 1,
+          "fill": 7,
           "gridPos": {
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 22
+            "y": 23
           },
           "id": 148,
           "legend": {
@@ -2167,7 +2241,7 @@
             "values": true
           },
           "lines": true,
-          "linewidth": 1,
+          "linewidth": 0,
           "links": [],
           "nullPointMode": "null",
           "percentage": false,
@@ -2176,7 +2250,7 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
-          "stack": false,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
@@ -2215,6 +2289,108 @@
           "yaxes": [
             {
               "format": "bytes",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_TIDB-CLUSTER}",
+          "fill": 1,
+          "gridPos": {
+            "h": 5,
+            "w": 24,
+            "x": 0,
+            "y": 27
+          },
+          "id": 198,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "node_memory_Mlocked_bytes{instance=~\"$host\"}",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "Mlocked",
+              "refId": "A"
+            },
+            {
+              "expr": "node_memory_Slab_bytes{instance=~\"$host\"}",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "Slab",
+              "refId": "B"
+            },
+            {
+              "expr": "node_memory_MemFree_bytes{instance=~\"$host\"}",
+              "format": "time_series",
+              "hide": true,
+              "intervalFactor": 1,
+              "legendFormat": "free",
+              "refId": "C"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Mlocked/Slab",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -2248,7 +2424,7 @@
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 26
+            "y": 32
           },
           "id": 152,
           "legend": {
@@ -2307,7 +2483,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -2337,7 +2513,7 @@
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 30
+            "y": 36
           },
           "id": 150,
           "legend": {
@@ -2431,9 +2607,9 @@
           "fill": 1,
           "gridPos": {
             "h": 4,
-            "w": 24,
+            "w": 12,
             "x": 0,
-            "y": 34
+            "y": 40
           },
           "id": 156,
           "legend": {
@@ -2492,7 +2668,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -2501,7 +2677,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ],
           "yaxis": {
@@ -2518,10 +2694,10 @@
           "description": "HugePages_Free: The total number of idle HugePages that the system currently has\n\nHugePages_Rsvd: The total number of HugePages currently retained by the system\n\nHugePages_Surp: Exceeds the number of resident HugePages set by the system\n\nHugePages: The total number of HugePages currently owned by the system",
           "fill": 1,
           "gridPos": {
-            "h": 5,
-            "w": 24,
-            "x": 0,
-            "y": 38
+            "h": 4,
+            "w": 12,
+            "x": 12,
+            "y": 40
           },
           "id": 154,
           "legend": {
@@ -2601,7 +2777,7 @@
               "label": "Pages",
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -2610,7 +2786,7 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ],
           "yaxis": {
@@ -2631,7 +2807,7 @@
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 43
+            "y": 44
           },
           "id": 144,
           "legend": {
@@ -2723,13 +2899,13 @@
           "decimals": 2,
           "editable": true,
           "error": false,
-          "fill": 6,
+          "fill": 7,
           "grid": {},
           "gridPos": {
             "h": 4,
-            "w": 24,
+            "w": 12,
             "x": 0,
-            "y": 47
+            "y": 48
           },
           "id": 23,
           "instanceColors": {},
@@ -2746,23 +2922,14 @@
             "values": true
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [],
           "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "color": "#584477",
-              "instance": "Used"
-            },
-            {
-              "color": "#AEA2E0",
-              "instance": "Free"
-            }
-          ],
+          "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
           "steppedLine": false,
@@ -2850,9 +3017,9 @@
           "grid": {},
           "gridPos": {
             "h": 4,
-            "w": 24,
-            "x": 0,
-            "y": 51
+            "w": 12,
+            "x": 12,
+            "y": 48
           },
           "id": 30,
           "instanceColors": {},
@@ -2962,7 +3129,7 @@
             "h": 4,
             "w": 24,
             "x": 0,
-            "y": 55
+            "y": 52
           },
           "id": 42,
           "legend": {
@@ -3071,7 +3238,7 @@
             "h": 5,
             "w": 24,
             "x": 0,
-            "y": 59
+            "y": 56
           },
           "id": 44,
           "legend": {
@@ -5539,10 +5706,7 @@
               "decimals": 2,
               "mappingType": 1,
               "pattern": "Value",
-              "thresholds": [
-                "0",
-                "1"
-              ],
+              "thresholds": ["0", "1"],
               "type": "number",
               "unit": "bytes"
             }
@@ -5698,10 +5862,7 @@
               "decimals": 2,
               "mappingType": 1,
               "pattern": "Value",
-              "thresholds": [
-                "0.5",
-                "0.9"
-              ],
+              "thresholds": ["0.5", "0.9"],
               "type": "string",
               "unit": "short",
               "valueMaps": [
@@ -8195,6 +8356,28 @@
         "tagsQuery": "up",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_TIDB-CLUSTER}",
+        "definition": "label_values(node_buddyinfo_blocks,zone)",
+        "hide": 2,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "buddyinfozone",
+        "options": [],
+        "query": "label_values(node_buddyinfo_blocks,zone)",
+        "refresh": 2,
+        "regex": "/^(?!DMA).*/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
@@ -8220,21 +8403,11 @@
       "1d"
     ],
     "status": "Stable",
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
-    ],
+    "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"],
     "type": "timepicker"
   },
   "timezone": "browser",
   "title": "Tidb-Cluster-Node_exporter",
   "uid": "000000001",
-  "version": 9
+  "version": 10
 }
