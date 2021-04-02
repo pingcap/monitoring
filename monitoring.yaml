@@ -13,7 +13,7 @@ components:
   - repo_name: "tidb-binlog"
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
-  - repo_name: "tidb-lightning"
+  - repo_name: "br"
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
   - repo_name: "tics"
