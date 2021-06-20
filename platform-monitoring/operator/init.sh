@@ -51,7 +51,8 @@ sed -i 's/Test-Cluster-TiCDC/Cluster-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/t
 sed -i 's%job=\\\"tiflash\\\"%component=\\"tiflash\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
 sed -i 's%job=\\\"tikv-importer\\\"%component=\\"importer\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
 sed -i 's%job=\\\"lightning\\\"%component=\\"tidb-lightning\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
-sed -i 's%\\\"hide\\\": 2%\\\"hide\\\": 0%g' $GF_PROVISIONING_PATH/dashboards/*.json
+sed -i 's/\"hide\":\s2/"hide": 0/g' $GF_PROVISIONING_PATH/dashboards/*.json
+
 fs=`ls $GF_PROVISIONING_PATH/dashboards/*.json`
 for f in $fs
 do
