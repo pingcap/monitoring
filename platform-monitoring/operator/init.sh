@@ -8,10 +8,12 @@ fi
 # TiDB dashboard
 cp /tmp/tidb.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiDB/Cluster-TiDB/g'  $GF_PROVISIONING_PATH/dashboards/tidb.json
+sed -i 's/label_values(pd_cluster_status, tidb_cluster)/label_values(tidb_server_connections, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/tidb.json
 
 # Overview dashboard
 cp /tmp/overview.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-Overview/Cluster-Overview/g' $GF_PROVISIONING_PATH/dashboards/overview.json
+sed -i 's/label_values(pd_cluster_status, tidb_cluster)/label_values(process_start_time_seconds, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/overview.json
 
 # PD dashboard
 cp /tmp/pd.json $GF_PROVISIONING_PATH/dashboards
@@ -46,6 +48,7 @@ sed -i 's/Test-Cluster-TiFlash-Proxy-Details/Cluster-TiFlash-Proxy-Details/g' $G
 # TiCDC dashboard
 cp /tmp/ticdc.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC/Cluster-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
+sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(ticdc_kvclient_event_feed_count, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
 
 # To support monitoring multiple clusters with one TidbMonitor, change the job label to component
 sed -i 's%job=\\\"tiflash\\\"%component=\\"tiflash\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
