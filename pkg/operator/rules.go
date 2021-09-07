@@ -7,7 +7,8 @@ import (
 	"github.com/pingcap/monitoring/pkg/common"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/pkg/rulefmt"
-	"github.com/wushilin/stream"
+	"github.com/youthlin/stream"
+	streamtypes "github.com/youthlin/stream/types"
 	"gopkg.in/yaml.v2"
 )
 
@@ -40,10 +41,11 @@ func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]by
 		newG := rulefmt.RuleGroup{
 			Interval: group.Interval,
 			Name:     group.Name,
-			Rules:    make([]rulefmt.Rule, len(group.Rules)),
+			Rules:    make([]rulefmt.Rule, 0, len(group.Rules)),
 		}
 
-		stream.FromArray(group.Rules).Map(func(rule rulefmt.Rule) rulefmt.Rule {
+		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
+			rule := t.(rulefmt.Rule)
 			if time.Duration(rule.For) <= (time.Second * 60) {
 				if err != nil {
 					rule.For = forConfig
@@ -61,7 +63,10 @@ func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]by
 			}
 
 			return rule
-		}).CollectTo(newG.Rules)
+		}).ForEach(func(t streamtypes.T) {
+			rule := t.(rulefmt.Rule)
+			newG.Rules = append(newG.Rules, rule)
+		})
 
 		newGS.Groups = append(newGS.Groups, newG)
 	}
