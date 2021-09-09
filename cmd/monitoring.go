@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"time"
 
@@ -19,7 +18,8 @@ import (
 	"github.com/pingcap/monitoring/pkg/operator"
 	traceErr "github.com/pkg/errors"
 	"github.com/spf13/cobra"
-	"github.com/wushilin/stream"
+	"github.com/youthlin/stream"
+	streamtypes "github.com/youthlin/stream/types"
 	"gopkg.in/yaml.v2"
 )
 
@@ -154,19 +154,24 @@ func Start() error {
 		return err
 	}
 
-	stream.FromArray(cfg.OperatorConfig.NeedToReplaceExpr).Each(func(expr ReplaceExpr) {
+	stream.OfSlice(cfg.OperatorConfig.NeedToReplaceExpr).ForEach(func(t streamtypes.T) {
+		expr := t.(ReplaceExpr)
 		operatorReplaceExpr[strings.ToUpper(expr.RuleName)] = expr.NewExpr
 	})
 
-	stream.FromArray(cfg.ComponentConfigs).Peek(func(component ComponentConfig) {
+	stream.OfSlice(cfg.ComponentConfigs).Peek(func(t streamtypes.T) {
+		component := t.(ComponentConfig)
 		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref)), rservice)
-	}).Each(func(component ComponentConfig) {
+	}).ForEach(func(t streamtypes.T) {
+		component := t.(ComponentConfig)
 		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref)), rservice)
 	})
 
 	// copy ansible platform config
-	stream.FromMapEntries(ansibleFiles).Each(func(entry stream.MapEntry) {
-		copyAnsibleLocalFiles(rservice, entry.Key.(reflect.Value).String(), entry.Value.(string))
+	stream.OfMap(ansibleFiles).ForEach(func(t streamtypes.T) {
+		pair := t.(streamtypes.Pair)
+		key, val := pair.First.(string), pair.Second.(string)
+		copyAnsibleLocalFiles(rservice, key, val)
 	})
 
 	err = ansible.Compress(fmt.Sprintf("%s%c%s", baseTagDir, filepath.Separator, Ansible), fmt.Sprintf("%s%c%s", baseTagDir, filepath.Separator, "ansible-monitor.tar.gz"))
@@ -174,8 +179,10 @@ func Start() error {
 	os.RemoveAll(fmt.Sprintf("%s%c%s", baseTagDir, filepath.Separator, Ansible))
 
 	// copy operator platform config
-	stream.FromMapEntries(operatorFiles).Each(func(entry stream.MapEntry) {
-		copyOperatorLocalfiles(rservice, entry.Key.(reflect.Value).String(), entry.Value.(string))
+	stream.OfMap(operatorFiles).ForEach(func(t streamtypes.T) {
+		pair := t.(streamtypes.Pair)
+		key, val := pair.First.(string), pair.Second.(string)
+		copyOperatorLocalfiles(rservice, key, val)
 	})
 
 	if autoPush {
@@ -257,7 +264,8 @@ func fetchDirectory(rservice *common.GitRepoService, owner string, repoName stri
 
 func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.GitRepoService) {
 	var name string
-	stream.FromArray(dashboards).Map(func(dashboard *common.RepositoryContent) string {
+	stream.OfSlice(dashboards).Map(func(t streamtypes.T) streamtypes.R {
+		dashboard := t.(*common.RepositoryContent)
 		name = *dashboard.Name
 		content, err := service.DownloadContents(dashboard)
 		common.CheckErr(err, "")
@@ -267,12 +275,15 @@ func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.G
 		}
 
 		return string(content)
-	}).Filter(func(content string) bool {
+	}).Filter(func(t streamtypes.T) bool {
+		content := t.(string)
 		return content != ""
-	}).Peek(func(content string) {
+	}).Peek(func(t streamtypes.T) {
+		content := t.(string)
 		// ansible
 		common.WriteFile(ansibleGrafanaDir, name, content)
-	}).Each(func(content string) {
+	}).ForEach(func(t streamtypes.T) {
+		content := t.(string)
 		// operator
 		operator.WriteDashboard(operatorGrafanaDir, content, name)
 	})
@@ -280,7 +291,8 @@ func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.G
 
 func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoService) {
 	var name string
-	stream.FromArray(rules).Map(func(rule *common.RepositoryContent) string {
+	stream.OfSlice(rules).Map(func(t streamtypes.T) streamtypes.R {
+		rule := t.(*common.RepositoryContent)
 		name = *rule.Name
 		content, err := service.DownloadContents(rule)
 		common.CheckErr(err, "")
@@ -290,12 +302,15 @@ func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoServ
 		}
 
 		return string(content)
-	}).Filter(func(content string) bool {
+	}).Filter(func(t streamtypes.T) bool {
+		content := t.(string)
 		return content != ""
-	}).Peek(func(content string) {
+	}).Peek(func(t streamtypes.T) {
+		content := t.(string)
 		// ansible
 		common.WriteFile(ansibleRuleDir, name, content)
-	}).Each(func(content string) {
+	}).ForEach(func(t streamtypes.T) {
+		content := t.(string)
 		// operatotr
 		operator.WriteRule(content, name, operatorRuleDir, operatorReplaceExpr)
 	})
@@ -330,7 +345,8 @@ func copyOperatorLocalfiles(service *common.GitRepoService, sourcePath string, d
 		path, getValue(Platform_Monitoring_Repo_Ref, cfg.PlatformMonitoringConfig.Ref))
 
 	name := ""
-	stream.FromArray(contents).Map(func(file *common.RepositoryContent) string {
+	stream.OfSlice(contents).Map(func(t streamtypes.T) streamtypes.R {
+		file := t.(*common.RepositoryContent)
 		name = *file.Name
 
 		if strings.HasPrefix(name, ".") {
@@ -345,9 +361,11 @@ func copyOperatorLocalfiles(service *common.GitRepoService, sourcePath string, d
 		}
 
 		return string(content)
-	}).Filter(func(content string) bool {
+	}).Filter(func(t streamtypes.T) bool {
+		content := t.(string)
 		return content != ""
-	}).Each(func(content string) {
+	}).ForEach(func(t streamtypes.T) {
+		content := t.(string)
 		dstDir := fmt.Sprintf("%s%c%s%c%s", baseTagDir, filepath.Separator, Opertaor, filepath.Separator, dstPath)
 		if !common.PathExist(dstDir) {
 			os.MkdirAll(dstDir, os.ModePerm)
@@ -370,7 +388,8 @@ func copyAnsibleLocalFiles(service *common.GitRepoService, sourcePath string, ds
 		path, getValue(Platform_Monitoring_Repo_Ref, cfg.PlatformMonitoringConfig.Ref))
 
 	name := ""
-	stream.FromArray(contents).Map(func(file *common.RepositoryContent) string {
+	stream.OfSlice(contents).Map(func(t streamtypes.T) streamtypes.R {
+		file := t.(*common.RepositoryContent)
 		name = *file.Name
 
 		if strings.HasPrefix(name, ".") {
@@ -385,9 +404,11 @@ func copyAnsibleLocalFiles(service *common.GitRepoService, sourcePath string, ds
 		}
 
 		return string(content)
-	}).Filter(func(content string) bool {
+	}).Filter(func(t streamtypes.T) bool {
+		content := t.(string)
 		return content != ""
-	}).Each(func(content string) {
+	}).ForEach(func(t streamtypes.T) {
+		content := t.(string)
 
 		dstDir := fmt.Sprintf("%s%c%s%c%s", baseTagDir, filepath.Separator, Ansible, filepath.Separator, dstPath)
 		if !common.PathExist(dstDir) {
