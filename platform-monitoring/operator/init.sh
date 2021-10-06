@@ -56,6 +56,28 @@ sed -i 's%job=\\\"tikv-importer\\\"%component=\\"importer\\"%g' $GF_PROVISIONING
 sed -i 's%job=\\\"lightning\\\"%component=\\"tidb-lightning\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
 sed -i 's/\"hide\":\s2/"hide": 0/g' $GF_PROVISIONING_PATH/dashboards/*.json
 
+# heterogeneous cluster optimize
+sed -i 's/label_values(tikv_engine_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, instance)/label_values(tikv_engine_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, instance)/g' $GF_PROVISIONING_PATH/dashboards/tikv_summary.json
+sed -i 's/label_values(tikv_engine_block_cache_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, db)/label_values(tikv_engine_block_cache_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, db)/g' $GF_PROVISIONING_PATH/dashboards/tikv_summary.json
+sed -i 's/label_values(tikv_storage_command_total{tidb_cluster=\\\"$tidb_cluster\\\"}, type)/label_values(tikv_storage_command_total{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, type)/g' $GF_PROVISIONING_PATH/dashboards/tikv_summary.json
+
+sed -i 's/label_values(tikv_engine_block_cache_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, db)/label_values(tikv_engine_block_cache_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, db)/g' $GF_PROVISIONING_PATH/dashboards/tikv_details.json
+sed -i 's/label_values(tikv_storage_command_total{tidb_cluster=\\\"$tidb_cluster\\\"}, type)/label_values(tikv_storage_command_total{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, type)/g' $GF_PROVISIONING_PATH/dashboards/tikv_details.json
+sed -i 's/label_values(tikv_engine_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, instance)/label_values(tikv_engine_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, instance)/g' $GF_PROVISIONING_PATH/dashboards/tikv_details.json
+sed -i 's/label_values(tikv_engine_titandb_num_live_blob_file{tidb_cluster=\\\"$tidb_cluster\\\"}, db)/label_values(tikv_engine_titandb_num_live_blob_file{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, db)/g' $GF_PROVISIONING_PATH/dashboards/tikv_details.json
+
+sed -i 's/label_values(tikv_engine_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, instance)/label_values(tikv_engine_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, instance)/g' $GF_PROVISIONING_PATH/dashboards/tikv_trouble_shooting.json
+sed -i 's/label_values(tikv_engine_block_cache_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, db)/label_values(tikv_engine_block_cache_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, db)/g' $GF_PROVISIONING_PATH/dashboards/tikv_trouble_shooting.json
+sed -i 's/label_values(tikv_storage_command_total{tidb_cluster=\\\"$tidb_cluster\\\"}, type)/label_values(tikv_storage_command_total{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, type)/g' $GF_PROVISIONING_PATH/dashboards/tikv_trouble_shooting.json
+
+sed -i 's/label_values(tiflash_system_profile_event_Query{tidb_cluster=\\\"$tidb_cluster\\\"}, instance)/label_values(tiflash_system_profile_event_Query{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, instance)/g' $GF_PROVISIONING_PATH/dashboards/tiflash_summary.json
+
+sed -i 's/label_values(tiflash_proxy_tikv_engine_block_cache_size_bytes{tidb_cluster="$tidb_cluster"}, db)/label_values(tiflash_proxy_tikv_engine_block_cache_size_bytes{tidb_cluster="$tidb_cluster"}, db)/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_details.json
+sed -i 's/label_values(tiflash_proxy_tikv_storage_command_total{tidb_cluster=\\\"$tidb_cluster\\\"}, type)/label_values(tiflash_proxy_tikv_storage_command_total{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, type)/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_details.json
+sed -i 's/label_values(tiflash_proxy_tikv_engine_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, instance)/label_values(tiflash_proxy_tikv_engine_size_bytes{tidb_cluster=~\\\"$tidb_cluster\\\"}, instance)/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_details.json
+
+sed -i 's/label_values(tiflash_proxy_tikv_engine_size_bytes{tidb_cluster=\\\"$tidb_cluster\\\"}, instance)/label_values(tiflash_proxy_tikv_engine_size_bytes{tidb_cluster=~\\\"$tidb_cluster.*\\\"}, instance)/g' $GF_PROVISIONING_PATH/dashboards/tiflash_proxy_summary.json
+
 fs=`ls $GF_PROVISIONING_PATH/dashboards/*.json`
 for f in $fs
 do
@@ -64,6 +86,9 @@ do
     sed -i 's%job=%component=%g' ${f}
     sed -i 's%{{job}}%{{component}}%g' ${f}
     sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' ${f}
+    sed -i 's%tidb_cluster=\\\"$tidb_cluster\\\"%tidb_cluster=~\\\"$tidb_cluster.*\\\"%g' ${f}
+
+    tidb_cluster="$tidb_cluster"
   fi
 done
 
