@@ -56,7 +56,6 @@ sed -i 's%job=\\\"tikv-importer\\\"%component=\\"importer\\"%g' $GF_PROVISIONING
 sed -i 's%job=\\\"lightning\\\"%component=\\"tidb-lightning\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
 sed -i 's/\"hide\":\s2/"hide": 0/g' $GF_PROVISIONING_PATH/dashboards/*.json
 
-
 fs=`ls $GF_PROVISIONING_PATH/dashboards/*.json`
 for f in $fs
 do
