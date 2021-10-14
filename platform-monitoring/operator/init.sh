@@ -64,6 +64,7 @@ do
     sed -i 's%job=%component=%g' ${f}
     sed -i 's%{{job}}%{{component}}%g' ${f}
     sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' ${f}
+    sed -i 's/tidb_cluster=\\\"$tidb_cluster\\\"/tidb_cluster=~\\\"$tidb_cluster.*\\\"/g' ${f}
   fi
 done
 
