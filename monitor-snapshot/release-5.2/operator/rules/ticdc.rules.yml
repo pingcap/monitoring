@@ -37,34 +37,6 @@ groups:
         {{ $value }}'
       summary: cdc processor resolved ts delay more than 5 minutes
       value: '{{ $value }}'
-  - alert: ticdc_puller_entry_sorter_sort_duration_time_more_than_2s
-    expr: histogram_quantile(0.9, rate(ticdc_puller_entry_sorter_sort_bucket[1m]))
-      > 2
-    for: 1m
-    labels:
-      env: ENV_LABELS_ENV
-      expr: histogram_quantile(0.9, rate(ticdc_puller_entry_sorter_sort_bucket[1m]))
-        > 2
-      level: warning
-    annotations:
-      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:
-        {{ $value }}'
-      summary: ticdc_puller_entry_sorter sort duration time more than 2s
-      value: '{{ $value }}'
-  - alert: ticdc_puller_entry_sorter_merge_duration_time_more_than_2s
-    expr: histogram_quantile(0.9, rate(ticdc_puller_entry_sorter_merge_bucket[1m]))
-      > 2
-    for: 1m
-    labels:
-      env: ENV_LABELS_ENV
-      expr: histogram_quantile(0.9, rate(ticdc_puller_entry_sorter_merge_bucket[1m]))
-        > 2
-      level: warning
-    annotations:
-      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:
-        {{ $value }}'
-      summary: ticdc_puller_entry_sorter merge duration time more than 2s
-      value: '{{ $value }}'
   - alert: ticdc_mounter_unmarshal_and_mount_time_more_than_1s
     expr: histogram_quantile(0.9, rate(ticdc_mounter_unmarshal_and_mount_bucket[1m]))
       * 1000 > 1000
@@ -131,30 +103,32 @@ groups:
       summary: ticdc puller entry sorter merge latency is too high
       value: '{{ $value }}'
   - alert: tikv_cdc_min_resolved_ts_no_change_for_1m
-    expr: changes(tikv_cdc_min_resolved_ts[1m]) < 1
+    expr: changes(tikv_cdc_min_resolved_ts[1m]) < 1 and ON (instance) tikv_cdc_region_resolve_status{status="resolved"}
+      > 0
     for: 1m
     labels:
       env: ENV_LABELS_ENV
-      expr: changes(tikv_cdc_min_resolved_ts[1m]) < 1
+      expr: changes(tikv_cdc_min_resolved_ts[1m]) < 1 and ON (instance) tikv_cdc_region_resolve_status{status="resolved"}
+        > 0
       level: warning
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:
         {{ $value }}'
       summary: tikv cdc min resolved ts no change for 1m
-      value: '{{ $value }}'
-  - alert: tikv_cdc_scan_duration_seconds_more_than_30s
+      value: '{{ $labels.instance }}'
+  - alert: tikv_cdc_scan_duration_seconds_more_than_10min
     expr: histogram_quantile(0.9, rate(tikv_cdc_scan_duration_seconds_bucket{}[1m]))
-      > 30
+      > 600
     for: 1m
     labels:
       env: ENV_LABELS_ENV
       expr: histogram_quantile(0.9, rate(tikv_cdc_scan_duration_seconds_bucket{}[1m]))
-        > 30
+        > 600
       level: warning
     annotations:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:
         {{ $value }}'
-      summary: tikv cdc scan duration seconds more than 30s
+      summary: tikv cdc scan duration seconds more than 10 min
       value: '{{ $value }}'
   - alert: ticdc_sink_mysql_execution_error
     expr: changes(ticdc_sink_mysql_execution_error[1m]) > 0
@@ -191,16 +165,4 @@ groups:
       description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
         $value }}'
       summary: TiCDC heap memory usage is over 10 GB
-      value: '{{ $value }}'
-  - alert: tikv_enabled_hibernate_regions
-    expr: sum(tikv_config_raftstore{name="hibernate_regions"}) > 0
-    for: 1m
-    labels:
-      env: ENV_LABELS_ENV
-      expr: sum(tikv_config_raftstore{name="hibernate_regions"}) > 0
-      level: warning
-    annotations:
-      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:
-        {{ $value }}'
-      summary: cdc will break tikv hibernate regions
       value: '{{ $value }}'
