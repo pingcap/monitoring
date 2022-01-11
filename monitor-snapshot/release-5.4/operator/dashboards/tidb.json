@@ -10867,7 +10867,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 33
+            "y": 170
           },
           "hiddenSeries": false,
           "id": 229,
@@ -10888,7 +10888,6 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -10977,7 +10976,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 33
+            "y": 170
           },
           "hiddenSeries": false,
           "id": 230,
@@ -10998,7 +10997,6 @@
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
