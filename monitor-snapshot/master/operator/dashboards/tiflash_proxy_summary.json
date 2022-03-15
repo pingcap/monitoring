@@ -56,200 +56,6 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "decimals": 1,
-          "description": " \tThe CPU usage of each TiKV instance",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "grid": {},
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 1
-          },
-          "id": 1708,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": 250,
-            "sort": "max",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", job=\"tiflash\"}[1m])) by (instance)",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "CPU",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "decimals": 1,
-          "description": " \tThe memory usage of each TiKV instance",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "grid": {},
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 1
-          },
-          "id": 1709,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": 250,
-            "sort": "current",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "avg(tiflash_proxy_process_resident_memory_bytes{instance=~\"$instance\", job=\"tiflash\"}) by (instance)",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Memory",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "decimals": 1,
           "description": " \tThe I/O utilization per TiKV instance",
           "editable": true,
           "error": false,
@@ -290,7 +96,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(node_disk_io_time_seconds_total[1m])",
+              "expr": "rate(node_disk_io_time_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\"}[1m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}} - {{device}}",
@@ -385,7 +191,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_proxy_tikv_raftstore_region_count{instance=~\"$instance\", type=\"region\"}) by (instance)",
+              "expr": "sum(tiflash_proxy_tikv_raftstore_region_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=\"region\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -497,7 +303,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_scheduler_too_busy_total{instance=~\"$instance\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_tikv_scheduler_too_busy_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "scheduler-{{instance}}",
@@ -506,7 +312,7 @@
               "step": 4
             },
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_channel_full_total{instance=~\"$instance\"}[1m])) by (instance, type)",
+              "expr": "sum(rate(tiflash_proxy_tikv_channel_full_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (instance, type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "channelfull-{{instance}}-{{type}}",
@@ -515,7 +321,7 @@
               "step": 4
             },
             {
-              "expr": "avg(tiflash_proxy_tikv_engine_write_stall{instance=~\"$instance\", type=\"write_stall_percentile99\"}) by (instance)",
+              "expr": "avg(tiflash_proxy_tikv_engine_write_stall{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=\"write_stall_percentile99\"}) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "stall-{{instance}}",
@@ -618,7 +424,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_proxy_tikv_raftstore_leader_missing{instance=~\"$instance\"}) by (instance)",
+              "expr": "sum(tiflash_proxy_tikv_raftstore_leader_missing{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -729,7 +535,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(tiflash_proxy_tikv_engine_size_bytes{instance=~\"$instance\"}) by (type)",
+              "expr": "sum(tiflash_proxy_tikv_engine_size_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{type}}",
@@ -810,10 +616,10 @@
                 "query": {
                   "datasourceId": 1,
                   "model": {
-                    "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
+                    "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
                     "intervalFactor": 2,
                     "legendFormat": "{{instance}}",
-                    "metric": "tikv_tiflash_proxy_thread_cpu_seconds_total",
+                    "metric": "tiflash_proxy_thread_cpu_seconds_total",
                     "refId": "A",
                     "step": 20
                   },
@@ -886,11 +692,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"raftstore_.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "tikv_tiflash_proxy_thread_cpu_seconds_total",
+              "metric": "tiflash_proxy_thread_cpu_seconds_total",
               "refId": "A",
               "step": 4
             }
@@ -992,11 +798,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"rocksdb.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"rocksdb.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "tikv_tiflash_proxy_thread_cpu_seconds_total",
+              "metric": "tiflash_proxy_thread_cpu_seconds_total",
               "refId": "A",
               "step": 4
             }
@@ -1105,11 +911,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"split_check\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"split_check\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "tikv_tiflash_proxy_thread_cpu_seconds_total",
+              "metric": "tiflash_proxy_thread_cpu_seconds_total",
               "refId": "A",
               "step": 4
             }
@@ -1163,7 +969,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "decimals": 1,
-          "description": "The CPU utilization of snapshot worker",
+          "description": "The CPU utilization of background worker",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -1205,11 +1011,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"snapshot_worker\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"background.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
-              "metric": "tikv_tiflash_proxy_thread_cpu_seconds_total",
+              "metric": "tiflash_proxy_thread_cpu_seconds_total",
               "refId": "A",
               "step": 4
             }
@@ -1218,7 +1024,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Snapshot worker CPU",
+          "title": "Background worker CPU",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1299,7 +1105,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tikv_tiflash_proxy_thread_cpu_seconds_total{instance=~\"$instance\", name=~\"gc_worker.*\"}[1m])) by (instance)",
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"gc_worker.*\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{instance}}",
@@ -1313,6 +1119,113 @@
           "timeShift": null,
           "title": "GC worker CPU",
           "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "tidb-cluster",
+          "decimals": 1,
+          "description": "The CPU utilization of region task",
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {},
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 12,
+            "y": 18
+          },
+          "id": 670,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": false,
+            "max": true,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "sideWidth": null,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"region_task.*\"}[1m])) by (instance)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{instance}}",
+              "metric": "tiflash_proxy_thread_cpu_seconds_total",
+              "refId": "A",
+              "step": 4
+            },
+            {
+              "expr": "sum(rate(tiflash_proxy_thread_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", name=~\"region_worker.*\"}[1m])) by (instance)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{instance}}-region-worker",
+              "refId": "B"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Region task worker pre-handle/generate snapshot CPU",
+          "tooltip": {
+            "msResolution": false,
             "shared": true,
             "sort": 0,
             "value_type": "individual"
@@ -1405,7 +1318,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -1496,7 +1409,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_sum{instance=~\"$instance\"}[1m])) by (type) / sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{instance=~\"$instance\"}[1m])) by (type)",
+              "expr": "sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type) / sum(rate(tiflash_proxy_tikv_pd_request_duration_seconds_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ type }}",
@@ -1558,6 +1471,46 @@
   "templating": {
     "list": [
       {
+        "allValue": null,
+        "current": { },
+        "datasource": "tidb-cluster",
+        "hide": 2,
+        "includeAll": false,
+        "label": "K8s-cluster",
+        "multi": false,
+        "name": "k8s_cluster",
+        "options": [ ],
+        "query": "label_values(tiflash_proxy_tikv_engine_size_bytes, k8s_cluster)",
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [ ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": { },
+        "datasource": "tidb-cluster",
+        "hide": 2,
+        "includeAll": false,
+        "label": "tidb_cluster",
+        "multi": false,
+        "name": "tidb_cluster",
+        "options": [ ],
+        "query": "label_values(tiflash_proxy_tikv_engine_size_bytes{k8s_cluster=\"$k8s_cluster\"}, tidb_cluster)",
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [ ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
         "allValue": ".*",
         "current": {},
         "datasource": "tidb-cluster",
@@ -1568,7 +1521,7 @@
         "multi": true,
         "name": "instance",
         "options": [],
-        "query": "label_values(tiflash_proxy_tikv_engine_size_bytes, instance)",
+        "query": "label_values(tiflash_proxy_tikv_engine_size_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\"}, instance)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
