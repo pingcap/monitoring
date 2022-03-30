@@ -1,0 +1,8 @@
+token: ""
+components:
+  - repo_name: "tiflow"
+    monitor_path: "metrics/grafana"
+    rule_path: "metrics/alertmanager"
+
+platform_monitoring:
+  repo_name: "monitoring"
