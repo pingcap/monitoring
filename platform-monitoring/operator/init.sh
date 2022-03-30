@@ -8,7 +8,7 @@ if [ ! -z $DM_CLUSTER_NAME ]; then
         rm -rf $GF_PROVISIONING_PATH/dashboards/*
     fi
 
-    # DM
+    # DM dashboard
     cp -f /tmp/DM-Monitor-Standard.json $GF_PROVISIONING_PATH/dashboards
     sed -i 's/Test-Cluster-DM/'$DM_CLUSTER_NAME'-DM-Standard/g' $GF_PROVISIONING_PATH/dashboards/DM-Monitor-Standard.json
     cp -f /tmp/DM-Monitor-Professional.json $GF_PROVISIONING_PATH/dashboards
