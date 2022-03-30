@@ -3,9 +3,6 @@ FROM busybox:1.34.1
 ADD init.sh /usr/bin/init.sh
 RUN chmod +x /usr/bin/init.sh
 
-ADD init.sh /usr/bin/dm_init.sh
-RUN chmod +x /usr/bin/dm_init.sh
-
 COPY dashboards/*.json /tmp/
 COPY rules/*.rules.yml /tmp/
 COPY datasources/*.yaml /tmp/
