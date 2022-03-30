@@ -9,9 +9,9 @@ if [ ! -z $DM_CLUSTER_NAME ]; then
     fi
 
     # DM
-    \cp -f /tmp/DM-Monitor-Standard.json $GF_PROVISIONING_PATH/dashboards
+    cp -f /tmp/DM-Monitor-Standard.json $GF_PROVISIONING_PATH/dashboards
     sed -i 's/Test-Cluster-DM/'$DM_CLUSTER_NAME'-DM-Standard/g' $GF_PROVISIONING_PATH/dashboards/DM-Monitor-Standard.json
-    \cp -f /tmp/DM-Monitor-Professional.json $GF_PROVISIONING_PATH/dashboards
+    cp -f /tmp/DM-Monitor-Professional.json $GF_PROVISIONING_PATH/dashboards
     sed -i 's/Test-Cluster-DM/'$DM_CLUSTER_NAME'-DM-Professional/g' $GF_PROVISIONING_PATH/dashboards/DM-Monitor-Professional.json
 
     # Rules
@@ -22,13 +22,13 @@ if [ ! -z $DM_CLUSTER_NAME ]; then
     echo $META_TYPE
     echo $META_INSTANCE
     echo $META_VALUE
-    \cp -f /tmp/dm_worker.rules.yml $PROM_CONFIG_PATH/rules
+    cp -f /tmp/dm_worker.rules.yml $PROM_CONFIG_PATH/rules
     sed -i 's/ENV_LABELS_ENV/'$DM_CLUSTER_NAME'/g' $PROM_CONFIG_PATH/rules/dm_worker.rules.yml
 
     # Copy Persistent rules to override raw files
     if [ ! -z $PROM_PERSISTENT_DIR ]; then
         if [ -d $PROM_PERSISTENT_DIR/latest-rules/${DM_VERSION##*/} ]; then
-            \cp -f $PROM_PERSISTENT_DIR/latest-rules/${DM_VERSION##*/}/dm_worker.rules.yml $PROM_CONFIG_PATH/rules
+            cp -f $PROM_PERSISTENT_DIR/latest-rules/${DM_VERSION##*/}/dm_worker.rules.yml $PROM_CONFIG_PATH/rules
         fi
     fi
 
@@ -37,7 +37,7 @@ if [ ! -z $DM_CLUSTER_NAME ]; then
         if [ ! -z $GF_DM_PROMETHEUS_URL ]; then
             sed -i 's,http://127.0.0.1:9090,'$GF_DM_PROMETHEUS_URL',g' /tmp/dm-cluster-datasource.yaml
         fi
-        \cp -f /tmp/dm-cluster-datasource.yaml $GF_DATASOURCE_PATH/
+        cp -f /tmp/dm-cluster-datasource.yaml $GF_DATASOURCE_PATH/
     fi
     echo "running for DM done"
     exit
