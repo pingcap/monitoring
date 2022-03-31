@@ -21,20 +21,22 @@ var (
 	tikvExcludeItems     = []string{"IO utilization"}
 
 	dashboards = map[string]string{
-		"binlog.json":                "Test-Cluster-Binlog",
-		"tidb.json":                  "Test-Cluster-TiDB",
-		"overview.json":              "Test-Cluster-Overview",
-		"tikv_details.json":          "Test-Cluster-TiKV-Details",
-		"tikv_summary.json":          "Test-Cluster-TiKV-Summary",
-		"tikv_trouble_shooting.json": "Test-Cluster-TiKV-Trouble-Shooting",
-		"pd.json":                    "Test-Cluster-PD",
-		"tikv_pull.json":             "Test-Cluster-TiKV",
-		"overview_pull.json":         "Test-Cluster-Overview",
-		"lightning.json":             "Test-Cluster-Lightning",
-		"tiflash_summary.json":       "Test-Cluster-TiFlash-Summary",
-		"tiflash_proxy_summary.json": "Test-Cluster-TiFlash-Proxy-Summary",
-		"ticdc.json":                 "Test-Cluster-TiCDC",
-		"tiflash_proxy_details.json": "Test-Cluster-TiFlash-Proxy-Details",
+		"binlog.json":                  "Test-Cluster-Binlog",
+		"tidb.json":                    "Test-Cluster-TiDB",
+		"overview.json":                "Test-Cluster-Overview",
+		"tikv_details.json":            "Test-Cluster-TiKV-Details",
+		"tikv_summary.json":            "Test-Cluster-TiKV-Summary",
+		"tikv_trouble_shooting.json":   "Test-Cluster-TiKV-Trouble-Shooting",
+		"pd.json":                      "Test-Cluster-PD",
+		"tikv_pull.json":               "Test-Cluster-TiKV",
+		"overview_pull.json":           "Test-Cluster-Overview",
+		"lightning.json":               "Test-Cluster-Lightning",
+		"tiflash_summary.json":         "Test-Cluster-TiFlash-Summary",
+		"tiflash_proxy_summary.json":   "Test-Cluster-TiFlash-Proxy-Summary",
+		"ticdc.json":                   "Test-Cluster-TiCDC",
+		"tiflash_proxy_details.json":   "Test-Cluster-TiFlash-Proxy-Details",
+		"DM-Monitor-Standard.json":     "Test-Cluster-DM-Standard",
+		"DM-Monitor-Professional.json": "Test-Cluster-DM-Professional",
 	}
 )
 

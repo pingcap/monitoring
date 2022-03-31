@@ -22,9 +22,9 @@ components:
   - repo_name: "tiflow"
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
+  - repo_name: "tiflow"
+    monitor_path: "dm/metrics/grafana"
+    rule_path: "dm/metrics/alertmanager"
 
 platform_monitoring:
-    repo_name: "monitoring"
-
-
-
+  repo_name: "monitoring"
