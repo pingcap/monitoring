@@ -233,7 +233,7 @@ func PushPullRequest() error {
 		return err
 	}
 
-	return common.CreatePR(client, commitBrach, ctx, tag)
+	return nil
 }
 
 func getTag(defaultTag string) string {
