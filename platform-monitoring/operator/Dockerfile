@@ -1,4 +1,4 @@
-FROM busybox:1.34.1
+FROM alpine:3.14.6
 
 ADD init.sh /usr/bin/init.sh
 RUN chmod +x /usr/bin/init.sh
