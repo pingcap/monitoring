@@ -1,8 +1,0 @@
-es:
-  uri: http://infra-es-elasticsearch-client:9200
-
-serviceMonitor:
-  ## If true, a ServiceMonitor CRD is created for a prometheus operator
-  ## https://github.com/coreos/prometheus-operator
-  ##
-  enabled: true
