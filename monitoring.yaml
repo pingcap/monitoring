@@ -26,6 +26,7 @@ components:
     monitor_path: "dm/metrics/grafana"
     rule_path: "dm/metrics/alertmanager"
   - repo_name: "migration"
+    owner: "tikv"
     monitor_path: "cdc/metrics/grafana"
     rule_path: "cdc/metrics/alertmanager"
 
