@@ -94,6 +94,11 @@ cp /tmp/ticdc.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC/Cluster-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
 sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(ticdc_kvclient_event_feed_count, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
 
+# TiKV-CDC dashboard
+cp /tmp/tikv-cdc.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiKV-CDC/Cluster-TiKV-CDC/g' $GF_PROVISIONING_PATH/dashboards/tikv-cdc.json
+sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(tikv_cdc_kvclient_event_feed_count, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/tikv_cdc.json
+
 # To support monitoring multiple clusters with one TidbMonitor, change the job label to component
 sed -i 's%job=\\\"tiflash\\\"%component=\\"tiflash\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
 sed -i 's%job=\\\"tikv-importer\\\"%component=\\"importer\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json

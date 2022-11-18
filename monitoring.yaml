@@ -25,6 +25,9 @@ components:
   - repo_name: "tiflow"
     monitor_path: "dm/metrics/grafana"
     rule_path: "dm/metrics/alertmanager"
+  - repo_name: "migration"
+    monitor_path: "cdc/metrics/grafana"
+    rule_path: "cdc/metrics/alertmanager"
 
 platform_monitoring:
   repo_name: "monitoring"
