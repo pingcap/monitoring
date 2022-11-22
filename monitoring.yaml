@@ -29,6 +29,7 @@ components:
     owner: "tikv"
     monitor_path: "cdc/metrics/grafana"
     rule_path: "cdc/metrics/alertmanager"
+    fix_master_ref: true
 
 platform_monitoring:
   repo_name: "monitoring"

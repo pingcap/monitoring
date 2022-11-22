@@ -161,10 +161,10 @@ func Start() error {
 
 	stream.OfSlice(cfg.ComponentConfigs).Peek(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref)), rservice)
+		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixMasterRef)), rservice)
 	}).ForEach(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref)), rservice)
+		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref, component.FixMasterRef)), rservice)
 	})
 
 	// copy ansible platform config
@@ -236,12 +236,16 @@ func PushPullRequest() error {
 	return nil
 }
 
-func getTag(defaultTag string) string {
-	if useGlobalTag {
-		return tag
+func getTag(defaultTag string, fixMainRef bool) string {
+	tag := tag
+	if !useGlobalTag {
+		tag = tag
 	}
 
-	return defaultTag
+	if tag == "master" && fixMainRef {
+		tag = "main"
+	}
+	return tag
 }
 
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
@@ -445,11 +449,12 @@ type Config struct {
 }
 
 type ComponentConfig struct {
-	RepoName    string `yaml:"repo_name"`
-	MonitorPath string `yaml:"monitor_path"`
-	RulesPath   string `yaml:"rule_path"`
-	Ref         string `yaml:"ref"`
-	Owner       string `yaml:"owner,omitempty"`
+	RepoName     string `yaml:"repo_name"`
+	MonitorPath  string `yaml:"monitor_path"`
+	RulesPath    string `yaml:"rule_path"`
+	Ref          string `yaml:"ref"`
+	Owner        string `yaml:"owner,omitempty"`
+	FixMasterRef bool   `yaml:"fix_master_ref"`
 }
 
 type OperatorConfig struct {
