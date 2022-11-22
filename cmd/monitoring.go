@@ -161,10 +161,10 @@ func Start() error {
 
 	stream.OfSlice(cfg.ComponentConfigs).Peek(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixMasterRef)), rservice)
+		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixTag)), rservice)
 	}).ForEach(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref, component.FixMasterRef)), rservice)
+		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref, component.FixTag)), rservice)
 	})
 
 	// copy ansible platform config
@@ -236,16 +236,15 @@ func PushPullRequest() error {
 	return nil
 }
 
-func getTag(defaultTag string, fixMainRef bool) string {
-	tag := tag
-	if !useGlobalTag {
-		tag = defaultTag
+func getTag(defaultTag string, fixTag string) string {
+	if useGlobalTag {
+		if fixTag != "" {
+			return fixTag
+		}
+		return tag
 	}
 
-	if tag == "master" && fixMainRef {
-		tag = "main"
-	}
-	return tag
+	return defaultTag
 }
 
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
@@ -449,12 +448,12 @@ type Config struct {
 }
 
 type ComponentConfig struct {
-	RepoName     string `yaml:"repo_name"`
-	MonitorPath  string `yaml:"monitor_path"`
-	RulesPath    string `yaml:"rule_path"`
-	Ref          string `yaml:"ref"`
-	Owner        string `yaml:"owner,omitempty"`
-	FixMasterRef bool   `yaml:"fix_master_ref"`
+	RepoName    string `yaml:"repo_name"`
+	MonitorPath string `yaml:"monitor_path"`
+	RulesPath   string `yaml:"rule_path"`
+	Ref         string `yaml:"ref"`
+	Owner       string `yaml:"owner,omitempty"`
+	FixTag      string `yaml:"fix_tag"`
 }
 
 type OperatorConfig struct {
