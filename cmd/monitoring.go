@@ -239,7 +239,7 @@ func PushPullRequest() error {
 func getTag(defaultTag string, fixMainRef bool) string {
 	tag := tag
 	if !useGlobalTag {
-		tag = tag
+		tag = defaultTag
 	}
 
 	if tag == "master" && fixMainRef {
