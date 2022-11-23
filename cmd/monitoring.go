@@ -161,10 +161,10 @@ func Start() error {
 
 	stream.OfSlice(cfg.ComponentConfigs).Peek(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref)), rservice)
+		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixTag)), rservice)
 	}).ForEach(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref)), rservice)
+		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref, component.FixTag)), rservice)
 	})
 
 	// copy ansible platform config
@@ -236,8 +236,11 @@ func PushPullRequest() error {
 	return nil
 }
 
-func getTag(defaultTag string) string {
+func getTag(defaultTag string, fixTag string) string {
 	if useGlobalTag {
+		if fixTag != "" {
+			return fixTag
+		}
 		return tag
 	}
 
@@ -450,6 +453,7 @@ type ComponentConfig struct {
 	RulesPath   string `yaml:"rule_path"`
 	Ref         string `yaml:"ref"`
 	Owner       string `yaml:"owner,omitempty"`
+	FixTag      string `yaml:"fix_tag"`
 }
 
 type OperatorConfig struct {
