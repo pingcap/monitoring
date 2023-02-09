@@ -23,7 +23,10 @@ var (
 	dashboards = map[string]string{
 		"binlog.json":                  "Test-Cluster-Binlog",
 		"tidb.json":                    "Test-Cluster-TiDB",
+		"tidb_resource_control.json":   "Test-Cluster-TiDB-Resource-Control",
+		"tidb_runtime.json":            "Test-Cluster-TiDB-Runtime",
 		"overview.json":                "Test-Cluster-Overview",
+		"performance_overview.json":    "Test-Cluster-Performance-Overview",
 		"tikv_details.json":            "Test-Cluster-TiKV-Details",
 		"tikv_summary.json":            "Test-Cluster-TiKV-Summary",
 		"tikv_trouble_shooting.json":   "Test-Cluster-TiKV-Trouble-Shooting",
