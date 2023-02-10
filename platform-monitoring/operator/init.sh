@@ -50,13 +50,17 @@ else
 fi
 
 # TiDB dashboard
-cp /tmp/tidb.json $GF_PROVISIONING_PATH/dashboards
+cp /tmp/tidb*.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiDB/Cluster-TiDB/g' $GF_PROVISIONING_PATH/dashboards/tidb.json
+sed -i 's/Test-Cluster-TiDB/Cluster-TiDB/g' $GF_PROVISIONING_PATH/dashboards/tidb_runtime.json
+sed -i 's/Test-Cluster-TiDB/Cluster-TiDB/g' $GF_PROVISIONING_PATH/dashboards/tidb_resource_control.json
 sed -i 's/label_values(pd_cluster_status, tidb_cluster)/label_values(tidb_server_connections, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/tidb.json
 
 # Overview dashboard
 cp /tmp/overview.json $GF_PROVISIONING_PATH/dashboards
+cp /tmp/performance_overview.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-Overview/Cluster-Overview/g' $GF_PROVISIONING_PATH/dashboards/overview.json
+sed -i 's/Test-Cluster-Performance-Overview/Cluster-Performance-Overview/g' $GF_PROVISIONING_PATH/dashboards/performance_overview.json
 sed -i 's/label_values(pd_cluster_status, tidb_cluster)/label_values(process_start_time_seconds, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/overview.json
 
 # PD dashboard
