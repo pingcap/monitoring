@@ -94,6 +94,8 @@ sed -i 's/Test-Cluster-TiFlash-Proxy-Details/'$TIDB_CLUSTER_NAME'-TiFlash-Proxy-
 # TiCDC dashboard
 cp /tmp/ticdc.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
+cp /tmp/TiCDC-Monitor-Summary.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiCDC-Summary/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/TiCDC-Monitor-Summary.json
 
 # TiKV-CDC dashboard
 cp /tmp/tikv-cdc.json $GF_PROVISIONING_PATH/dashboards
