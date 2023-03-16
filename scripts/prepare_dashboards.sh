@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 SCRIPTDIR=$(dirname -- "$0")
 cd $SCRIPTDIR/..

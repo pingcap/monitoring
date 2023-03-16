@@ -1,3 +1,4 @@
+#!/bin/bash
 set -ex
 BASEDIR="$(dirname -- "$0")/.."
 rm -f grafana.tar.gz
