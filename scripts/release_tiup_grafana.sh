@@ -1,5 +1,4 @@
-set -e
-set -o xtrace
+set -ex
 SCRIPTDIR=$(dirname -- "$0")
 cd $SCRIPTDIR/../output
 rm -f grafana.tar.gz
