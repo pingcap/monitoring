@@ -16,4 +16,3 @@ mkdir -p tiup_dashboards
 cp tidb-monitor/*.json tiup_dashboards/
 mkdir -p operator_dashboards
 cp ../monitor-snapshot/${TARGET}/operator/dashboards/*.json operator_dashboards/
-
