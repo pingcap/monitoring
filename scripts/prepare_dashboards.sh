@@ -2,7 +2,6 @@
 set -e
 SCRIPTDIR=$(dirname -- "$0")
 cd $SCRIPTDIR/..
-make pull-monitoring
 set +x
 echo ./pull-monitoring --config=monitoring.yaml --tag=${TARGET}
 ./pull-monitoring --config=monitoring.yaml --tag=${TARGET} --token=$TOKEN
@@ -13,7 +12,8 @@ case "$(uname -s)" in
     *)          tar_comp=1
 esac
 tar --strip-components=$tar_comp -xzf ../monitor-snapshot/${TARGET}/ansible-monitor.tar.gz
-mkdir -p tiup_dashboards
-cp tidb-monitor/*.json tiup_dashboards/
-mkdir -p operator_dashboards
-cp ../monitor-snapshot/${TARGET}/operator/dashboards/*.json operator_dashboards/
+mkdir -p dashboards_swp/tiup
+mkdir -p dashboards_swp/operator
+cp tidb-monitor/*.json dashboards_swp/tiup/
+cp ../monitor-snapshot/${TARGET}/operator/dashboards/*.json dashboards_swp/operator/
+mv dashboards_swp dashboards
