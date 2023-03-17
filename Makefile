@@ -3,7 +3,7 @@ LINUX     := "linux"
 MAC       := "Darwin"
 
 TARGET_OS ?= $(shell go env GOOS)
-TARGET_ARCH ?= $(shell go env ARCH)
+TARGET_ARCH ?= $(shell go env GOARCH)
 
 export CGO_ENABLED = 0
 
@@ -29,4 +29,4 @@ output/dashboards: pull-monitoring
 	bash scripts/prepare_dashboards.sh
 
 output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz : output/dashboards
-	bash scripts/build_tiup_grafana.sh
+	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
