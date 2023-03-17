@@ -12,7 +12,8 @@ case "$(uname -s)" in
     *)          tar_comp=1
 esac
 tar --strip-components=$tar_comp -xzf ../monitor-snapshot/${TARGET}/ansible-monitor.tar.gz
-mkdir -p dashboards/tiup
-mkdir -p dashboards/operator
-cp tidb-monitor/*.json dashboards/tiup/
-cp ../monitor-snapshot/${TARGET}/operator/dashboards/*.json dashboards/operator/
+mkdir -p dashboards_swp/tiup
+mkdir -p dashboards_swp/operator
+cp tidb-monitor/*.json dashboards_swp/tiup/
+cp ../monitor-snapshot/${TARGET}/operator/dashboards/*.json dashboards_swp/operator/
+mv dashboards_swp dashboards
