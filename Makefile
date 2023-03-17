@@ -2,6 +2,9 @@ ARCH      := "`uname -s`"
 LINUX     := "linux"
 MAC       := "Darwin"
 
+TARGET_OS ?= $(shell go env GOOS)
+TARGET_ARCH ?= $(shell go env ARCH)
+
 export CGO_ENABLED = 0
 
 all:
