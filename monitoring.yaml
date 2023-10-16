@@ -1,8 +1,8 @@
 token: ""
 components:
   - repo_name: "tidb"
-    monitor_path: "metrics/grafana"
-    rule_path: "metrics/alertmanager"
+    monitor_path: "pkg/metrics/grafana"
+    rule_path: "pkg/metrics/alertmanager"
   - repo_name: "tikv"
     owner: "tikv"
     monitor_path: "metrics/grafana"
