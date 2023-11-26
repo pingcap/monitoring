@@ -564,24 +564,24 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(container_memory_rss{ namespace=\"$namespace\", pod_name=\"$pod\", container_name!=\"POD\", container_name!=\"\"}) by (container_name)",
+          "expr": "sum(container_memory_rss{ namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", container!=\"\"}) by (container)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{container_name}} (RSS)",
+          "legendFormat": "{{container}} (RSS)",
           "refId": "E"
         },
         {
-          "expr": "sum(container_memory_cache{namespace=\"$namespace\", pod_name=\"$pod\", container_name!=\"POD\", container_name!=\"\"}) by (container_name)",
+          "expr": "sum(container_memory_cache{namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", container!=\"\"}) by (container)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{container_name}} (Cache)",
+          "legendFormat": "{{container}} (Cache)",
           "refId": "A"
         },
         {
-          "expr": "sum(container_memory_working_set_bytes{ namespace=\"$namespace\", pod_name=\"$pod\", container_name!=\"POD\", container_name!=\"\"}) by (container_name)",
+          "expr": "sum(container_memory_working_set_bytes{ namespace=\"$namespace\", pod=\"$pod\", container!=\"POD\", container!=\"\"}) by (container)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{container_name}} (WorkingSet)",
+          "legendFormat": "{{container}} (WorkingSet)",
           "refId": "B"
         },
         {
@@ -682,10 +682,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", image!=\"\", pod_name=\"$pod\", container_name=~\"$container\", container_name!=\"POD\"}[1m]))",
+          "expr": "sum by (container) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", image!=\"\", pod=\"$pod\", container=~\"$container\", container!=\"POD\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "Current: {{ container_name }}",
+          "legendFormat": "Current: {{ container }}",
           "refId": "A"
         },
         {
@@ -785,14 +785,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sort_desc(sum by (pod_name) (rate(container_network_receive_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
+          "expr": "sort_desc(sum by (pod) (rate(container_network_receive_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[1m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RX",
           "refId": "A"
         },
         {
-          "expr": "sort_desc(sum by (pod_name) (rate(container_network_transmit_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod_name=\"$pod\"}[1m])))",
+          "expr": "sort_desc(sum by (pod) (rate(container_network_transmit_bytes_total{job=\"kubelet\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[1m])))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "TX",
@@ -879,17 +879,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_fs_writes_bytes_total{pod_name=\"$pod\",container_name=\"$container\"}[1m])) by (container_name,device)",
+          "expr": "sum(rate(container_fs_writes_bytes_total{pod=\"$pod\",container=\"$container\"}[1m])) by (container,device)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Write: {{container_name}}-{{device}}",
+          "legendFormat": "Write: {{container}}-{{device}}",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(container_fs_reads_bytes_total{pod_name=\"$pod\",container_name=\"$container\"}[1m])) by (container_name,device)",
+          "expr": "sum(rate(container_fs_reads_bytes_total{pod=\"$pod\",container=\"$container\"}[1m])) by (container,device)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Read: {{container_name}}-{{device}}",
+          "legendFormat": "Read: {{container}}-{{device}}",
           "refId": "B"
         }
       ],
