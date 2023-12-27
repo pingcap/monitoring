@@ -25,6 +25,7 @@ components:
   - repo_name: "tiproxy"
     monitor_path: "pkg/metrics/grafana"
     rule_path: "pkg/metrics/alertmanager"
+    fix_tag: "main"
   - repo_name: "migration"
     owner: "tikv"
     monitor_path: "cdc/metrics/grafana"
