@@ -26,6 +26,7 @@ pull-monitoring:
 	go build -o pull-monitoring cmd/monitoring.go
 
 output/dashboards: pull-monitoring
+# set NOPULL=1 to disable pulling configs
 	bash scripts/prepare_dashboards.sh
 
 output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz : output/dashboards
