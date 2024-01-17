@@ -25,13 +25,15 @@ all:
 pull-monitoring:
 	go build -o pull-monitoring cmd/monitoring.go
 
-# set NOPULL=1 to disable pulling configs
-ifeq ("$(NOPULL)", "1")
-output/dashboards:
-else
 output/dashboards: pull-monitoring
-endif
 	bash scripts/prepare_dashboards.sh
 
 output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz : output/dashboards
 	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
+
+# same as output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz, but without pull
+grafana_without_pull:
+	NOPULL=1 bash scripts/prepare_dashboards.sh
+	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
+
+.PHONY: grafana_without_pull
