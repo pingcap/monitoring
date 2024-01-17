@@ -3,8 +3,10 @@ set -e
 SCRIPTDIR=$(dirname -- "$0")
 cd $SCRIPTDIR/..
 set +x
+if [ -z $NOPULL ]; then
 echo ./pull-monitoring --config=monitoring.yaml --tag=${TARGET}
 ./pull-monitoring --config=monitoring.yaml --tag=${TARGET} --token=$TOKEN
+fi
 set -x
 mkdir -p output && cd output
 case "$(uname -s)" in
