@@ -37,4 +37,8 @@ grafana_without_pull:
 	NOPULL=1 bash scripts/prepare_dashboards.sh
 	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
 
+<<<<<<< HEAD
 .PHONY: grafana_without_pull output/prometheus
+=======
+.PHONY: grafana_without_pull
+>>>>>>> 6df7b28 (feat(grafana): use NOPULL env to disable pulling files (#252))
