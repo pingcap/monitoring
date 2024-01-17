@@ -30,3 +30,10 @@ output/dashboards: pull-monitoring
 
 output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz : output/dashboards
 	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
+
+# same as output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz, but without pull
+grafana_without_pull:
+	NOPULL=1 bash scripts/prepare_dashboards.sh
+	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
+
+.PHONY: grafana_without_pull
