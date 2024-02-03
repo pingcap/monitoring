@@ -1,0 +1,69 @@
+groups:
+- name: alert.rules
+  rules:
+  - alert: TiFlash_server_is_down
+    expr: probe_success{group="tiflash"} == 0
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: probe_success{group="tiflash"} == 0
+      level: emergency
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiFlash server is down
+      value: '{{ $value }}'
+  - alert: TiFlash_schema_error
+    expr: increase(tiflash_schema_apply_count{type="failed"}[15m]) > 0
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: increase(tiflash_schema_apply_count{type="failed"}[15m]) > 0
+      level: emergency
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiFlash schema error
+      value: '{{ $value }}'
+  - alert: TiFlash_schema_apply_duration
+    expr: histogram_quantile(0.99, sum(rate(tiflash_schema_apply_duration_seconds_bucket[1m]))
+      BY (le, instance)) > 20
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: histogram_quantile(0.99, sum(rate(tiflash_schema_apply_duration_seconds_bucket[1m]))
+        BY (le, instance)) > 20
+      level: emergency
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiFlash schema apply duration 99th percentile is above 20s
+      value: '{{ $value }}'
+  - alert: TiFlash_raft_read_index_duration
+    expr: histogram_quantile(0.99, sum(rate(tiflash_raft_read_index_duration_seconds_bucket[1m]))
+      BY (le, instance)) > 3
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: histogram_quantile(0.99, sum(rate(tiflash_raft_read_index_duration_seconds_bucket[1m]))
+        BY (le, instance)) > 3
+      level: critical
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiFlash raft read index duration 99th percentile is above 3s
+      value: '{{ $value }}'
+  - alert: TiFlash_raft_wait_index_duration
+    expr: histogram_quantile(0.99, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket[1m]))
+      BY (le, instance)) > 2
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: histogram_quantile(0.99, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket[1m]))
+        BY (le, instance)) > 2
+      level: critical
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiFlash raft wait index duration 99th percentile is above 2s
+      value: '{{ $value }}'
