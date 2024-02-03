@@ -1,0 +1,207 @@
+groups:
+- name: alert.rules
+  rules:
+  - alert: PD_cluster_offline_tikv_nums
+    expr: (sum ( pd_cluster_status{type="store_down_count"} ) by (instance) > 0) and
+      (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum ( pd_cluster_status{type="store_down_count"} ) by (instance) > 0)
+        and (sum(etcd_server_is_leader) by (instance) > 0)
+      level: emergency
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_cluster_offline_tikv_nums
+      value: '{{ $value }}'
+  - alert: PD_etcd_write_disk_latency
+    expr: histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m]))
+      by (instance,job,le) ) > 1
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m]))
+        by (instance,job,le) ) > 1
+      level: critical
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_etcd_write_disk_latency
+      value: '{{ $value }}'
+  - alert: PD_miss_peer_region_count
+    expr: (sum(pd_regions_status{type="miss_peer_region_count"}) by (instance)  >
+      100) and (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum(pd_regions_status{type="miss_peer_region_count"}) by (instance)  >
+        100) and (sum(etcd_server_is_leader) by (instance) > 0)
+      level: critical
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_miss_peer_region_count
+      value: '{{ $value }}'
+  - alert: PD_cluster_lost_connect_tikv_nums
+    expr: (sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance)
+      > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance)
+        > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_cluster_lost_connect_tikv_nums
+      value: '{{ $value }}'
+  - alert: PD_cluster_low_space
+    expr: (sum ( pd_cluster_status{type="store_low_space_count"} ) by (instance) >
+      0) and (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum ( pd_cluster_status{type="store_low_space_count"} ) by (instance)
+        > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_cluster_low_space
+      value: '{{ $value }}'
+  - alert: PD_etcd_network_peer_latency
+    expr: histogram_quantile(0.99, sum(rate(etcd_network_peer_round_trip_time_seconds_bucket[1m]))
+      by (To,instance,job,le) ) > 1
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: histogram_quantile(0.99, sum(rate(etcd_network_peer_round_trip_time_seconds_bucket[1m]))
+        by (To,instance,job,le) ) > 1
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_etcd_network_peer_latency
+      value: '{{ $value }}'
+  - alert: PD_tidb_handle_requests_duration
+    expr: histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{type="tso"}[1m]))
+      by (instance,job,le) ) > 0.1
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{type="tso"}[1m]))
+        by (instance,job,le) ) > 0.1
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_tidb_handle_requests_duration
+      value: '{{ $value }}'
+  - alert: PD_down_peer_region_nums
+    expr: (sum(pd_regions_status{type="down-peer-region-count"}) by (instance)  >
+      0) and (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum(pd_regions_status{type="down-peer-region-count"}) by (instance)  >
+        0) and (sum(etcd_server_is_leader) by (instance) > 0)
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_down_peer_region_nums
+      value: '{{ $value }}'
+  - alert: PD_pending_peer_region_count
+    expr: (sum(pd_regions_status{type="pending-peer-region-count"}) by (instance)  >
+      100) and (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum(pd_regions_status{type="pending-peer-region-count"}) by (instance)  >
+        100) and (sum(etcd_server_is_leader) by (instance) > 0)
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_pending_peer_region_count
+      value: '{{ $value }}'
+  - alert: PD_leader_change
+    expr: count( changes(pd_server_tso{type="save"}[10m]) > 0 )   >= 2
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: count( changes(pd_server_tso{type="save"}[10m]) > 0 )   >= 2
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_leader_change
+      value: '{{ $value }}'
+  - alert: TiKV_space_used_more_than_80%
+    expr: sum(pd_cluster_status{type="storage_size"}) / sum(pd_cluster_status{type="storage_capacity"})
+      * 100  > 80
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: sum(pd_cluster_status{type="storage_size"}) / sum(pd_cluster_status{type="storage_capacity"})
+        * 100  > 80
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{
+        $labels.instance }}, values: {{ $value }}'
+      summary: TiKV_space_used_more_than_80%
+      value: '{{ $value }}'
+  - alert: PD_system_time_slow
+    expr: changes(pd_server_tso{type="system_time_slow"}[10m]) >= 1
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: changes(pd_server_tso{type="system_time_slow"}[10m]) >= 1
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:
+        {{ $value }}'
+      summary: PD_system_time_slow
+      value: '{{ $value }}'
+  - alert: PD_no_store_for_making_replica
+    expr: increase(pd_checker_event_count{type="replica_checker", name="no_target_store"}[1m])
+      > 0
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: increase(pd_checker_event_count{type="replica_checker", name="no_target_store"}[1m])
+        > 0
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{
+        $labels.instance }}, values: {{ $value }}'
+      summary: PD_no_store_for_making_replica
+      value: '{{ $value }}'
+  - alert: PD_node_restart
+    expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD server has been restarted
+      value: '{{ $value }}'
+  - alert: PD_cluster_slow_tikv_nums
+    expr: (sum(pd_cluster_status{type="store_slow_count"}) by (instance) > 0) and
+      (sum(etcd_server_is_leader) by (instance) > 0)
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: (sum(pd_cluster_status{type="store_slow_count"}) by (instance) > 0) and
+        (sum(etcd_server_is_leader) by (instance) > 0)
+      level: critical
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: PD_cluster_slow_tikv_nums
+      value: '{{ $value }}'
