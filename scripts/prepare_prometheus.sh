@@ -32,8 +32,7 @@ main() {
     wget "$prometheus_download_url" -O - | tar -zxvf - --strip-components=0 -C $archive_dir ${prometheus_dirname}
 
     ## add rules
-    # mv "$archive_dir/${prometheus_dirname}" ${archive_dir}/prometheus
-    mkdir ${archive_dir}/prometheus
+    mv "$archive_dir/${prometheus_dirname}" ${archive_dir}/prometheus
     for rf in tidb.rules.yml pd.rules.yml tikv.rules.yml tikv.accelerate.rules.yml binlog.rules.yml ticdc.rules.yml tiflash.rules.yml lightning.rules.yml; do cp -v "monitor-snapshot/${ref_path}/operator/rules/$rf" "$archive_dir/prometheus"; done
     for rf in blacker.rules.yml bypass.rules.yml kafka.rules.yml node.rules.yml; do cp -v "platform-monitoring/ansible/rule/$rf" "$archive_dir/prometheus"; done
 
