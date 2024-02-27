@@ -38,4 +38,3 @@ grafana_without_pull:
 	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
 
 .PHONY: grafana_without_pull output/prometheus
->>>>>>> e54cc3f (ci: add make task `output/prometheus` to compose the most files for prometheus tiup package (#283) (#293))
