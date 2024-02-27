@@ -18,8 +18,6 @@ all:
 	fi
 	GOOS=linux go build -o ./reload/build/linux/reload  ./reload/main.go; \
     GOOS=darwin go build -o ./reload/build/macos/reload  ./reload/main.go; \
-<<<<<<< HEAD
-=======
 
 pull-monitoring:
 	go build -o pull-monitoring cmd/monitoring.go
@@ -40,4 +38,3 @@ grafana_without_pull:
 	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
 
 .PHONY: grafana_without_pull output/prometheus
->>>>>>> e54cc3f (ci: add make task `output/prometheus` to compose the most files for prometheus tiup package (#283) (#293))
