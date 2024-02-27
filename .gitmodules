@@ -1,0 +1,4 @@
+[submodule "ng-monitoring"]
+	path = ng-monitoring
+	url = https://github.com/pingcap/ng-monitoring.git
+	branch = release-6.1
