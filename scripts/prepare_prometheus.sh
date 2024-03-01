@@ -30,10 +30,10 @@ main() {
     ref_dir="$(get_ref_path)"
     echo "Ref directory is: $ref_dir"
 
-    rm -rf "$archive_dir"
     mkdir -p "$archive_dir"
 
     ## Compose prometheus files from the community repo.
+    rm -rf ${archive_dir}/prometheus
     prometheus_dirname="prometheus-${prometheus_ver}.${prometheus_os}-${prometheus_arch}"
     prometheus_download_url="https://github.com/prometheus/prometheus/releases/download/v${prometheus_ver}/${prometheus_dirname}.tar.gz"
     wget "$prometheus_download_url" -O - | tar -zxvf - --strip-components=0 -C "$archive_dir" "$prometheus_dirname"
