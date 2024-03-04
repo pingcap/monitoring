@@ -1,16 +1,19 @@
 #!/bin/bash
-set -ex
+set -exo pipefail
+
+grafanaVer="$(grep -E "^grafana: " dependencies.yaml | awk -F': ' '{ print $2 }')"
+grafanaVer="${grafanaVer#v}"
 cd "$(dirname -- "$0")/../output"
 GrafanaPath=grafana-$TARGET_OS-$TARGET_ARCH
-mkdir -p $GrafanaPath && cd $GrafanaPath 
-rm -f grafana.tar.gz
-if [ $TARGET_OS = 'darwin' ] && [ $TARGET_ARCH = 'arm64' ] ; then
-	wget -O grafana.tar.gz -qnc  http://fileserver.pingcap.net/download/pingcap/grafana-7.5.10.darwin-arm64.tar.gz
-else
-	wget -O grafana.tar.gz -qnc https://download.pingcap.org/grafana-7.5.11.$TARGET_OS-$TARGET_ARCH.tar.gz
+grafanaFile="grafana-${grafanaVer}.${TARGET_OS}-${TARGET_ARCH}.tar.gz"
+downloadUrl="https://dl.grafana.com/oss/release/$grafanaFile"
+if [ "$TARGET_OS/$TARGET_ARCH" = "darwin/arm64" ]; then
+	downloadUrl="https://download.pingcap.org/$grafanaFile"
 fi
+mkdir -p $GrafanaPath && cd "$GrafanaPath"
 mkdir -p grafana
-tar -C grafana --strip-components=1 -xzf grafana.tar.gz
+wget -O - "$downloadUrl" | tar -C grafana --strip-components=1 -xzvf -
 cp ../dashboards/tiup/* grafana/
+rm -f grafana.tar.gz
 tar -C grafana -czf grafana.tar.gz .
-mv grafana.tar.gz ../$GrafanaPath.tar.gz 
+mv grafana.tar.gz ../$GrafanaPath.tar.gz
