@@ -4,4 +4,4 @@
 # renovate: datasource=github-release depName=prometheus/prometheus
 prometheus: v2.27.1
 # renovate: datasource=github-release depName=grafana/grafana
-grafana: v7.5.16
+grafana: v7.5.17
