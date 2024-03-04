@@ -10361,7 +10361,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "Percentiles of TiKV sink write duration by each server.\n",
+          "description": "Percentiles of $sink_type sink write duration by each server.\n",
           "fieldConfig": {
             "defaults": {
               "links": []
@@ -10409,7 +10409,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, sum(rate(tikv_cdc_sink_txn_exec_duration_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (le,instance, changefeed))",
+              "expr": "histogram_quantile(0.95, sum(rate(tikv_cdc_sink_txn_exec_duration_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (le,instance, changefeed))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10419,7 +10419,7 @@
             },
             {
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, sum(rate(tikv_cdc_sink_txn_exec_duration_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (le,instance, changefeed))",
+              "expr": "histogram_quantile(0.99, sum(rate(tikv_cdc_sink_txn_exec_duration_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (le,instance, changefeed))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10429,7 +10429,7 @@
             },
             {
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, sum(rate(tikv_cdc_sink_txn_exec_duration_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (le,instance, changefeed))",
+              "expr": "histogram_quantile(0.999, sum(rate(tikv_cdc_sink_txn_exec_duration_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (le,instance, changefeed))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10442,7 +10442,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV sink write duration percentile",
+          "title": "$sink_type sink write duration percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10533,7 +10533,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "histogram_quantile(0.90, sum(rate(tikv_cdc_sink_txn_batch_size_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (le, instance, changefeed))",
+              "expr": "histogram_quantile(0.90, sum(rate(tikv_cdc_sink_txn_batch_size_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (le, instance, changefeed))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -10542,7 +10542,7 @@
             },
             {
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, sum(rate(tikv_cdc_sink_txn_batch_size_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (le, instance, changefeed))",
+              "expr": "histogram_quantile(0.99, sum(rate(tikv_cdc_sink_txn_batch_size_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (le, instance, changefeed))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -10551,7 +10551,7 @@
             },
             {
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, sum(rate(tikv_cdc_sink_txn_batch_size_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (le, instance, changefeed))",
+              "expr": "histogram_quantile(0.999, sum(rate(tikv_cdc_sink_txn_batch_size_bucket{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (le, instance, changefeed))",
               "format": "time_series",
               "hide": true,
               "interval": "",
@@ -10564,7 +10564,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV sink write batch size percentile",
+          "title": "$sink_type sink write batch size percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10607,7 +10607,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "The number of changed entires that are written to  downstream TiKV",
+          "description": "The number of changed entires that are written to downstream sink",
           "fieldConfig": {
             "defaults": {
               "links": []
@@ -10654,7 +10654,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum (rate(tikv_cdc_sink_txn_batch_size_sum{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (instance)",
+              "expr": "sum (rate(tikv_cdc_sink_txn_batch_size_sum{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (instance)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
@@ -10663,7 +10663,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum (rate(tikv_cdc_sink_txn_batch_size_sum{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (changefeed)",
+              "expr": "sum (rate(tikv_cdc_sink_txn_batch_size_sum{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (changefeed)",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10676,7 +10676,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV sink write rows count/s",
+          "title": "$sink_type sink write rows count/s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10763,7 +10763,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(delta(tikv_cdc_sink_execution_error{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"TiKV\"}[1m])) by (capture)",
+              "expr": "sum(delta(tikv_cdc_sink_execution_error{tidb_cluster=\"$tidb_cluster\", changefeed=~\"$changefeed\", capture=~\"$capture\", type=\"$sink_type\"}[1m])) by (capture)",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{capture}}",
@@ -10774,7 +10774,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV sink error count/m",
+          "title": "$sink_type sink error count/m",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10812,7 +10812,8 @@
           }
         }
       ],
-      "title": "TiKV Sink",
+      "repeat": "sink_type",
+      "title": "$sink_type Sink",
       "type": "row"
     }
   ],
@@ -10936,6 +10937,37 @@
         "query": {
           "query": "label_values(tikv_engine_size_bytes{tidb_cluster=\"$tidb_cluster\"}, instance)",
           "refId": "tidb-cluster-tikv_instance-Variable-Query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "tidb-cluster",
+        "definition": "label_values(tikv_cdc_sink_txn_batch_size_sum{tidb_cluster=\"$tidb_cluster\"}, type)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Sink",
+        "multi": false,
+        "name": "sink_type",
+        "options": [],
+        "query": {
+          "query": "label_values(tikv_cdc_sink_txn_batch_size_sum{tidb_cluster=\"$tidb_cluster\"}, type)",
+          "refId": "tidb-cluster-sink_type-Variable-Query"
         },
         "refresh": 2,
         "regex": "",
