@@ -11,7 +11,7 @@ set -x
 mkdir -p output && cd output
 case "$(uname -s)" in
     Darwin*)    tar_comp=2;;
-    *)        tar_comp=1
+    *)          tar_comp=1
 esac
 tar --strip-components=$tar_comp -xzf ../monitor-snapshot/${TARGET}/ansible-monitor.tar.gz
 mkdir -p dashboards_swp/tiup
