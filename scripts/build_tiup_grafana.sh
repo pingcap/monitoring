@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -exo pipefail
 
 grafanaVer="$(grep -E "^grafana: " dependencies.yaml | awk -F': ' '{ print $2 }')"
 grafanaVer="${grafanaVer#v}"
@@ -12,7 +12,7 @@ if [ "$TARGET_OS/$TARGET_ARCH" = "darwin/arm64" ]; then
 fi
 mkdir -p $GrafanaPath && cd "$GrafanaPath"
 mkdir -p grafana
-wget -O - -qnc "$downloadUrl" | tar -C grafana --strip-components=1 -xzf -
+wget -O - "$downloadUrl" | tar -C grafana --strip-components=1 -xzvf -
 cp ../dashboards/tiup/* grafana/
 rm -f grafana.tar.gz
 tar -C grafana -czf grafana.tar.gz .
