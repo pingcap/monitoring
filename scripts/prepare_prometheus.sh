@@ -22,12 +22,12 @@ get_ref_path() {
 }
 
 main() {
+    prometheus_os="${TARGET_OS:-linux}"
+    prometheus_arch="${TARGET_ARCH:-amd64}"
     prometheus_ver="2.27.1"
     if [ "$prometheus_os/$prometheus_arch" = "darwin/arm64" ]; then
         prometheus_ver="2.28.1"
     fi
-    prometheus_os="${TARGET_OS:-linux}"
-    prometheus_arch="${TARGET_ARCH:-amd64}"
 
     archive_dir="output"
     ref_dir="$(get_ref_path)"
