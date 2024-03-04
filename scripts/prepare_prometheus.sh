@@ -22,7 +22,8 @@ get_ref_path() {
 }
 
 main() {
-    prometheus_ver="2.49.1"
+    prometheus_ver="$(grep -E "^prometheus: " dependencies.yaml | awk -F': ' '{ print $2 }')"
+    prometheus_ver="${prometheus_ver#v}"
     prometheus_os="${TARGET_OS:-linux}"
     prometheus_arch="${TARGET_ARCH:-amd64}"
 
