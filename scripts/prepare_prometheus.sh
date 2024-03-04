@@ -6,7 +6,7 @@ get_ref_path() {
     current_git_desc=$(git describe --tags)
     if [[ $current_git_desc =~ -[0-9]+-g[0-9a-f]{7,10}$ ]]; then
         # Not checked out on a tag revision, or no tag added on this revision.
-        git branch --contains | grep -v 'detached at' | sed 's/^ *//' | sed 's/^* //'
+        git branch --contains | grep -vE 'detached (at|from)' | sed 's/^ *//' | sed 's/^* //'
     elif [[ $current_git_desc =~ v[0-9]+.[0-9]+.[0-9]+$ ]]; then
         # Remove the leading 'v'
         version=${current_git_desc#"v"}
