@@ -6,13 +6,13 @@ get_ref_path() {
     current_git_desc=$(git describe --tags)
     if [[ $current_git_desc =~ -[0-9]+-g[0-9a-f]{7,10}$ ]]; then
         # Not checked out on a tag revision, or no tag added on this revision.
-        git branch --contains | grep -v 'HEAD detached' | sed 's/^ *//' | sed 's/^* //'
+        git branch --contains | grep -vE 'detached (at|from)' | sed 's/^ *//' | sed 's/^* //'
     elif [[ $current_git_desc =~ v[0-9]+.[0-9]+.[0-9]+$ ]]; then
         # Remove the leading 'v'
         version=${current_git_desc#"v"}
 
         # Split the version string using '.' as delimiter
-        IFS='.' read -r major minor patch <<<"$version"
+        IFS='.' read -r major minor _patch <<<"$version"
 
         # Construct the desired release branch
         echo "release-$major.$minor"
@@ -22,9 +22,10 @@ get_ref_path() {
 }
 
 main() {
+    prometheus_ver="$(grep -E "^prometheus: " dependencies.yaml | awk -F': ' '{ print $2 }')"
+    prometheus_ver="${prometheus_ver#v}"
     prometheus_os="${TARGET_OS:-linux}"
     prometheus_arch="${TARGET_ARCH:-amd64}"
-    prometheus_ver="2.27.1"
     if [ "$prometheus_os/$prometheus_arch" = "darwin/arm64" ]; then
         prometheus_ver="2.28.1"
     fi
