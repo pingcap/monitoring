@@ -42,6 +42,7 @@ var (
 		"tiflash_proxy_details.json":   "Test-Cluster-TiFlash-Proxy-Details",
 		"DM-Monitor-Standard.json":     "Test-Cluster-DM-Standard",
 		"DM-Monitor-Professional.json": "Test-Cluster-DM-Professional",
+		"tiproxy_summary.json":         "Test-Cluster-TiProxy-Summary",
 	}
 )
 
