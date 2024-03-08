@@ -163,3 +163,31 @@ groups:
         $value }}'
       summary: TiDB server has been restarted
       value: '{{ $value }}'
+  - alert: TiDB_cpu_quota
+    expr: irate(process_cpu_seconds_total{job="tidb"}[30s]) / tidb_server_maxprocs
+      > 0.8
+    for: 45s
+    labels:
+      env: ENV_LABELS_ENV
+      expr: irate(process_cpu_seconds_total{job="tidb"}[30s]) / tidb_server_maxprocs
+        > 0.8
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiDB CPU usage is over 80% of CPU quota
+      value: '{{ $value }}'
+  - alert: TiDB_memory_quota
+    expr: process_resident_memory_bytes{job="tidb"} / tidb_server_memory_quota_bytes
+      > 0.8
+    for: 15s
+    labels:
+      env: ENV_LABELS_ENV
+      expr: process_resident_memory_bytes{job="tidb"} / tidb_server_memory_quota_bytes
+        > 0.8
+      level: warning
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: TiDB memory usage is over 80% of memory quota
+      value: '{{ $value }}'
