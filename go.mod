@@ -10,7 +10,7 @@ require (
 	github.com/google/go-querystring v1.0.0
 	github.com/hashicorp/go-version v1.2.0
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/common v0.4.1
 	github.com/prometheus/prometheus v0.0.0-20190710134608-e5b22494857d
 	github.com/rakyll/statik v0.1.6
@@ -19,7 +19,7 @@ require (
 	github.com/tidwall/gjson v1.9.3
 	github.com/tidwall/sjson v1.0.4
 	github.com/youthlin/stream v0.0.3
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
+	golang.org/x/oauth2 v0.18.0
 	gopkg.in/src-d/go-git.v4 v4.12.0
 	gopkg.in/yaml.v2 v2.2.8
 	k8s.io/api v0.0.0-20190720062849-3043179095b6 // indirect
