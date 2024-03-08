@@ -101,6 +101,10 @@ sed -i 's/Test-Cluster-TiCDC-Summary/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISION
 cp /tmp/tikv-cdc.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiKV-CDC/'$TIDB_CLUSTER_NAME'-TiKV-CDC/g' $GF_PROVISIONING_PATH/dashboards/tikv-cdc.json
 
+# TiProxy dashboard
+cp /tmp/tiproxy_summary.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiProxy-Summary/'$TIDB_CLUSTER_NAME'-TiProxy-Summary/g' $GF_PROVISIONING_PATH/dashboards/tiproxy_summary.json
+
 # To support monitoring multiple clusters with one TidbMonitor, change the job label to component
 sed -i 's%job=\\\"tiflash\\\"%component=\\"tiflash\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
 sed -i 's%job=\\\"tikv-importer\\\"%component=\\"importer\\"%g' $GF_PROVISIONING_PATH/dashboards/*.json
