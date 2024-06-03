@@ -2335,7 +2335,7 @@
             {
               "format": "dtdurations",
               "label": null,
-              "logBase": 1,
+              "logBase": 2,
               "max": null,
               "min": "0",
               "show": true
