@@ -23,7 +23,13 @@
       },
       etcdDashboards+:: {
         'etcd.json': (import 'dashboards/etcd.json'),
-      }
+      },
+
+      tolerations+:: [
+            {
+              operator: 'Exists',
+            },
+       ]
   },
 
 }
