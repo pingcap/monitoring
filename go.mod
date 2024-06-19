@@ -12,7 +12,7 @@ require (
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/common v0.4.1
-	github.com/prometheus/prometheus v0.0.0-20190710134608-e5b22494857d
+	github.com/prometheus/prometheus v0.53.0
 	github.com/rakyll/statik v0.1.6
 	github.com/sirupsen/logrus v1.4.2 // indirect
 	github.com/spf13/cobra v0.0.5
