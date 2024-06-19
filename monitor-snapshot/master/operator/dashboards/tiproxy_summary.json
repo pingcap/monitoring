@@ -278,7 +278,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -756,7 +756,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -842,7 +842,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -928,7 +928,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1014,7 +1014,7 @@
                   {
                      "format": "short",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1100,7 +1100,7 @@
                   {
                      "format": "short",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1186,7 +1186,7 @@
                   {
                      "format": "short",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1286,7 +1286,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1478,7 +1478,7 @@
                   {
                      "format": "short",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1578,7 +1578,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1664,7 +1664,7 @@
                   {
                      "format": "short",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1784,7 +1784,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1870,7 +1870,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -1956,7 +1956,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
