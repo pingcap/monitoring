@@ -1,4 +1,4 @@
-FROM busybox:1.33.1
+FROM busybox:1.36.1
 
 COPY ./build/linux/reload  /bin/reload
 ENTRYPOINT [ "/bin/reload" ]
