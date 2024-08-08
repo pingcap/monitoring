@@ -49,6 +49,18 @@ groups:
       value: '{{ $value }}'
       summary: TiKV server is down
 
+  - alert: TiCDC_server_is_down
+    expr: probe_success{group="ticdc"} == 0
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      level: emergency
+      expr: probe_success{group="ticdc"} == 0
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}'
+      value: '{{ $value }}'
+      summary: TiCDC server is down
+
   - alert: PD_server_is_down
     expr: probe_success{group="pd"} == 0
     for: 1m
