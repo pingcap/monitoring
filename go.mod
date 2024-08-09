@@ -10,7 +10,7 @@ require (
 	github.com/google/go-querystring v1.0.0
 	github.com/hashicorp/go-version v1.2.0
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/common v0.4.1
 	github.com/prometheus/prometheus v0.0.0-20190710134608-e5b22494857d
 	github.com/rakyll/statik v0.1.6
