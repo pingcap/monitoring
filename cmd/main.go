@@ -1,16 +1,17 @@
 // package is used to automic generate directory of dashboards and alert rules.
 // The monitor like this:
 // monitor
-//      v2.1.8
-//          dashboards
-//               tidb.json
-//               ...
-//          rules
-//                pd.rule.yml
-//                ...
-//          Dockerfile
-//          init.sh
-//       ...
+//
+//	v2.1.8
+//	    dashboards
+//	         tidb.json
+//	         ...
+//	    rules
+//	          pd.rule.yml
+//	          ...
+//	    Dockerfile
+//	    init.sh
+//	 ...
 package main
 
 import (
@@ -22,6 +23,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/config"
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/hashicorp/go-version"
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
@@ -31,10 +36,6 @@ import (
 	"github.com/tidwall/sjson"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
-	"gopkg.in/src-d/go-git.v4"
-	"gopkg.in/src-d/go-git.v4/config"
-	"gopkg.in/src-d/go-git.v4/plumbing"
-	"gopkg.in/src-d/go-git.v4/storage/memory"
 	"gopkg.in/yaml.v2"
 )
 
