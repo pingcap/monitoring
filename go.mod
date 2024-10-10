@@ -15,7 +15,7 @@ require (
 	github.com/prometheus/prometheus v0.0.0-20190710134608-e5b22494857d
 	github.com/rakyll/statik v0.1.6
 	github.com/sirupsen/logrus v1.4.2 // indirect
-	github.com/spf13/cobra v0.0.5
+	github.com/spf13/cobra v0.0.7
 	github.com/tidwall/gjson v1.9.3
 	github.com/tidwall/sjson v1.0.4
 	github.com/youthlin/stream v0.0.3
