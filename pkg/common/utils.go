@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v66/github"
 	"github.com/pkg/errors"
 )
 
@@ -117,7 +117,7 @@ func GetRef(client *github.Client, commitBranch string, ctx context.Context) (re
 // of the ref you got in getRef.
 func GetTree(client *github.Client, ref *github.Reference, directory string, ctx context.Context, rootDir string) (tree *github.Tree, err error) {
 	// Create a tree with what to commit.
-	entries := []github.TreeEntry{}
+	entries := []*github.TreeEntry{}
 
 	// Load each file into the tree.
 	files := ListAllFiles(directory)
@@ -132,7 +132,7 @@ func GetTree(client *github.Client, ref *github.Reference, directory string, ctx
 		}
 
 		treePath := strings.ReplaceAll(file, fmt.Sprintf("%s%c", rootDir, filepath.Separator), "")
-		entries = append(entries, github.TreeEntry{Path: github.String(treePath), Type: github.String("blob"), Content: github.String(string(content)), Mode: github.String("100644")})
+		entries = append(entries, &github.TreeEntry{Path: github.String(treePath), Type: github.String("blob"), Content: github.String(string(content)), Mode: github.String("100644")})
 	}
 
 	tree, _, err = client.Git.CreateTree(ctx, Monitoring_Owner, Monitoirng_Repo, *ref.Object.SHA, entries)
@@ -162,7 +162,7 @@ func getFileContent(fileArg string) (targetName string, b []byte, err error) {
 // createCommit creates the commit in the given reference using the given tree.
 func PushCommit(client *github.Client, ref *github.Reference, tree *github.Tree, ctx context.Context, tag string, authorName string, authorEmail string) (err error) {
 	// Get the parent commit to attach the commit to.
-	parent, _, err := client.Repositories.GetCommit(ctx, Monitoring_Owner, Monitoirng_Repo, *ref.Object.SHA)
+	parent, _, err := client.Repositories.GetCommit(ctx, Monitoring_Owner, Monitoirng_Repo, *ref.Object.SHA, nil)
 	if err != nil {
 		return err
 	}
@@ -171,11 +171,11 @@ func PushCommit(client *github.Client, ref *github.Reference, tree *github.Tree,
 
 	// Create the commit using the tree.
 	date := time.Now()
-	author := &github.CommitAuthor{Date: &date, Name: &authorName, Email: &authorEmail}
+	author := &github.CommitAuthor{Date: &github.Timestamp{Time: date}, Name: &authorName, Email: &authorEmail}
 
 	commitMsg := fmt.Sprintf(Commit_Message, tag)
-	commit := &github.Commit{Author: author, Message: &commitMsg, Tree: tree, Parents: []github.Commit{*parent.Commit}}
-	newCommit, _, err := client.Git.CreateCommit(ctx, Monitoring_Owner, Monitoirng_Repo, commit)
+	commit := &github.Commit{Author: author, Message: &commitMsg, Tree: tree, Parents: []*github.Commit{parent.Commit}}
+	newCommit, _, err := client.Git.CreateCommit(ctx, Monitoring_Owner, Monitoirng_Repo, commit, nil)
 	if err != nil {
 		return err
 	}
