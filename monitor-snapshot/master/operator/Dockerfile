@@ -1,4 +1,4 @@
-FROM busybox:1.36.1
+FROM busybox:1.37.0
 
 ADD init.sh /usr/bin/init.sh
 RUN chmod +x /usr/bin/init.sh
