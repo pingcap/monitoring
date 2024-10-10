@@ -3,6 +3,10 @@
   "extends": [
     "config:recommended"
   ],
+  "postUpdateOptions": [
+    "gomodTidy",
+    "gomodUpdateImportPaths"
+  ],
   "separateMinorPatch": true,
   "customManagers": [
     {
