@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/go-version v1.7.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/common v0.4.1
-	github.com/prometheus/prometheus v0.0.0-20190710134608-e5b22494857d
+	github.com/prometheus/prometheus v0.54.1
 	github.com/rakyll/statik v0.1.7
 	github.com/spf13/cobra v1.8.1
 	github.com/tidwall/gjson v1.18.0
