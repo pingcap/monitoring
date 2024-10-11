@@ -16,7 +16,7 @@ import (
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
 	"golang.org/x/oauth2"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"github.com/pingcap/monitoring/pkg/ansible"
 	"github.com/pingcap/monitoring/pkg/common"
