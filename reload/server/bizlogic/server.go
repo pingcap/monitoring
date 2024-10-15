@@ -16,7 +16,7 @@ import (
 	"github.com/prometheus/prometheus/pkg/rulefmt"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type server struct {
