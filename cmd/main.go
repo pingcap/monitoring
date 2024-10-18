@@ -30,7 +30,7 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/pkg/rulefmt"
+	"github.com/prometheus/prometheus/model/rulefmt"
 	"github.com/spf13/cobra"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -428,29 +428,29 @@ func replaceAlertExpr(content []byte) ([]byte, error) {
 		newG := rulefmt.RuleGroup{
 			Interval: group.Interval,
 			Name:     group.Name,
-			Rules:    make([]rulefmt.Rule, 0, len(group.Rules)),
+			Rules:    make([]rulefmt.RuleNode, 0, len(group.Rules)),
 		}
 
 		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
-			rule := t.(rulefmt.Rule)
+			rule := t.(rulefmt.RuleNode)
 
 			if time.Duration(rule.For) <= (time.Second * 60) {
 				rule.For = forConfig
 			}
 
-			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
+			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert.Value)]
 			if !ok {
 				return rule
 			}
 
-			rule.Expr = newExpr
+			rule.Expr.SetString(newExpr)
 			if _, ok := rule.Labels["expr"]; ok {
 				rule.Labels["expr"] = newExpr
 			}
 
 			return rule
 		}).ForEach(func(t streamtypes.T) {
-			rule := t.(rulefmt.Rule)
+			rule := t.(rulefmt.RuleNode)
 			newG.Rules = append(newG.Rules, rule)
 		})
 
