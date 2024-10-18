@@ -106,6 +106,8 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
       serviceAccountName: grafana
+      tolerations:
+      - operator: Exists
       volumes:
       - name: grafana-storage
         persistentVolumeClaim:
