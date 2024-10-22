@@ -2,6 +2,6 @@
 # Renovate bot will use this file to track and update component versions
 
 # renovate: datasource=github-releases depName=prometheus/prometheus
-prometheus: v2.49.1
+prometheus: v2.55.0
 # renovate: datasource=github-releases depName=grafana/grafana
 grafana: v7.5.17
