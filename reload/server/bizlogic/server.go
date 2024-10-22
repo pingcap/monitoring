@@ -3,6 +3,7 @@ package bizlogic
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -12,11 +13,9 @@ import (
 	"github.com/pingcap/monitoring/reload/server/types"
 	"github.com/pingcap/monitoring/reload/server/utils"
 	"github.com/pkg/errors"
-	"github.com/prometheus/common/log"
-	"github.com/prometheus/prometheus/pkg/rulefmt"
+	"github.com/prometheus/prometheus/model/rulefmt"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
-	"gopkg.in/yaml.v2"
 )
 
 type server struct {
@@ -135,25 +134,20 @@ func (s *server) UpdateConfig(c *gin.Context) {
 			}
 		}).Filter(func(t streamtypes.T) bool {
 			if !s.needStoreFileToStorePath {
-				log.Info("do not need to store file to storepath")
+				log.Printf("do not need to store file to storepath")
 			}
 			return s.needStoreFileToStorePath
 		}).ForEach(func(t streamtypes.T) {
 			data := t.([]byte)
 			if err := ioutil.WriteFile(fmt.Sprintf("%s%c%s", s.storePath, filepath.Separator, configName), data, os.ModePerm); err != nil {
-				log.Error("write file to store path failed", err)
+				log.Printf("write file to store path failed: %v", err)
 			}
 		})
 	}
 }
 
 func parse(content []byte) error {
-	var groups rulefmt.RuleGroups
-	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
-		return err
-	}
-
-	errs := groups.Validate()
+	_, errs := rulefmt.Parse([]byte(content))
 	if errs == nil || len(errs) == 0 {
 		return nil
 	}
