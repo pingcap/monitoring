@@ -10,7 +10,7 @@ require (
 	github.com/google/go-querystring v1.1.0
 	github.com/hashicorp/go-version v1.7.0
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/common v0.4.1
+	github.com/prometheus/common v0.60.1
 	github.com/prometheus/prometheus v0.0.0-20190710134608-e5b22494857d
 	github.com/rakyll/statik v0.1.7
 	github.com/spf13/cobra v1.8.1
