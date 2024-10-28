@@ -16,7 +16,7 @@ import (
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
 	"golang.org/x/oauth2"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"github.com/pingcap/monitoring/pkg/ansible"
 	"github.com/pingcap/monitoring/pkg/common"
@@ -428,7 +428,7 @@ func removeLastSlash(str string) string {
 func Load(s string) (*Config, error) {
 	cfg := &Config{}
 
-	err := yaml.UnmarshalStrict([]byte(s), cfg)
+	err := yaml.Unmarshal([]byte(s), cfg)
 	if err != nil {
 		return nil, err
 	}
