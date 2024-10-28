@@ -15,6 +15,7 @@
 package main
 
 import (
+	goerrors "errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -418,9 +419,9 @@ func exist(path string) bool {
 }
 
 func replaceAlertExpr(content []byte) ([]byte, error) {
-	var groups rulefmt.RuleGroups
-	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
-		return nil, err
+	groups, errs := rulefmt.Parse(content)
+	if len(errs) > 0 {
+		return nil, goerrors.Join(errs...)
 	}
 
 	var newGS rulefmt.RuleGroups
