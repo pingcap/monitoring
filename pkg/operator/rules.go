@@ -1,6 +1,7 @@
 package operator
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -31,9 +32,9 @@ func WriteRule(body string, ruleName string, baseDir string, needToReplaceExpr m
 }
 
 func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]byte, error) {
-	var groups rulefmt.RuleGroups
-	if err := yaml.UnmarshalStrict(content, &groups); err != nil {
-		return nil, err
+	groups, errs := rulefmt.Parse(content)
+	if len(errs) > 0 {
+		return nil, errors.Join(errs...)
 	}
 
 	var newGS rulefmt.RuleGroups
