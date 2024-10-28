@@ -1,14 +1,39 @@
 groups:
-    - name: alert.rules
-      rules:
-        - alert: Lightning_import_failure_tables_count
-          expr: sum ( lightning_tables{result="failure"} ) > 0
-          for: 1m
-          labels:
-            env: ENV_LABELS_ENV
-            expr: sum ( lightning_tables{result="failure"} ) > 0
-            level: emergency
-          annotations:
-            description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
-            summary: Lightning failed to import a table
-            value: '{{ $value }}'
+- name: alert.rules
+  rules:
+  - alert:
+      kind: 8
+      style: 0
+      tag: '!!str'
+      value: Lightning_import_failure_tables_count
+      anchor: ""
+      alias: null
+      content: []
+      headcomment: ""
+      linecomment: ""
+      footcomment: ""
+      line: 4
+      column: 12
+    expr:
+      kind: 8
+      style: 0
+      tag: '!!str'
+      value: sum ( lightning_tables{result="failure"} ) > 0
+      anchor: ""
+      alias: null
+      content: []
+      headcomment: ""
+      linecomment: ""
+      footcomment: ""
+      line: 5
+      column: 11
+    for: 1m
+    labels:
+      env: ENV_LABELS_ENV
+      expr: sum ( lightning_tables{result="failure"} ) > 0
+      level: emergency
+    annotations:
+      description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{
+        $value }}'
+      summary: Lightning failed to import a table
+      value: '{{ $value }}'
