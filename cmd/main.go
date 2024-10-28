@@ -37,7 +37,7 @@ import (
 	"github.com/tidwall/sjson"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 const (
