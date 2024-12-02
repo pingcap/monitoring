@@ -85,7 +85,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -208,7 +208,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -338,7 +338,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -787,7 +787,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -912,7 +912,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -1049,7 +1049,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -1145,7 +1145,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -1241,7 +1241,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -1337,7 +1337,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -1447,7 +1447,7 @@
           "description": "TiDB durations with 80 percent buckets by instance",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -1541,7 +1541,7 @@
           "description": "TiDB durations with 95 percent buckets by instance",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -1638,7 +1638,7 @@
           "description": "TiDB durations with 99 percent buckets by instance",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -1731,7 +1731,7 @@
           "description": "TiDB durations with 99.9 percent buckets by instance",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -1824,7 +1824,7 @@
           "description": "TiDB failed query statistics with failing information ",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -1917,7 +1917,7 @@
           "description": "The internal SQL is used by TiDB itself.",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -2012,7 +2012,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -2140,7 +2140,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -2257,7 +2257,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -2367,7 +2367,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -2766,7 +2766,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -2866,7 +2866,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -2983,7 +2983,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3083,7 +3083,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -3192,7 +3192,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -3307,7 +3307,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3405,7 +3405,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3512,7 +3512,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3610,7 +3610,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3706,7 +3706,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3804,7 +3804,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -3912,7 +3912,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -4011,7 +4011,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -4108,7 +4108,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -4337,7 +4337,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -4449,7 +4449,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -4697,7 +4697,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -4798,7 +4798,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -4914,7 +4914,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -5017,7 +5017,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -5205,7 +5205,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -5464,7 +5464,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -5585,7 +5585,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -5774,7 +5774,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -5895,7 +5895,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -5999,7 +5999,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -6176,7 +6176,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -6290,7 +6290,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -6411,7 +6411,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -6509,7 +6509,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -6607,7 +6607,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -6707,7 +6707,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -6823,7 +6823,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -6936,7 +6936,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -7050,7 +7050,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -7149,7 +7149,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -7248,7 +7248,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -7347,7 +7347,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -7446,7 +7446,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -7689,7 +7689,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -7858,7 +7858,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -7969,7 +7969,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -8080,7 +8080,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -8191,7 +8191,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -8299,7 +8299,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -8407,7 +8407,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -8515,7 +8515,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -8624,7 +8624,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -8728,7 +8728,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -9070,7 +9070,7 @@
           "description": "durations of distsql execution by type",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -9191,7 +9191,7 @@
           "description": "distsql query handling durations per second",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -9284,7 +9284,7 @@
           "description": "the numebr of distsql partial scan numbers",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -9375,7 +9375,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "the numebr of distsql scan numbers",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -9475,7 +9475,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "the numebr of distsql partial scan key numbers",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -9575,7 +9575,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "distsql partial numbers per query",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -9677,7 +9677,7 @@
           "description": "TiDB coprocessor cache hit, evict and miss number",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -9772,7 +9772,7 @@
           "description": "kv storage coprocessor processing durations",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -9883,7 +9883,7 @@
           "description": "kv backoff time durations by type",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -10095,7 +10095,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage backoff times",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -10187,7 +10187,7 @@
           "description": "lock resolve times",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -10283,7 +10283,7 @@
           "description": "This metric shows the reasons of replica selector failure (which needs a backoff).",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -10399,7 +10399,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -10502,7 +10502,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -10607,7 +10607,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -10712,7 +10712,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -10815,7 +10815,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -10916,7 +10916,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11013,7 +11013,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11110,7 +11110,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11219,7 +11219,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11330,7 +11330,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11431,7 +11431,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11535,7 +11535,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11635,7 +11635,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "The slow score calculated by time cost of some specific TiKV RPC requests.",
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11726,7 +11726,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "The slow score calculated by TiKV rafstore and sent to TiDB via health feedback.",
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -11839,7 +11839,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -11942,7 +11942,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12065,7 +12065,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12168,7 +12168,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12275,7 +12275,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12397,7 +12397,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12519,7 +12519,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12620,7 +12620,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12734,7 +12734,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -12836,7 +12836,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -12992,7 +12992,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -13108,7 +13108,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -13224,7 +13224,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -13374,7 +13374,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -13478,7 +13478,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -14127,7 +14127,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -14247,7 +14247,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -14505,7 +14505,7 @@
           "description": "TiDB DDL duration statistics",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -14604,7 +14604,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "Some DDLs need to backfill data, for example, adding indexes, column type changes, etc. This metrics shows the number of rows backfilled per second.",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -14694,7 +14694,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB ddl request in queue",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -14784,7 +14784,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB different ddl worker numbers",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -14872,7 +14872,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB worker duration by type, action, results",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -14962,7 +14962,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB ddl schema syncer statistics, including init, start, watch, clear function call time cost",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -15050,7 +15050,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB ddl owner time operations on etcd duration statistics ",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -15138,7 +15138,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB schema syncer version update time duration",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -15226,7 +15226,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "executed DDL jobs per minute",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
@@ -15319,7 +15319,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB DDL backfill progress in percentage. The value is [0,100]",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 8,
             "w": 12,
@@ -15419,7 +15419,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -15519,7 +15519,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -15619,7 +15619,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -15746,7 +15746,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -15848,7 +15848,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -15951,7 +15951,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -16046,7 +16046,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -16476,7 +16476,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -16582,7 +16582,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -16679,7 +16679,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -16790,7 +16790,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -16887,7 +16887,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -17083,7 +17083,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -17203,7 +17203,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -17430,7 +17430,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -17533,7 +17533,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -17652,7 +17652,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -17762,7 +17762,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -17861,7 +17861,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -18018,7 +18018,7 @@
             "alignLevel": null
           },
           "lines": true,
-          "fill": 1,
+          "fill": 0,
           "linewidth": 1,
           "dashLength": 10,
           "spaceLength": 10,
@@ -18123,7 +18123,7 @@
             "alignLevel": null
           },
           "lines": true,
-          "fill": 1,
+          "fill": 0,
           "linewidth": 1,
           "dashLength": 10,
           "spaceLength": 10,
@@ -18220,7 +18220,7 @@
             "alignLevel": null
           },
           "lines": true,
-          "fill": 1,
+          "fill": 0,
           "linewidth": 1,
           "dashLength": 10,
           "spaceLength": 10,
@@ -18281,7 +18281,7 @@
           "description": "TiDB new session durations for new etcd sessions",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -18372,7 +18372,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB owner  watcher counts",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -18474,7 +18474,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB auto id requests per second including  single table/global auto id processing and single table auto id rebase processing",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -18562,7 +18562,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB auto id requests durations",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -18657,7 +18657,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "TiDB meta operation durations including get/set schema and ddl jobs",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -18747,7 +18747,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
@@ -18864,7 +18864,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage garbage collection counts by type",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -18953,7 +18953,7 @@
           "datasource": "tidb-cluster",
           "decimals": 2,
           "description": "kv storage garbage collection time durations",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19042,7 +19042,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage garbage collection config including gc_life_time and gc_run_interval",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19129,7 +19129,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage garbage collection failing counts",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19215,7 +19215,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage unsafe destroy range failed counts",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19303,7 +19303,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage region garbage collection clean too many locks count",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19389,7 +19389,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "kv storage garbage collection results including failed and successful ones",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19477,7 +19477,7 @@
           "description": "kv storage delete range task execution status by type",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -19576,7 +19576,7 @@
           "description": "kv storage range worker processing one task duration",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -19833,7 +19833,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "Metrics for 'no available connection'.\nThere should be no data here if the connection between TiDB and TiKV is healthy.",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
@@ -19921,7 +19921,7 @@
           "description": "kv storage batch processing unvailable durations",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -20015,7 +20015,7 @@
           "description": "kv storage batch client wait new connection establish duration",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {},
           "gridPos": {
             "h": 7,
@@ -20110,7 +20110,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -20248,7 +20248,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -20353,7 +20353,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -20463,7 +20463,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -20564,7 +20564,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
@@ -20683,7 +20683,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -20789,7 +20789,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -20910,7 +20910,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -21032,7 +21032,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
@@ -21263,7 +21263,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -21376,7 +21376,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -21476,7 +21476,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -21574,7 +21574,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -21674,7 +21674,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -21773,7 +21773,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -21894,7 +21894,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -22015,7 +22015,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -22145,7 +22145,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -22275,7 +22275,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -22389,7 +22389,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -22889,7 +22889,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -22985,7 +22985,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23096,7 +23096,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23196,7 +23196,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23296,7 +23296,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23438,7 +23438,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23550,7 +23550,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23670,7 +23670,7 @@
             "defaults": {},
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -23768,7 +23768,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
@@ -24014,7 +24014,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "Duration of writing to cloud storage",
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -24122,7 +24122,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -24226,7 +24226,7 @@
           "dashes": false,
           "datasource": "tidb-cluster",
           "description": "Duration of reading from cloud storage",
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -24334,7 +24334,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
@@ -24444,7 +24444,7 @@
             },
             "overrides": []
           },
-          "fill": 1,
+          "fill": 0,
           "fillGradient": 0,
           "gridPos": {
             "h": 6,
