@@ -587,7 +587,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "GC STW Duration (last 256 GC cycles)",
+          "title": "GC STW Duration: Last 256 GC Cycles",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1527,7 +1527,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "goroutine scheduler latency",
+          "title": "Goroutine Scheduler Latency",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1721,7 +1721,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "GC STW Latency(>= go1.22.0)",
+          "title": "GC STW Latency(>=go1.22.0)",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2001,7 +2001,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "estimated portion of CPU time",
+          "title": "Estimated Portion Of CPU Time",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2185,7 +2185,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "golang GC",
+          "title": "Golang GC",
           "type": "timeseries"
         },
         {
@@ -2262,7 +2262,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "sync mutex wait",
+          "title": "Sync Mutex Wait",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2553,7 +2553,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "heap alloc",
+          "title": "Heap Alloc",
           "type": "timeseries"
         },
         {
@@ -2685,7 +2685,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "heap free",
+          "title": "Heap Free",
           "type": "timeseries"
         }
       ],

@@ -88,7 +88,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 1
@@ -212,7 +212,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 1
@@ -342,7 +342,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 7
@@ -456,7 +456,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 7
@@ -567,7 +567,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 13
@@ -670,7 +670,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 13
@@ -790,7 +790,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 19
@@ -862,7 +862,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Slow query",
+          "title": "Slow Query",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -915,7 +915,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 19
@@ -1052,7 +1052,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 25
@@ -1148,7 +1148,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 25
@@ -1244,7 +1244,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 31
@@ -1340,7 +1340,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 31
@@ -2072,7 +2072,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Queries in Multi-Statement",
+          "title": "Queries In Multi-Statement",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2752,7 +2752,7 @@
               "refId": "B"
             }
           ],
-          "title": "Runtime GC rate and GOMEMLIMIT",
+          "title": "Runtime GC Rate And GOMEMLIMIT",
           "type": "timeseries"
         },
         {
@@ -5271,7 +5271,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction Write KV Num Rate and Sum",
+          "title": "Transaction Write KV Num Rate And Sum",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -5651,7 +5651,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction Write Size Bytes Rate and Sum",
+          "title": "Transaction Write Size Bytes Rate And Sum",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -6358,7 +6358,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction Commit .99 Backoff",
+          "title": "Transaction Commit P99 Backoff",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -6771,7 +6771,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction execution states duration",
+          "title": "Transaction Execution States Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -6886,7 +6886,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction with lock execution states duration",
+          "title": "Transaction With Lock Execution States Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7000,7 +7000,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction execution states duration",
+          "title": "Transaction Execution States Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7099,7 +7099,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction enter state",
+          "title": "Transaction Enter State",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7198,7 +7198,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction leave state",
+          "title": "Transaction Leave State",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7297,7 +7297,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Transaction state count change",
+          "title": "Transaction State Count Change",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7862,7 +7862,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 5
@@ -7973,7 +7973,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 5
@@ -8084,7 +8084,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 13
@@ -8195,7 +8195,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 13
@@ -8303,7 +8303,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 21
@@ -8411,7 +8411,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 21
@@ -8519,7 +8519,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 29
@@ -8627,7 +8627,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 29
@@ -8732,7 +8732,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 37
@@ -8842,7 +8842,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 37
@@ -8953,7 +8953,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 45
@@ -9053,7 +9053,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 45
@@ -10671,7 +10671,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "KV Request Duration 99 by store",
+          "title": "KV Request Duration 99 By Store",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -10776,7 +10776,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "KV Request Duration 99 by type",
+          "title": "KV Request Duration 99 By Type",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -10982,7 +10982,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "KV Request Forwarding OPS by Type",
+          "title": "KV Request Forwarding OPS By Type",
           "tooltip": {
             "msResolution": true,
             "shared": true,
@@ -11804,7 +11804,7 @@
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Client-side slow score",
+          "title": "Client-side Slow Score",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -11895,7 +11895,7 @@
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "TiKV-side slow score",
+          "title": "TiKV-side Slow Score",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -12901,7 +12901,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Request forwarded status",
+          "title": "Request Forwarded Status",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -14302,7 +14302,7 @@
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Infoschema v2 Cache Operation",
+          "title": "Infoschema V2 Cache Operation",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -14365,7 +14365,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 38
@@ -14419,7 +14419,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Infoschema v2 Cache Size",
+          "title": "Infoschema V2 Cache Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -15851,7 +15851,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 20
@@ -15953,7 +15953,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 20
@@ -16056,7 +16056,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 30
@@ -16151,7 +16151,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 28
@@ -16344,7 +16344,7 @@
             ]
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 36
@@ -16421,7 +16421,7 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 20
@@ -16455,7 +16455,7 @@
               "refId": "A"
             }
           ],
-          "title": "Uncompleted Subtask Distribution on TiDB Nodes",
+          "title": "Uncompleted Subtask Distribution On TiDB Nodes",
           "type": "piechart"
         },
         {
@@ -16512,7 +16512,7 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 36
@@ -16548,7 +16548,7 @@
               "refId": "B"
             }
           ],
-          "title": "Slots usage",
+          "title": "Slots Usage",
           "type": "timeseries"
         }
       ],
@@ -17867,7 +17867,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 48
@@ -17966,7 +17966,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 48
@@ -18058,7 +18058,7 @@
             "x": 0,
             "y": 56,
             "w": 8,
-            "h": 8
+            "h": 7
           },
           "id": 23763572008,
           "targets": [
@@ -18163,7 +18163,7 @@
             "x": 8,
             "y": 56,
             "w": 8,
-            "h": 8
+            "h": 7
           },
           "id": 23763572009,
           "targets": [
@@ -18263,12 +18263,12 @@
         },
         {
           "type": "graph",
-          "title": "Number of Bindings in Cache",
+          "title": "Number Of Bindings In Cache",
           "gridPos": {
             "x": 16,
             "y": 56,
             "w": 8,
-            "h": 8
+            "h": 7
           },
           "id": 23763572010,
           "targets": [
@@ -21016,7 +21016,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 20
@@ -21138,7 +21138,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 20
@@ -21265,7 +21265,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 28
@@ -21368,7 +21368,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 28
@@ -21481,7 +21481,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 36
@@ -21581,7 +21581,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 36
@@ -21679,7 +21679,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 44
@@ -21779,7 +21779,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 44
@@ -21878,7 +21878,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 52
@@ -21999,7 +21999,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 52
@@ -22120,7 +22120,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 60
@@ -22250,7 +22250,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 60
@@ -22380,7 +22380,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 68
@@ -22494,7 +22494,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 68
@@ -22605,7 +22605,7 @@
           "fill": 8,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 74
@@ -22776,7 +22776,7 @@
             ]
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 74
@@ -22866,7 +22866,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 111
@@ -22994,7 +22994,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 20
@@ -23090,7 +23090,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 20
@@ -23201,7 +23201,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 105
@@ -23301,7 +23301,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 105
@@ -23348,7 +23348,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Coprocessor Response Size Per Instance and TiKV",
+          "title": "Coprocessor Response Size Per Instance And TiKV",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23401,7 +23401,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 113
@@ -23543,7 +23543,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 20
@@ -23604,7 +23604,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Total encode/deliver/import-kv speed",
+          "title": "Total Encode/Deliver/Import-kv Speed",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23655,7 +23655,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 20
@@ -23724,7 +23724,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Encoded/Delivered/Imported data size",
+          "title": "Encoded/Delivered/Imported Data Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23775,7 +23775,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 28
@@ -23820,7 +23820,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Delivered kv count",
+          "title": "Delivered KV Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23873,7 +23873,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 28
@@ -23934,7 +23934,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Data read/encode/deliver average duration",
+          "title": "Data Read/Encode/Deliver Average Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -24053,7 +24053,7 @@
             ]
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 36
@@ -24082,7 +24082,7 @@
               "refId": "A"
             }
           ],
-          "title": "Import/Normal mode",
+          "title": "Import/Normal Mode",
           "transformations": [
             {
               "id": "reduce",
@@ -24119,7 +24119,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 1
@@ -24227,7 +24227,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 1
@@ -24331,7 +24331,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 7
@@ -24439,7 +24439,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 7
@@ -24549,7 +24549,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 13
@@ -24681,7 +24681,7 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 6,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 105
@@ -24711,7 +24711,7 @@
               "refId": "A"
             }
           ],
-          "title": "Parallel upload worker count",
+          "title": "Parallel Upload Worker Count",
           "type": "timeseries"
         }
       ],
