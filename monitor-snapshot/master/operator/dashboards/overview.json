@@ -129,7 +129,8 @@
             }
           ],
           "thresholds": "0,2",
-          "title": "PD role",
+          "title": "PD Role",
+          "description": "PD Role",
           "type": "singlestat",
           "valueFontSize": "50%",
           "valueMaps": [
@@ -223,7 +224,7 @@
             }
           ],
           "thresholds": "",
-          "title": "Storage capacity",
+          "title": "Storage Capacity",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -307,7 +308,7 @@
             }
           ],
           "thresholds": "",
-          "title": "Current storage size",
+          "title": "Current Storage Size",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -387,7 +388,7 @@
             }
           ],
           "thresholds": "",
-          "title": "Number of Regions",
+          "title": "Number Of Regions",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -468,7 +469,7 @@
             }
           ],
           "thresholds": "",
-          "title": "Normal stores",
+          "title": "Normal Stores",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -584,7 +585,7 @@
             }
           ],
           "timeFrom": "1s",
-          "title": "Abnormal stores",
+          "title": "Abnormal Stores",
           "transform": "timeseries_aggregations",
           "type": "table-old"
         },
@@ -856,7 +857,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "99% completed cmds duration seconds",
+          "title": "99% Completed Cmds Duration Seconds",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -957,7 +958,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Handle requests duration seconds",
+          "title": "Handle Requests Duration Seconds",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1054,7 +1055,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Region health",
+          "title": "Region Health",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1144,7 +1145,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Hot write Region's leader distribution",
+          "title": "Hot Write Region's Leader Distribution",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1235,7 +1236,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Hot read Region's leader distribution",
+          "title": "Hot Read Region's Leader Distribution",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1327,7 +1328,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Region heartbeat report",
+          "title": "Region Heartbeat Report",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1417,7 +1418,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "99% Region heartbeat latency",
+          "title": "99% Region Heartbeat Latency",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3036,7 +3037,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 4
@@ -3099,7 +3100,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "leader",
+          "title": "Leader",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3154,7 +3155,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 4
@@ -3202,7 +3203,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "region",
+          "title": "Region",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3254,7 +3255,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 12
@@ -3351,7 +3352,7 @@
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 12
@@ -3449,7 +3450,7 @@
           "fill": 5,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 20
@@ -3497,7 +3498,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "store size",
+          "title": "Store Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3548,7 +3549,7 @@
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 20
@@ -3595,7 +3596,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "cf size",
+          "title": "CF Size",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -3649,7 +3650,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 28
@@ -3701,7 +3702,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "channel full",
+          "title": "Channel Full",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3756,7 +3757,7 @@
           "fillGradient": 0,
           "grid": {},
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 28
@@ -3809,7 +3810,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "server report failures",
+          "title": "Server Report Failures",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3861,7 +3862,7 @@
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 36
@@ -3909,7 +3910,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "scheduler pending commands",
+          "title": "Scheduler Pending Commands",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3960,7 +3961,7 @@
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 36
@@ -4010,7 +4011,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "coprocessor executor count",
+          "title": "Coprocessor Executor Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4060,7 +4061,7 @@
           },
           "fill": 1,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 44
@@ -4128,7 +4129,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "coprocessor  request duration",
+          "title": "Coprocessor Request Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4178,7 +4179,7 @@
           },
           "fill": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 44
@@ -4223,7 +4224,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "raft store CPU",
+          "title": "Raft Store CPU",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4273,7 +4274,7 @@
           },
           "fill": 0,
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 0,
             "y": 52
