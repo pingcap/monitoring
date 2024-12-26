@@ -4368,7 +4368,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -4381,7 +4381,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -5045,7 +5045,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -5058,7 +5058,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -8388,7 +8388,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -8401,7 +8401,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -8694,7 +8694,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -8707,7 +8707,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -9000,7 +9000,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -9013,7 +9013,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -9306,7 +9306,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -9319,7 +9319,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -9612,7 +9612,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -9625,7 +9625,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -9946,7 +9946,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -9959,7 +9959,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -10147,7 +10147,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -10160,7 +10160,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -10348,7 +10348,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -10361,7 +10361,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -14470,7 +14470,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -14483,7 +14483,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -14671,7 +14671,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -14684,7 +14684,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -14872,7 +14872,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -14885,7 +14885,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -15073,7 +15073,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -15086,7 +15086,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -15274,7 +15274,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -15287,7 +15287,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -15475,7 +15475,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -15488,7 +15488,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -15676,7 +15676,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -15689,7 +15689,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -15877,7 +15877,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -15890,7 +15890,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -16078,7 +16078,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -16091,7 +16091,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -16279,7 +16279,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -16292,7 +16292,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -16480,7 +16480,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -16493,7 +16493,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -16681,7 +16681,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -16694,7 +16694,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -16882,7 +16882,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -16895,7 +16895,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -17230,7 +17230,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -17243,7 +17243,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -17536,7 +17536,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -17549,7 +17549,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -17842,7 +17842,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -17855,7 +17855,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -18148,7 +18148,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -18161,7 +18161,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -18454,7 +18454,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -18467,7 +18467,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -18760,7 +18760,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -18773,7 +18773,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -19921,7 +19921,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -19934,7 +19934,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -20227,7 +20227,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -20240,7 +20240,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -20533,7 +20533,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -20546,7 +20546,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -24092,7 +24092,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -24105,7 +24105,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -24398,7 +24398,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -24411,7 +24411,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -27117,7 +27117,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -27130,7 +27130,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -27629,7 +27629,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -27642,7 +27642,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -28467,7 +28467,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -28480,7 +28480,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -34119,7 +34119,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -34132,7 +34132,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -39498,7 +39498,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -39511,7 +39511,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -41183,7 +41183,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -41196,7 +41196,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -41489,7 +41489,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -41502,7 +41502,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -45578,7 +45578,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -45591,7 +45591,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -45779,7 +45779,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -45792,7 +45792,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -45980,7 +45980,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -45993,7 +45993,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -46371,7 +46371,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -46384,7 +46384,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -46572,7 +46572,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -46585,7 +46585,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -46773,7 +46773,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -46786,7 +46786,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -46974,7 +46974,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -46987,7 +46987,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -47707,7 +47707,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -47720,7 +47720,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -48160,7 +48160,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -48173,7 +48173,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -48760,7 +48760,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -48773,7 +48773,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -49402,7 +49402,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -49415,7 +49415,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -49603,7 +49603,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -49616,7 +49616,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -49804,7 +49804,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -49817,7 +49817,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -50005,7 +50005,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -50018,7 +50018,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -51109,7 +51109,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -51122,7 +51122,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -51856,7 +51856,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -51869,7 +51869,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -52057,7 +52057,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -52070,7 +52070,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -52258,7 +52258,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -52271,7 +52271,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -52679,7 +52679,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -52692,7 +52692,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -54670,7 +54670,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -54683,7 +54683,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -55019,7 +55019,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -55032,7 +55032,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -55990,7 +55990,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -56003,7 +56003,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -65763,7 +65763,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -65776,7 +65776,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -65964,7 +65964,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -65977,7 +65977,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -66727,7 +66727,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -66740,7 +66740,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -75232,7 +75232,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -75245,7 +75245,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -76288,7 +76288,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -76301,7 +76301,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
@@ -77063,7 +77063,7 @@
           "repeatDirection": null,
           "seriesOverrides": [
             {
-              "alias": "count",
+              "alias": "/^count/",
               "bars": false,
               "dashLength": 1,
               "dashes": true,
@@ -77076,7 +77076,7 @@
               "zindex": -3
             },
             {
-              "alias": "avg",
+              "alias": "/^avg/",
               "bars": false,
               "fill": 7,
               "fillBelowTo": null,
