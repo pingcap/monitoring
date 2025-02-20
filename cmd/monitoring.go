@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v66/github"
+	"github.com/google/go-github/v69/github"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/youthlin/stream"
