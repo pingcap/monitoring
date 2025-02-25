@@ -76,7 +76,7 @@ analysis.
 If you're not familiar with **Jsonnet**, check out the
 [website](http://jsonnet.org/index.html) and [their
 tutorial](http://jsonnet.org/docs/tutorial.html). For usage, see the [command
-line tool](http://jsonnet.org/implementation/commandline.html).
+line tool](http://jsonnet.org/learning/getting_started.html).
 
 You can also start writing `.libsonnet` or `.jsonnet` files based on
 the examples in this readme. Then run the
@@ -176,7 +176,7 @@ runtime instead of compile time, which lets you combine them freely to modify ob
 create new ones.
 
 **ksonnet** ships with a large library of built-in mixins, or you can write your own custom mixins. 
-The [tutorial](/docs/TUTORIAL.md) shows you how to create a custom mixin that you can then 
+The [tutorial](./docs/TUTORIAL.md) shows you how to create a custom mixin that you can then 
 easily add as a Sidecar container to your Kubernetes cluster.
 
 ## Contributing
@@ -207,8 +207,8 @@ tag](https://stackoverflow.com/questions/tagged/ksonnet) on Stack
 Overflow.
 
 [jsonnet]: http://jsonnet.org/ "Jsonnet"
-[v1]: https://kubernetes.io/docs/api-reference/v1/definitions/ "V1 API objects"
-[v1Container]: https://kubernetes.io/docs/api-reference/v1/definitions/#_v1_container "v1.Container"
+[v1]: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/ "V1 API objects"
+[v1Container]: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core "v1.Container"
 [Kompose]: https://github.com/kubernetes-incubator/kompose "Kompose"
 [OpenCompose]: https://github.com/redhat-developer/opencompose "OpenCompose"
 [compose2kube]: https://github.com/kelseyhightower/compose2kube "compose2kube"
