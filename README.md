@@ -122,4 +122,4 @@ TIDB_ENABLE_BINLOG // whether enable binlog
 PROM_CONFIG_PATH // proemtheus rules config path
 ```
 
-<!-- VERSION_PLACEHOLDER: v6.5.11 -->
+<!-- VERSION_PLACEHOLDER: v6.5.13 -->
