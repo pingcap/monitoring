@@ -10,7 +10,7 @@ The default release names prefix is `infra`, if you would like to change it, jus
 ./mkcharts.sh <your-prefered-prefix>
 ```
 
-Suggest you already have helm installed and working (if you don't, see [this doc](https://helm.sh/docs/using_helm/#installing-helm)), and the official repo configured as `stable`, deploying these compoments are as easy as:
+Suggest you already have helm installed and working (if you don't, see [this doc](https://helm.sh/docs/intro/install)), and the official repo configured as `stable`, deploying these compoments are as easy as:
 
 ```
 ./install-logging.sh
