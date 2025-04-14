@@ -247,6 +247,7 @@ func getTag(defaultTag string, fixTag string) string {
 }
 
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
+	log.Printf("fetch dir %s from %s/%s at rev:%s", path, owner, repoName, ref)
 	fileContent, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
 		Ref: ref,
 	})
@@ -310,11 +311,15 @@ func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoServ
 	}).Peek(func(t streamtypes.T) {
 		content := t.(string)
 		// ansible
+		log.Printf("write file: %s in folder: %s", name, ansibleRuleDir)
 		common.WriteFile(ansibleRuleDir, name, content)
 	}).ForEach(func(t streamtypes.T) {
 		content := t.(string)
 		// operatotr
-		operator.WriteRule(content, name, operatorRuleDir, operatorReplaceExpr)
+		log.Printf("write file: %s in folder: %s", name, operatorRuleDir)
+		if err := operator.WriteRule(content, name, operatorRuleDir, operatorReplaceExpr); err != nil {
+			log.Fatal(errors.Wrap(err, "failed to write rule"))
+		}
 	})
 }
 
