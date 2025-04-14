@@ -247,6 +247,10 @@ func getTag(defaultTag string, fixTag string) string {
 }
 
 func fetchDirectory(rservice *common.GitRepoService, owner string, repoName string, path string, ref string) []*common.RepositoryContent {
+	if path == "" {
+		return nil
+	}
+
 	log.Printf("fetch dir %s from %s/%s at rev:%s", path, owner, repoName, ref)
 	fileContent, monitorDirectory, err := rservice.GetContents(owner, repoName, path, &common.RepositoryContentGetOptions{
 		Ref: ref,
