@@ -25246,7 +25246,7 @@
         },
         {
           "datasource": "tidb-cluster",
-          "description": "",
+          "description": "Active parallel upload worker count, only valid for GCS now",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -25328,7 +25328,7 @@
               "refId": "A"
             }
           ],
-          "title": "Parallel Upload Worker Count",
+          "title": "Active Parallel Upload Worker Count",
           "type": "timeseries"
         }
       ],
