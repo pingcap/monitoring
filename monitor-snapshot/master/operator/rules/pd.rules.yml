@@ -1,7 +1,7 @@
 groups:
     - name: alert.rules
       rules:
-        - alert: PD_cluster_down_tikv_nums
+        - alert: PD_cluster_down_store_nums
           expr: (sum(pd_cluster_status{type="store_down_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
           for: 1m
           labels:
@@ -10,7 +10,7 @@ groups:
             level: emergency
           annotations:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
-            summary: PD_cluster_down_tikv_nums
+            summary: PD_cluster_down_store_nums
             value: '{{ $value }}'
         - alert: PD_etcd_write_disk_latency
           expr: histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m])) by (instance,job,le) ) > 1
@@ -34,7 +34,7 @@ groups:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
             summary: PD_miss_peer_region_count
             value: '{{ $value }}'
-        - alert: PD_cluster_lost_connect_tikv_nums
+        - alert: PD_cluster_lost_connect_store_nums
           expr: (sum(pd_cluster_status{type="store_disconnected_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
           for: 1m
           labels:
@@ -43,9 +43,9 @@ groups:
             level: warning
           annotations:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
-            summary: PD_cluster_lost_connect_tikv_nums
+            summary: PD_cluster_lost_connect_store_nums
             value: '{{ $value }}'
-        - alert: PD_cluster_unhealthy_tikv_nums
+        - alert: PD_cluster_unhealthy_store_nums
           expr: (sum ( pd_cluster_status{type="store_unhealth_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
           for: 1m
           labels:
@@ -54,7 +54,7 @@ groups:
             level: warning
           annotations:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
-            summary: PD_cluster_unhealth_tikv_nums
+            summary: PD_cluster_unhealth_store_nums
             value: '{{ $value }}'
         - alert: PD_cluster_low_space
           expr: (sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -122,7 +122,7 @@ groups:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
             summary: PD_leader_change
             value: '{{ $value }}'
-        - alert: TiKV_space_used_more_than_80%
+        - alert: PD_cluster_store_space_used_more_than_80%
           expr: sum(pd_cluster_status{type="storage_size"}) / sum(pd_cluster_status{type="storage_capacity"}) * 100  > 80
           for: 1m
           labels:
@@ -131,7 +131,7 @@ groups:
             level: warning
           annotations:
             description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
-            summary: TiKV_space_used_more_than_80%
+            summary: PD_cluster_store_space_used_more_than_80%
             value: '{{ $value }}'
         - alert: PD_system_time_slow
           expr: changes(pd_tso_events{type="system_time_slow"}[10m]) >= 1
