@@ -54,7 +54,7 @@ groups:
             level: warning
           annotations:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
-            summary: PD_cluster_unhealth_store_nums
+            summary: PD_cluster_unhealthy_store_nums
             value: '{{ $value }}'
         - alert: PD_cluster_low_space
           expr: (sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -143,17 +143,6 @@ groups:
           annotations:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'
             summary: PD_system_time_slow
-            value: '{{ $value }}'
-        - alert: PD_no_store_for_making_replica
-          expr: increase(pd_checker_event_count{type="replica_checker", name="no_target_store"}[1m]) > 0
-          for: 1m
-          labels:
-            env: ENV_LABELS_ENV
-            expr: increase(pd_checker_event_count{type="replica_checker", name="no_target_store"}[1m]) > 0
-            level: warning
-          annotations:
-            description: 'cluster: ENV_LABELS_ENV, type: {{ $labels.type }}, instance: {{ $labels.instance }}, values: {{ $value }}'
-            summary: PD_no_store_for_making_replica
             value: '{{ $value }}'
         - alert: PD_node_restart
           expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
