@@ -1,7 +1,11 @@
 # See the OWNERS docs at https://go.k8s.io/owners
 approvers:
   - csuzhangxc
+  - KanShiori
+  - liubog2008
+  - fgksgf
 reviewers:
   - asddongmen
   - KanShiori
-  - lijie0123
+  - liubog2008
+  - fgksgf
