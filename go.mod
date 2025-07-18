@@ -1,10 +1,12 @@
 module github.com/pingcap/monitoring
 
-go 1.23
+go 1.23.0
+
+toolchain go1.24.5
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
-	github.com/gin-gonic/gin v1.10.0
+	github.com/gin-gonic/gin v1.10.1
 	github.com/go-git/go-git/v5 v5.13.0
 	github.com/google/go-github/v66 v66.0.0
 	github.com/google/go-querystring v1.1.0
