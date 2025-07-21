@@ -22692,7 +22692,9 @@
           "datasource": "tidb-cluster",
           "description": "The total coprocessor response size between each tidb and tikv",
           "fieldConfig": {
-            "defaults": {},
+            "defaults": {
+              "unit": "KiBs"
+            },
             "overrides": []
           },
           "fill": 1,
@@ -22762,7 +22764,7 @@
           "yaxes": [
             {
               "$$hashKey": "object:394",
-              "format": "binBps",
+              "format": "KiBs",
               "label": "",
               "logBase": 1,
               "max": null,
@@ -22792,7 +22794,9 @@
           "datasource": "tidb-cluster",
           "description": "Histogram of coprocessor response size in bytes between tidb and tikv",
           "fieldConfig": {
-            "defaults": {},
+            "defaults": {
+              "unit": "kbytes"
+            },
             "overrides": []
           },
           "fill": 1,
@@ -22889,7 +22893,7 @@
           "yaxes": [
             {
               "$$hashKey": "object:394",
-              "format": "bytes",
+              "format": "kbytes",
               "label": "",
               "logBase": 1,
               "max": null,
