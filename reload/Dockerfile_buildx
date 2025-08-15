@@ -5,7 +5,14 @@ COPY reload ./reload
 RUN CGO_ENABLED=0 go build -v ./reload/main.go
 
 FROM busybox:1.37.0
-COPY --from=builder /app/main  /bin/reload
+
+# Add user and group to support run it with non-root.
+ARG PINGCAP_UID=1000
+ARG PINGCAP_GID=2000
+RUN addgroup -g ${PINGCAP_GID} pingcap && \
+    adduser -u ${PINGCAP_UID} -G pingcap -h /home/pingcap -D pingcap
+
+COPY --from=builder --chmod=755 /app/main  /bin/reload
 ENTRYPOINT [ "/bin/reload" ]
 CMD        [ "--watch-path=/etc/prometheus/rules", \
              "--prometheus-url=http://127.0.0.1:9090" ]
