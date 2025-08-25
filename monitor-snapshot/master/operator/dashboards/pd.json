@@ -4854,6 +4854,15 @@
               "legendFormat": "{{address}}-store-{{store}}",
               "refId": "A",
               "step": 4
+            },
+            {
+              "expr": "pd_hotcache_status{k8s_cluster=\"$k8s_cluster\", tidb_cluster=~\"$tidb_cluster.*\", store=~\"$store\",name=~\".*threshold\",type=~\"write.*\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{store}}-{{type}}-{{name}}",
+              "hide": true,
+              "refId": "B",
+              "step": 4
             }
           ],
           "thresholds": [],
@@ -6128,6 +6137,13 @@
               "interval": "",
               "legendFormat": "{{address}}-store-{{store}}-leader",
               "refId": "B"
+            },
+            {
+              "expr": "pd_hotcache_status{k8s_cluster=\"$k8s_cluster\", tidb_cluster=~\"$tidb_cluster.*\", store=~\"$store\",name=~\".*threshold\",type=~\"read.*\"}",
+              "hide": true,
+              "interval": "",
+              "legendFormat": "{{store}}-{{type}}-{{name}}",
+              "refId": "C"
             }
           ],
           "thresholds": [],
