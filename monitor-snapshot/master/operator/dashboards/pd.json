@@ -5843,7 +5843,7 @@
           "gridPos": {
             "h": 7,
             "w": 12,
-            "x": 12,
+            "x": 0,
             "y": 52
           },
           "id": 511,
@@ -6749,7 +6749,7 @@
           "gridPos": {
             "h": 7,
             "w": 12,
-            "x": 0,
+            "x": 12,
             "y": 81
           },
           "id": 609,
@@ -10218,7 +10218,7 @@
             "y": 61
           },
           "hiddenSeries": false,
-          "id": 1110,
+          "id": 1115,
           "legend": {
             "alignAsTable": true,
             "avg": false,
