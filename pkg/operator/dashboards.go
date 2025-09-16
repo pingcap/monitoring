@@ -38,6 +38,7 @@ var (
 		"tiflash_proxy_summary.json":   "Test-Cluster-TiFlash-Proxy-Summary",
 		"ticdc.json":                   "Test-Cluster-TiCDC",
 		"TiCDC-Monitor-Summary.json":   "Test-Cluster-TiCDC-Summary",
+		"ticdc_new_arch.json":          "Test-Cluster-TiCDC-New-Arch",
 		"tikv-cdc.json":                "Test-Cluster-TiKV-CDC",
 		"tiflash_proxy_details.json":   "Test-Cluster-TiFlash-Proxy-Details",
 		"DM-Monitor-Standard.json":     "Test-Cluster-DM-Standard",
