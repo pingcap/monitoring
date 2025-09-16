@@ -1,7 +1,6 @@
 package operator
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -50,7 +49,7 @@ var (
 func WriteDashboard(dir string, body string, name string) error {
 	title, exist := dashboards[name]
 	if !exist {
-		return errors.New(fmt.Sprintf("%s dashboard is not found in operator", name))
+		return fmt.Errorf("%s dashboard is not found in operator", name)
 	}
 
 	common.WriteFile(dir, convertDashboardFileName(name), filterDashboard(body, name, title))
