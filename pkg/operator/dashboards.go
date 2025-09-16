@@ -1,7 +1,6 @@
 package operator
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -38,6 +37,7 @@ var (
 		"tiflash_proxy_summary.json":   "Test-Cluster-TiFlash-Proxy-Summary",
 		"ticdc.json":                   "Test-Cluster-TiCDC",
 		"TiCDC-Monitor-Summary.json":   "Test-Cluster-TiCDC-Summary",
+		"ticdc_new_arch.json":          "Test-Cluster-TiCDC-New-Arch",
 		"tikv-cdc.json":                "Test-Cluster-TiKV-CDC",
 		"tiflash_proxy_details.json":   "Test-Cluster-TiFlash-Proxy-Details",
 		"DM-Monitor-Standard.json":     "Test-Cluster-DM-Standard",
@@ -49,7 +49,7 @@ var (
 func WriteDashboard(dir string, body string, name string) error {
 	title, exist := dashboards[name]
 	if !exist {
-		return errors.New(fmt.Sprintf("%s dashboard is not found in operator", name))
+		return fmt.Errorf("%s dashboard is not found in operator", name)
 	}
 
 	common.WriteFile(dir, convertDashboardFileName(name), filterDashboard(body, name, title))
