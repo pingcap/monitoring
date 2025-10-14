@@ -295,7 +295,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed ResolvedTs Lag",
+          "title": "Changefeed Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -883,7 +883,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "The status of changefeeds",
+          "title": "The Status of Changefeeds",
           "type": "timeseries"
         },
         {
@@ -1260,7 +1260,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Maintainer resolved ts lag",
+          "title": "Maintainer Resolved Ts lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1350,7 +1350,7 @@
               "refId": "A"
             }
           ],
-          "title": "Event service scan duration",
+          "title": "EventService Scan Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -1450,7 +1450,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Puller and EventService Resolved ts lag ",
+          "title": "Puller and EventService Resolved Ts Lag ",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1548,7 +1548,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Dispatcher manager checkpoint ts lag",
+          "title": "DispatcherManager Checkpoint Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1646,7 +1646,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Dispatcher manager resolved ts lag",
+          "title": "DispatcherManager Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1736,7 +1736,7 @@
               "refId": "A"
             }
           ],
-          "title": "Event collector receive event Lag",
+          "title": "EventCollector Resolved Ts Lag",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -1842,7 +1842,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Puller output events / s",
+          "title": "Puller Output Events / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1946,7 +1946,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Puller output event rows",
+          "title": "Puller Output Event Rows",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2049,7 +2049,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "EventService output event row / s",
+          "title": "EventService Output Event Row / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2155,7 +2155,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "EventService output event rows",
+          "title": "EventService Output Event Rows",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2259,7 +2259,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event Collector received event rows / s",
+          "title": "Event Collector Received Event Rows / s",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -2363,7 +2363,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event collector Received event rows",
+          "title": "Event Collector Received Event Rows",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2467,7 +2467,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Sink flush rows / s",
+          "title": "Sink Flush Rows / s",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -2572,7 +2572,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Sink flush rows",
+          "title": "Sink Flush Rows",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -2812,7 +2812,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Goroutine count",
+          "title": "Goroutine Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2913,7 +2913,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Open FD count",
+          "title": "Open FD Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3029,7 +3029,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "CPU usage",
+          "title": "CPU Usage",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3138,7 +3138,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Memory usage",
+          "title": "Memory Usage",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3238,7 +3238,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Ownership history",
+          "title": "Ownership History",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3339,7 +3339,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "PD leader history",
+          "title": "PD Leader History",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3465,7 +3465,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "node table count",
+          "title": "Node Table Count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3577,7 +3577,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "changefeed table count",
+          "title": "Changefeed Table Count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -3803,7 +3803,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed checkpoint",
+          "title": "Changefeed Checkpoint",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -3929,7 +3929,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed resolved ts",
+          "title": "Changefeed Resolved Ts",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4033,7 +4033,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed checkpoint lag",
+          "title": "Changefeed Checkpoint Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4144,7 +4144,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed resolved ts lag",
+          "title": "Changefeed Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4174,105 +4174,6 @@
               "max": null,
               "min": null,
               "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of errors that interrupt changefeed per minute ",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 26
-          },
-          "hiddenSeries": false,
-          "id": 82,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum(rate(ticdc_processor_exit_with_error_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\",instance=~\"$ticdc_instance\"}[1m])) by (instance, namespace,changefeed)",
-              "hide": false,
-              "interval": "",
-              "legendFormat": "{{instance}}-{{namespace}}-{{changefeed}}",
-              "refId": "B"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Exit error count/m",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
             }
           ],
           "yaxis": {
@@ -4361,7 +4262,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed checkpoint lag",
+          "title": "Changefeed Checkpoint Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4458,7 +4359,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed resolved ts lag",
+          "title": "Changefeed Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4557,7 +4458,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Eventfeed error / m",
+          "title": "Eventfeed Error / m",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4656,7 +4557,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "PD operator / m",
+          "title": "PD Operator / m",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4750,7 +4651,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiDB query duration",
+          "title": "TiDB Query Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -4872,7 +4773,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV min resolved ts lag",
+          "title": "TiKV Min Resolved Ts Lag",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -4975,7 +4876,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Sink write rows / s",
+          "title": "Sink Write Rows / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5078,7 +4979,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Sink write duration",
+          "title": "Sink Write Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5177,7 +5078,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV scan tasks / m",
+          "title": "TiKV Scan Tasks / m",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5276,7 +5177,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV scan region time / m",
+          "title": "TiKV Scan Region Time / m",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -5379,7 +5280,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV leader change",
+          "title": "TiKV Leader Change",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -5479,7 +5380,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV admin apply / s",
+          "title": "TiKV Admin Apply / s",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -5579,7 +5480,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV advance resolved ts / s",
+          "title": "TiKV Advance Resolved Ts / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5678,7 +5579,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV unresolved region count",
+          "title": "TiKV Unresolved Region Count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -5777,7 +5678,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV check leader region count percentile",
+          "title": "TiKV Check Leader Region Count Percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5876,7 +5777,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV advance resolved ts fail / m",
+          "title": "TiKV Advance Resolved Ts Fail / m",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -5981,7 +5882,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "TiKV check leader duration percentile",
+          "title": "TiKV Check Leader Duration Percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -6134,7 +6035,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "downstream",
+          "datasource": "tidb-cluster",
           "decimals": 1,
           "description": "The number of changefeed in different status\n\n0: ReplicationSetStateUnknown means the replication state is unknown, it should not happen.\n\n1: ReplicationSetStateAbsent means there is no one replicates or prepares it.\n\n2: ReplicationSetStatePrepare means it needs to add a secondary.\n\n3: ReplicationSetStateCommit means it needs to promote secondary to primary.\n\n4: ReplicationSetStateReplicating means there is exactly one capture that is replicating the table.\n\n5: ReplicationSetStateRemoving means all captures need to stop replication eventually.\n\n",
           "editable": true,
@@ -6202,7 +6103,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Changefeed  Status",
+          "title": "Changefeed Status",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -6245,7 +6146,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "downstream",
+          "datasource": "tidb-cluster",
           "description": "duration for each operator for changefeed",
           "fieldConfig": {
             "defaults": {},
@@ -6351,7 +6252,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "downstream",
+          "datasource": "tidb-cluster",
           "description": "The history of TiCDC cluster coordinator, owner node has a value that is great than 0",
           "fieldConfig": {
             "defaults": {},
@@ -6528,7 +6429,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Maintainer checkpoint lag",
+          "title": "Maintainer Checkpoint Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -6631,7 +6532,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Maintainer resolved ts lag",
+          "title": "Maintainer Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -6988,7 +6889,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "KV client dispatch events / s",
+          "title": "Input Events / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7053,7 +6954,8 @@
             "min": false,
             "show": true,
             "total": false,
-            "values": false
+            "values": false,
+            "alignAsTable": true
           },
           "lines": true,
           "linewidth": 1,
@@ -7187,7 +7089,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Region request finish scan duration",
+          "title": "Region Request Finish Scan Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7252,7 +7154,8 @@
             "min": false,
             "show": true,
             "total": false,
-            "values": false
+            "values": false,
+            "alignAsTable": true
           },
           "lines": true,
           "linewidth": 1,
@@ -7283,7 +7186,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Subscribed region count",
+          "title": "Subscribed Region Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7461,7 +7364,7 @@
               "refId": "A"
             }
           ],
-          "title": "KV client batch resolved region count",
+          "title": "Resolved Ts Batch Size (Regions)",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -7786,7 +7689,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Subscription Resolved Ts Lag",
+          "title": "Subscriptions Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -7901,7 +7804,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Subscription Data GC Lag",
+          "title": "Subscriptions Data GC Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -8097,7 +8000,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Input  Bytes / s",
+          "title": "Input Bytes / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -8313,7 +8216,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Write duration",
+          "title": "Write Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -9146,7 +9049,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Read duration - Next",
+          "title": "Read Duration - Next",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -9230,7 +9133,7 @@
               "refId": "A"
             }
           ],
-          "title": "Read duration - Close",
+          "title": "Read Duration - Close",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -9314,7 +9217,7 @@
               "refId": "A"
             }
           ],
-          "title": "Read duration - First",
+          "title": "Read Duration - First",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -9891,7 +9794,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Wait ResolvedTs Duration",
+          "title": "Wait Resolved Ts Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -9996,7 +9899,7 @@
               "refId": "A"
             }
           ],
-          "title": "Event service scan duration",
+          "title": "Event Service Scan Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -10092,7 +9995,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service scan duration",
+          "title": "Event Service Scan Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10189,7 +10092,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service scanned entry count",
+          "title": "Event Service Scanned Entry Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10280,7 +10183,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service scanned transaction count",
+          "title": "Event Service Scanned Transaction Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10379,7 +10282,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service scanned entry bytes / s",
+          "title": "Event Service Scanned Entry Bytes / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10470,7 +10373,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service scanned transaction bytes / s",
+          "title": "Event Service Scanned Transaction Bytes / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -10659,7 +10562,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service resolved ts lag",
+          "title": "Event Service Resolved Ts Lag",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -11031,7 +10934,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event service channel size ",
+          "title": "Event Service Channel Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -11130,7 +11033,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Scanned entry count / s",
+          "title": "Scanned Entry Count / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -12143,7 +12046,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Event Collector Received ResolvedTs / s",
+          "title": "Event Collector Received Resolved Ts / s",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -12239,7 +12142,7 @@
               "refId": "A"
             }
           ],
-          "title": "Event collector handle message duration",
+          "title": "Event Collector Handle Message Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -12323,7 +12226,7 @@
               "refId": "A"
             }
           ],
-          "title": "Event collector receive event Lag",
+          "title": "Event Collector Receive Event Lag",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -12930,7 +12833,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Sink Error Count  / m",
+          "title": "Sink Error Count / m",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -14399,7 +14302,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "encoder group input channel size",
+          "title": "Encoder Group Input Channel Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -14497,7 +14400,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "encoder group output channel size",
+          "title": "Encoder Group Output Channel Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -15243,7 +15146,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Table replication state",
+          "title": "Table Replication State",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -15356,7 +15259,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Schedule tasks",
+          "title": "Schedule Tasks",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -15460,7 +15363,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Span count",
+          "title": "Span Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -15563,7 +15466,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Table count",
+          "title": "Table Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -16116,7 +16019,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Slowest table ID",
+          "title": "Slowest Table ID",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -16238,7 +16141,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Slowest table checkpoint",
+          "title": "Slowest Table Checkpoint",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -16357,7 +16260,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Slowest table resolved ts",
+          "title": "Slowest Table Resolved Ts",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -16470,7 +16373,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Slowest table replication state",
+          "title": "Slowest Table Replication State",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -16511,1536 +16414,6 @@
         }
       ],
       "title": "Scheduler",
-      "type": "row"
-    },
-    {
-      "collapsed": true,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 19
-      },
-      "id": 447,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of established Eventfeed RPC between TiCDC and TiKV",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 19
-          },
-          "hiddenSeries": false,
-          "id": 15,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": false,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*-rpc/",
-              "yaxis": 2
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(ticdc_kvclient_event_feed_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\"}) by (instance)",
-              "format": "time_series",
-              "hide": true,
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            },
-            {
-              "exemplar": true,
-              "expr": "sum(grpc_client_started_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", grpc_method=~\"EventFeed.*\"}) by (instance) - sum(grpc_client_handled_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", grpc_method=~\"EventFeed.*\"}) by (instance)",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-rpc",
-              "refId": "B"
-            },
-            {
-              "expr": "sum(grpc_client_started_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", grpc_method=~\"EventFeed.*\"}) by (instance)",
-              "format": "time_series",
-              "hide": false,
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-rpc-started",
-              "refId": "C"
-            },
-            {
-              "expr": "sum(grpc_client_handled_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", grpc_method=~\"EventFeed.*\"}) by (instance)",
-              "format": "time_series",
-              "hide": false,
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-rpc-handled",
-              "refId": "D"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Eventfeed count",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of KV client received events from TiKV per seconds",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 19
-          },
-          "hiddenSeries": false,
-          "id": 29,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum(rate(ticdc_kvclient_pull_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\"}[1m])) by (instance, type, changefeed)",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{changefeed}}-{{instance}}-{{type}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "KV client receive events / s",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": true,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of errors that interrupt Eventfeed RPC",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 26
-          },
-          "hiddenSeries": false,
-          "id": 28,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(increase(ticdc_kvclient_event_feed_error_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$ticdc_instance\"}[1m])) by (type)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "{{type}}",
-              "refId": "A"
-            },
-            {
-              "expr": "-sum(increase(pd_schedule_operators_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", event=\"create\", type=~\".*leader\"}[1m]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "transfer-leader",
-              "refId": "B"
-            },
-            {
-              "expr": "-sum(increase(pd_schedule_operators_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", event=\"create\", type=~\".*(peer|region)\"}[1m]))",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 1,
-              "legendFormat": "move-region",
-              "refId": "C"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Eventfeed error/m",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": null,
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of KV client dispatched event per second",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 26
-          },
-          "hiddenSeries": false,
-          "id": 31,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*batch-resolved/",
-              "yaxis": 2
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum(rate(ticdc_kvclient_send_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\"}[1m])) by (instance, namespace,changefeed, type)",
-              "format": "time_series",
-              "hide": true,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-{{namespace}}-{{changefeed}}-{{type}}",
-              "refId": "A"
-            },
-            {
-              "exemplar": true,
-              "expr": "sum(rate(ticdc_kvclient_batch_resolved_event_size_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\",instance=~\"$ticdc_instance\"}[1m])) by (instance,namespace, changefeed, table)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-{{namespace}}-{{changefeed}}-batch-resolved",
-              "refId": "B"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "KV client dispatch events / s",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "Active stream count of each gRPC connection",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 33
-          },
-          "hiddenSeries": false,
-          "id": 188,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(ticdc_kvclient_grpc_stream_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\"}) by (store)",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{store}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "KV client gRPC stream count",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "decimals": null,
-          "description": "Percentiles of Eventfeed message size",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 33
-          },
-          "hiddenSeries": false,
-          "id": 17,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(0.999, sum(rate(ticdc_kvclient_event_size_bytes_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\"}[1m])) by (le, instance, type))",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-{{type}}-p999",
-              "refId": "A"
-            },
-            {
-              "expr": "histogram_quantile(0.95, sum(rate(ticdc_kvclient_event_size_bytes_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\"}[1m])) by (le, instance, type))",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-{{type}}-p95",
-              "refId": "B"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Event size percentile",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of regions that are being scanned",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 40
-          },
-          "hiddenSeries": false,
-          "id": 177,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum(ticdc_kvclient_region_token{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\", instance=~\"$ticdc_instance\"}) by (instance,namespace, changefeed, store)",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{namespace}}-{{changefeed}}-{{instance}}-{{store}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "KV client scanning regions",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "decimals": 1,
-          "description": "The count of regoin cache operation initiated by TiCDC",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 40
-          },
-          "hiddenSeries": false,
-          "id": 459,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": null,
-            "sort": "current",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(rate(ticdc_tikvclient_region_cache_operations_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$ticdc_instance\"}[1m])) by (type)",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{type}}",
-              "metric": "tikv_grpc_msg_duration_seconds_bucket",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "RegionCache operation / s",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "cards": {
-            "cardPadding": 0,
-            "cardRound": 0
-          },
-          "color": {
-            "cardColor": "#FF9830",
-            "colorScale": "linear",
-            "colorScheme": "interpolateSpectral",
-            "exponent": 0.5,
-            "min": 0,
-            "mode": "spectrum"
-          },
-          "dataFormat": "tsbuckets",
-          "datasource": "tidb-cluster",
-          "description": "The size of batch resolved regions count",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 47
-          },
-          "heatmap": {},
-          "hideZeroBuckets": true,
-          "highlightCards": true,
-          "id": 97,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "sort": "current",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "links": [],
-          "reverseYBuckets": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum(rate(ticdc_kvclient_batch_resolved_event_size_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$ticdc_instance\"}[1m])) by (le)",
-              "format": "heatmap",
-              "instant": false,
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "{{le}}",
-              "refId": "A"
-            }
-          ],
-          "title": "KV client batch resolved region count",
-          "tooltip": {
-            "show": true,
-            "showHistogram": true
-          },
-          "tooltipDecimals": 1,
-          "type": "heatmap",
-          "xAxis": {
-            "show": true
-          },
-          "xBucketNumber": null,
-          "xBucketSize": null,
-          "yAxis": {
-            "decimals": 1,
-            "format": "none",
-            "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true,
-            "splitFactor": null
-          },
-          "yBucketBound": "upper",
-          "yBucketNumber": null,
-          "yBucketSize": null
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of regions that have not connected to TiKV",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 47
-          },
-          "hiddenSeries": false,
-          "id": 251,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum(ticdc_kvclient_cached_region{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\", instance=~\"$ticdc_instance\"}) by (instance, namespace,changefeed, store)",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{namespace}}-{{changefeed}}-{{instance}}-{{store}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "KV client cached regions",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "decimals": 1,
-          "description": "The count of resolve lock RPC initiated by TiCDC",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 54
-          },
-          "hiddenSeries": false,
-          "id": 453,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": null,
-            "sort": "current",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(delta(ticdc_tikvclient_lock_resolver_actions_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$ticdc_instance\"}[1m])) by (type)",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{type}}",
-              "metric": "tikv_grpc_msg_duration_seconds_bucket",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "ResolveLock count/m",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "opm",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "decimals": 1,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 54
-          },
-          "hiddenSeries": false,
-          "id": 460,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "sideWidth": null,
-            "sort": "current",
-            "sortDesc": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "histogram_quantile(0.99999, sum(rate(ticdc_tikvclient_backoff_seconds_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$ticdc_instance\"}[1m])) by (le, type))",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "{{type}}",
-              "metric": "tikv_grpc_msg_duration_seconds_bucket",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Backoff percentiles",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ms",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "The number of events that puller outputs to sorter \n per second",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 61
-          },
-          "hiddenSeries": false,
-          "id": 5,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum (rate(ticdc_puller_txn_collect_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\", changefeed!~\".*ddl_puller\"}[1m])) by (instance, type)",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}-{{type}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Puller output event rows / s",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "none",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "tidb-cluster",
-          "description": "Estimate the remaining time for a changefeed initialization (on a specific capture)",
-          "fieldConfig": {
-            "defaults": {
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 61
-          },
-          "hiddenSeries": false,
-          "id": 252,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "paceLength": 10,
-          "percentage": false,
-          "pluginVersion": "7.5.17",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "abs(sum(ticdc_kvclient_cached_region{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\",namespace=~\"$namespace\", changefeed=~\"$changefeed\", instance=~\"$ticdc_instance\"} / deriv(ticdc_kvclient_cached_region{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", namespace=~\"$namespace\",changefeed=~\"$changefeed\", instance=~\"$ticdc_instance\"}[1m])) by (instance, namespace,changefeed, store))",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{namespace}}-{{changefeed}}-{{instance}}-{{store}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Estimate remaining time for initialization",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "",
-              "logBase": 2,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "title": "KVClient",
       "type": "row"
     },
     {
@@ -18123,7 +16496,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "gRPC message count",
+          "title": "gRPC Message Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -18235,7 +16608,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "CDC network traffic",
+          "title": "CDC Network Traffic",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -18474,7 +16847,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "CDC memory quota",
+          "title": "CDC Memory Quota",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -18592,7 +16965,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Captured region count",
+          "title": "Captured Region Count",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -18712,7 +17085,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Initial scan tasks status",
+          "title": "Initial Scan Tasks Status",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -18827,7 +17200,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Incremental scan duration percentile",
+          "title": "Incremental Scan Duration Percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -18922,7 +17295,7 @@
               "refId": "A"
             }
           ],
-          "title": "Initial scan duration",
+          "title": "Initial Scan Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -19025,7 +17398,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Incremental scan sink duration percentile",
+          "title": "Incremental Scan Sink Duration Percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -19135,7 +17508,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "CDC total scan bytes",
+          "title": "CDC Total Scan Bytes",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -19246,7 +17619,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Incremental scan speed",
+          "title": "Incremental Scan Speed",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -19359,7 +17732,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Incremental scan disk speed",
+          "title": "Incremental Scan Disk Speed",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -19500,7 +17873,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Min resolved ts",
+          "title": "Min Resolved Ts",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -19606,7 +17979,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Resolved ts lag duration percentile",
+          "title": "Resolved Ts Lag Duration Percentile",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -19728,7 +18101,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Old value cache hit",
+          "title": "Old Value Cache Hit",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -19838,7 +18211,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Min resolved Region",
+          "title": "Min Resolved Region",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -19933,7 +18306,7 @@
               "refId": "A"
             }
           ],
-          "title": "Old value seek duration",
+          "title": "Old Value Seek Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -20058,7 +18431,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Old value cache size",
+          "title": "Old Value Cache Size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -20173,7 +18546,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Old value seek duration",
+          "title": "Old Value Seek Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -20283,7 +18656,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Old value seek operation",
+          "title": "Old Value Seek Operation",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -20385,7 +18758,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Redo fsync duration",
+          "title": "Redo Fsync Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -20459,7 +18832,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Redo flushall duration",
+          "title": "Redo Flushall Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -20533,7 +18906,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Redo write log duration",
+          "title": "Redo Write Log Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -20607,7 +18980,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Redo flush log duration",
+          "title": "Redo Flush Log Duration",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -20705,7 +19078,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Redo Write rows / s ",
+          "title": "Redo Write Rows / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -20801,7 +19174,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Redo Write bytes / s ",
+          "title": "Redo Write Bytes / s",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22164,7 +20537,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar published DDL schema count",
+          "title": "Pulsar Published DDL Schema Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22269,7 +20642,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar published DDL schema success",
+          "title": "Pulsar Published DDL Schema Success",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22374,7 +20747,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar published DDL schema fail",
+          "title": "Pulsar Published DDL Schema Fail",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22470,7 +20843,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar published DML schema count",
+          "title": "Pulsar Published DML Schema Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22566,7 +20939,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar published DML schema success",
+          "title": "Pulsar Published DML Schema Success",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22662,7 +21035,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar published DML schema fail",
+          "title": "Pulsar Published DML Schema Fail",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22759,7 +21132,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar client bytes published ",
+          "title": "Pulsar Client Bytes Published",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22858,7 +21231,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar client connections opened",
+          "title": "Pulsar Client Connections Opened",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -22957,7 +21330,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar client rpc count",
+          "title": "Pulsar Client RPC Count",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23082,7 +21455,7 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pulsar client producer latency ",
+          "title": "Pulsar Client Producer Latency",
           "type": "timeseries"
         },
         {
@@ -23148,7 +21521,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar client producer rpc latency",
+          "title": "Pulsar Client Producer RPC Latency",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23249,7 +21622,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar client producer pending messages",
+          "title": "Pulsar Client Producer Pending Messages",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -23350,7 +21723,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Pulsar client producer pending messages",
+          "title": "Pulsar Client Producer Pending Messages",
           "tooltip": {
             "shared": true,
             "sort": 0,
