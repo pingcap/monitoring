@@ -17424,7 +17424,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "TiDB auto analyze time durations",
+          "description": "TiDB auto and manual analyze time durations",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -17469,7 +17469,7 @@
               "expr": "histogram_quantile(0.95, sum(rate(tidb_statistics_auto_analyze_duration_seconds_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "95",
+              "legendFormat": "Auto 95",
               "refId": "A",
               "step": 30
             },
@@ -17477,8 +17477,24 @@
               "expr": "histogram_quantile(0.80, sum(rate(tidb_statistics_auto_analyze_duration_seconds_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "80",
+              "legendFormat": "Auto 80",
               "refId": "B",
+              "step": 30
+            },
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(tidb_server_handle_query_duration_seconds_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", sql_type=\"AnalyzeTable\"}[1m])) by (le))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Manual 95",
+              "refId": "C",
+              "step": 30
+            },
+            {
+              "expr": "histogram_quantile(0.80, sum(rate(tidb_server_handle_query_duration_seconds_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", sql_type=\"AnalyzeTable\"}[1m])) by (le))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Manual 80",
+              "refId": "D",
               "step": 30
             }
           ],
@@ -17486,7 +17502,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Auto Analyze Duration",
+          "title": "Auto/Manual Analyze Duration",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -17530,7 +17546,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "TiDB auto analyze query per minute",
+          "description": "TiDB auto/manual analyze queries per minute",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -17575,8 +17591,16 @@
               "expr": "sum(increase(tidb_statistics_auto_analyze_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{type}}",
+              "legendFormat": "Auto {{type}}",
               "refId": "A",
+              "step": 30
+            },
+            {
+              "expr": "sum(increase(tidb_statistics_manual_analyze_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Manual {{type}}",
+              "refId": "B",
               "step": 30
             }
           ],
@@ -17584,7 +17608,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Auto Analyze Queries Per Minute",
+          "title": "Auto/Manual Analyze Queries Per Minute",
           "tooltip": {
             "shared": true,
             "sort": 0,
