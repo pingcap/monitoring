@@ -96,6 +96,9 @@ cp /tmp/ticdc.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/ticdc.json
 cp /tmp/TiCDC-Monitor-Summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC-Summary/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/TiCDC-Monitor-Summary.json
+# TiCDC New Arch
+cp /tmp/ticdc_new_arch.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiCDC-New-Arch/'$TIDB_CLUSTER_NAME'-TiCDC/g' $GF_PROVISIONING_PATH/dashboards/ticdc_new_arch.json
 
 # TiKV-CDC dashboard
 cp /tmp/tikv-cdc.json $GF_PROVISIONING_PATH/dashboards
