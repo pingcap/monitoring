@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 FROM golang:1.17 as builder
+=======
+FROM golang:1.25 as builder
+>>>>>>> b72059e (chore: bump Golang and go mod for security (#962))
 WORKDIR /app
 COPY go.mod go.sum ./
 COPY reload ./reload
