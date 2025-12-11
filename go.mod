@@ -1,6 +1,6 @@
 module github.com/pingcap/monitoring
 
-go 1.23.0
+go 1.25.5
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
@@ -17,7 +17,7 @@ require (
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 	github.com/youthlin/stream v0.0.3
-	golang.org/x/oauth2 v0.23.0
+	golang.org/x/oauth2 v0.27.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/client-go v0.29.12
 )
