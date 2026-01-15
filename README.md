@@ -205,4 +205,4 @@ Reference PR: https://github.com/pingcap/monitoring/pull/227
     4. Follow the [doc](https://docs.pingcap.com/tidb-in-kubernetes/stable/monitor-a-tidb-cluster) and use your image to deploy monitoring.
 
         Note that you need replace the image `pingcap/tidb-monitor-initializer` and version with your image in the `TidbMonitor` spec.
-<!-- VERSION_PLACEHOLDER: v8.5.5 -->
+<!-- VERSION_PLACEHOLDER: v8.5.6 -->
