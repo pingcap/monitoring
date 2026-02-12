@@ -43,6 +43,9 @@ var (
 		"DM-Monitor-Standard.json":     "Test-Cluster-DM-Standard",
 		"DM-Monitor-Professional.json": "Test-Cluster-DM-Professional",
 		"tiproxy_summary.json":         "Test-Cluster-TiProxy-Summary",
+		"tici_meta.json":               "Test-Cluster-TiCI-Meta",
+		"tici_worker.json":             "Test-Cluster-TiCI-Worker",
+		"tici_reader.json":             "Test-Cluster-TiCI-Reader",
 	}
 )
 

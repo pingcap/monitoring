@@ -22,6 +22,9 @@ components:
   - repo_name: "ticdc"
     monitor_path: "metrics/grafana"
     # rule_path: "" TODO: This repo is a new arch of ticdc, we will add this rule_path later
+  - repo_name: "tici"
+    owner: "pingcap-inc"
+    monitor_path: "grafana"
   - repo_name: "tiproxy"
     monitor_path: "pkg/metrics/grafana"
     rule_path: "pkg/metrics/alertmanager"
