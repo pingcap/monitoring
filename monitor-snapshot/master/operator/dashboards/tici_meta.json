@@ -64,7 +64,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-meta\"}",
+                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -150,7 +150,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-meta\"}[1m])",
+                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -236,7 +236,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-meta\"}",
+                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -1703,7 +1703,7 @@
             "multi": false,
             "name": "tidb_cluster",
             "options": [ ],
-            "query": "label_values(pd_cluster_status{k8s_cluster=\"$kuberentes\"}, tidb_cluster)",
+            "query": "label_values(pd_cluster_status{k8s_cluster=\"$k8s_cluster\"}, tidb_cluster)",
             "refresh": 2,
             "regex": "",
             "sort": 1,
@@ -1714,7 +1714,7 @@
             "useTags": false
          },
          {
-            "allValue": ".*",
+            "allValue": "tici-meta-.+",
             "current": { },
             "datasource": "tidb-cluster",
             "hide": 0,
@@ -1723,7 +1723,7 @@
             "multi": false,
             "name": "instance",
             "options": [ ],
-            "query": "label_values(up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", job=\"tici-meta\"}, instance)",
+            "query": "label_values(up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-meta-.+\"}, instance)",
             "refresh": 1,
             "regex": "",
             "sort": 1,
