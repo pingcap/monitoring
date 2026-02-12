@@ -64,7 +64,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}",
+                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -150,7 +150,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}[1m])",
+                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -236,7 +236,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}",
+                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -342,14 +342,14 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (type) (rate(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}[1m]))",
+                     "expr": "sum by (type) (rate(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
                      "refId": "A"
                   },
                   {
-                     "expr": "sum(rate(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}[1m]))",
+                     "expr": "sum(rate(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "Total",
@@ -435,14 +435,14 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (type) (tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"})",
+                     "expr": "sum by (type) (tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
                      "refId": "A"
                   },
                   {
-                     "expr": "sum(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"})",
+                     "expr": "sum(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"})",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "Total",
@@ -527,7 +527,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (type) (rate(tici_writer_cdc_operation_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}[1m]))",
+                     "expr": "sum by (type) (rate(tici_writer_cdc_operation_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
@@ -724,7 +724,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (type) (rate(tici_writer_frag_operation_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-worker\"}[1m]))",
+                     "expr": "sum by (type) (rate(tici_writer_frag_operation_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
@@ -1117,7 +1117,7 @@
             "multi": false,
             "name": "tidb_cluster",
             "options": [ ],
-            "query": "label_values(pd_cluster_status{k8s_cluster=\"$kuberentes\"}, tidb_cluster)",
+            "query": "label_values(pd_cluster_status{k8s_cluster=\"$k8s_cluster\"}, tidb_cluster)",
             "refresh": 2,
             "regex": "",
             "sort": 1,
@@ -1128,7 +1128,7 @@
             "useTags": false
          },
          {
-            "allValue": ".*",
+            "allValue": "tici-worker-.+",
             "current": { },
             "datasource": "tidb-cluster",
             "hide": 0,
@@ -1137,7 +1137,7 @@
             "multi": false,
             "name": "instance",
             "options": [ ],
-            "query": "label_values(up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", job=\"tici-worker\"}, instance)",
+            "query": "label_values(up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-worker-.+\"}, instance)",
             "refresh": 1,
             "regex": "",
             "sort": 1,
