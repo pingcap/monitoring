@@ -1,0 +1,1770 @@
+{
+   "__requires": [ ],
+   "annotations": {
+      "list": [ ]
+   },
+   "editable": true,
+   "gnetId": null,
+   "graphTooltip": 1,
+   "hideControls": false,
+   "id": null,
+   "links": [],
+   "panels": [
+      {
+         "collapse": true,
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 2,
+         "panels": [
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Uptime since the last restart.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 3,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-meta\"}",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{instance}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Uptime",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 4,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-meta\"}[1m])",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{instance}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "CPU Usage",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "percentunit",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "percentunit",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 5,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", job=\"tici-meta\"}",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{instance}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Memory Usage",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "bytes",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "bytes",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            }
+         ],
+         "repeat": null,
+         "repeatIteration": null,
+         "repeatRowId": null,
+         "showTitle": true,
+         "title": "Server",
+         "titleSize": "h6",
+         "type": "row"
+      },
+      {
+         "collapse": true,
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 6,
+         "panels": [
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 7,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "tici_meta_shard_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard count",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 8,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "tici_meta_index_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Index count",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 9,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (type) (rate(tici_meta_shard_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Events",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 10,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_shard_task_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99%",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Task Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 11,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (reason) (rate(tici_meta_shard_task_trigger_reason_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Task Trigger Reason",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            }
+         ],
+         "repeat": null,
+         "repeatIteration": null,
+         "repeatRowId": null,
+         "showTitle": true,
+         "title": "Shard Summary",
+         "titleSize": "h6",
+         "type": "row"
+      },
+      {
+         "collapse": true,
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 12,
+         "panels": [
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Active reader nodes in pool",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 13,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "tici_meta_shard_cache_reader_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "active-readers",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Active Readers",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Current number of shard cache allocations",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 14,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "tici_meta_shard_cache_count_gauge{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Cache Count",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 15,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum(rate(tici_meta_shard_cache_query_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=~\"hit\"}[5m]))\n     /\n     sum(rate(tici_meta_shard_cache_query_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[5m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "hit-ratio",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Cache Hit Ratio",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "percentunit",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "percentunit",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 16,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "rate(tici_meta_shard_cache_query_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=~\"hit\"}[5m])",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "hit-{{instance}}",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "rate(tici_meta_shard_cache_query_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=~\"miss\"}[5m])",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "miss-{{instance}}",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Cache Hit/Miss Rate",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Shard cache warmup queue latency p95",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 17,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.95, sum by (le) (rate(tici_meta_shard_cache_warm_up_queued_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[5m])))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "p95",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Warmup queue P95",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Shard cache warmup latency p95",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 18,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.95, sum by (le) (rate(tici_meta_shard_cache_warm_up_req_latency_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[5m])))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "p95",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Warmup req P95",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Shard cache warmup queue latency p95",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 19,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.95, sum by (le) (rate(tici_meta_shard_cache_query_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=~\"hit\"}[5m])))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "hit-p95",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "histogram_quantile(0.95, sum by (le) (rate(tici_meta_shard_cache_query_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", type=~\"need_warm\"}[5m])))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "need_warm-p95",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Query duration P95",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 20,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "rate(tici_meta_shard_cache_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[5m])",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Cache Event",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            }
+         ],
+         "repeat": null,
+         "repeatIteration": null,
+         "repeatRowId": null,
+         "showTitle": true,
+         "title": "Shard Cache",
+         "titleSize": "h6",
+         "type": "row"
+      },
+      {
+         "collapse": true,
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 21,
+         "panels": [
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 22,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_grpc_handle_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99%",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Grpc Request Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            }
+         ],
+         "repeat": null,
+         "repeatIteration": null,
+         "repeatRowId": null,
+         "showTitle": true,
+         "title": "GRPC",
+         "titleSize": "h6",
+         "type": "row"
+      },
+      {
+         "collapse": true,
+         "collapsed": true,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 23,
+         "panels": [
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "S3 request duration",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 24,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_s3_request_duration{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99%",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "S3 Request Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            }
+         ],
+         "repeat": null,
+         "repeatIteration": null,
+         "repeatRowId": null,
+         "showTitle": true,
+         "title": "S3",
+         "titleSize": "h6",
+         "type": "row"
+      }
+   ],
+   "refresh": "30s",
+   "rows": [ ],
+   "schemaVersion": 14,
+   "style": "dark",
+   "tags": [ ],
+   "templating": {
+      "list": [
+         {
+            "allValue": null,
+            "current": { },
+            "datasource": "tidb-cluster",
+            "hide": 2,
+            "includeAll": false,
+            "label": "K8s-cluster",
+            "multi": false,
+            "name": "k8s_cluster",
+            "options": [ ],
+            "query": "label_values(pd_cluster_status, k8s_cluster)",
+            "refresh": 2,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [ ],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+         },
+         {
+            "allValue": null,
+            "current": { },
+            "datasource": "tidb-cluster",
+            "hide": 2,
+            "includeAll": false,
+            "label": "tidb_cluster",
+            "multi": false,
+            "name": "tidb_cluster",
+            "options": [ ],
+            "query": "label_values(pd_cluster_status{k8s_cluster=\"$kuberentes\"}, tidb_cluster)",
+            "refresh": 2,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [ ],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+         },
+         {
+            "allValue": ".*",
+            "current": { },
+            "datasource": "tidb-cluster",
+            "hide": 0,
+            "includeAll": true,
+            "label": "Instance",
+            "multi": false,
+            "name": "instance",
+            "options": [ ],
+            "query": "label_values(up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", job=\"tici-meta\"}, instance)",
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [ ],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+         }
+      ]
+   },
+   "time": {
+      "from": "now-1h",
+      "to": "now"
+   },
+   "timepicker": {
+      "refresh_intervals": [
+         "5s",
+         "10s",
+         "30s",
+         "1m",
+         "5m",
+         "15m",
+         "30m",
+         "1h",
+         "2h",
+         "1d"
+      ],
+      "time_options": [
+         "5m",
+         "15m",
+         "1h",
+         "6h",
+         "12h",
+         "24h",
+         "2d",
+         "7d",
+         "30d"
+      ]
+   },
+   "timezone": "browser",
+   "title": "Test-Cluster-TiCI-Meta",
+   "version": 0
+}
