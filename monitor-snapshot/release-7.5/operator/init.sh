@@ -101,6 +101,14 @@ cp /tmp/TiCDC-Monitor-Summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC-Summary/Cluster-TiCDC-Summary/g' $GF_PROVISIONING_PATH/dashboards/TiCDC-Monitor-Summary.json
 sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(ticdc_kvclient_event_feed_count, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/TiCDC-Monitor-Summary.json
 
+# TiCI dashboard
+cp /tmp/tici_meta.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiCI-Meta/Cluster-TiCI-Meta/g' $GF_PROVISIONING_PATH/dashboards/tici_meta.json
+cp /tmp/tici_worker.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiCI-Worker/Cluster-TiCI-Worker/g' $GF_PROVISIONING_PATH/dashboards/tici_worker.json
+cp /tmp/tici_reader.json $GF_PROVISIONING_PATH/dashboards
+sed -i 's/Test-Cluster-TiCI-Reader/Cluster-TiCI-Reader/g' $GF_PROVISIONING_PATH/dashboards/tici_reader.json
+
 # TiKV-CDC dashboard
 cp /tmp/tikv-cdc.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiKV-CDC/Cluster-TiKV-CDC/g' $GF_PROVISIONING_PATH/dashboards/tikv-cdc.json
