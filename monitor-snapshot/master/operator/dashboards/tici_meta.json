@@ -1714,7 +1714,7 @@
             "useTags": false
          },
          {
-            "allValue": "tici-meta-.+",
+            "allValue": ".*",
             "current": { },
             "datasource": "tidb-cluster",
             "hide": 0,
@@ -1723,9 +1723,9 @@
             "multi": false,
             "name": "instance",
             "options": [ ],
-            "query": "label_values(up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-meta-.+\"}, instance)",
-            "refresh": 1,
-            "regex": "",
+            "query": "query_result(max by (instance) (up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", component=\"tici-meta\"} or up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-meta-.+\"}))",
+            "refresh": 2,
+            "regex": "/.*instance=\\\"([^\\\"]+)\\\".*/",
             "sort": 1,
             "tagValuesQuery": "",
             "tags": [ ],
