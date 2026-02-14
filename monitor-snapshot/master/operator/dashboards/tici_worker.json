@@ -64,7 +64,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
+                     "expr": "time() - process_start_time_seconds{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", component=\"tici-worker\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -150,7 +150,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])",
+                     "expr": "rate(process_cpu_seconds_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", component=\"tici-worker\"}[1m])",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -236,7 +236,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}",
+                     "expr": "process_resident_memory_bytes{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", component=\"tici-worker\"}",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{instance}}",
@@ -1139,7 +1139,7 @@
             "options": [ ],
             "query": "query_result(max by (instance) (up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", component=\"tici-worker\"} or up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-worker-.+\"}))",
             "refresh": 2,
-            "regex": "/.*instance=\\\"([^\\\"]+)\\\".*/",
+            "regex": "/.*instance=\"([^\"]+)\".*/",
             "sort": 1,
             "tagValuesQuery": "",
             "tags": [ ],
