@@ -947,7 +947,7 @@
                },
                "yaxes": [
                   {
-                     "format": "s",
+                     "format": "ms",
                      "label": null,
                      "logBase": 1,
                      "max": null,
@@ -955,7 +955,7 @@
                      "show": true
                   },
                   {
-                     "format": "s",
+                     "format": "ms",
                      "label": null,
                      "logBase": 1,
                      "max": null,

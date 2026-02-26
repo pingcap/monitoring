@@ -709,15 +709,15 @@
                },
                "yaxes": [
                   {
-                     "format": "s",
+                     "format": "ms",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
                   },
                   {
-                     "format": "s",
+                     "format": "ms",
                      "label": null,
                      "logBase": 1,
                      "max": null,
@@ -796,7 +796,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -881,7 +881,7 @@
                   {
                      "format": "s",
                      "label": null,
-                     "logBase": 1,
+                     "logBase": 2,
                      "max": null,
                      "min": null,
                      "show": true
@@ -938,7 +938,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (type) (rate(tici_meta_shard_task_by_runner_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "expr": "sum by (id, type) (rate(tici_meta_shard_task_by_runner_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{id}}-{{type}}",
@@ -1788,7 +1788,7 @@
                },
                "yaxes": [
                   {
-                     "format": "s",
+                     "format": "ms",
                      "label": null,
                      "logBase": 1,
                      "max": null,
@@ -1796,7 +1796,7 @@
                      "show": true
                   },
                   {
-                     "format": "s",
+                     "format": "ms",
                      "label": null,
                      "logBase": 1,
                      "max": null,
