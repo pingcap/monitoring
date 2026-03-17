@@ -598,7 +598,92 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (reason) (rate(tici_meta_shard_task_trigger_reason_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_shard_event_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99%",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Event Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 2,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 11,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (type) (rate(tici_meta_shard_task_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
@@ -608,7 +693,7 @@
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Shard Task Trigger Reason",
+               "title": "Shard Tasks",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -652,10 +737,10 @@
                "gridPos": {
                   "h": 7,
                   "w": 12,
-                  "x": 0,
+                  "x": 12,
                   "y": 0
                },
-               "id": 11,
+               "id": 12,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -737,10 +822,95 @@
                "gridPos": {
                   "h": 7,
                   "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 13,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (reason) (rate(tici_meta_shard_task_trigger_reason_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Task Trigger Reason",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
                   "x": 12,
                   "y": 0
                },
-               "id": 12,
+               "id": 14,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -825,7 +995,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 13,
+               "id": 15,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -910,7 +1080,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 14,
+               "id": 16,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -995,7 +1165,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 15,
+               "id": 17,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1023,7 +1193,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_compaction_input_fragment_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_compaction_input_fragment_count_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}-99%",
@@ -1080,7 +1250,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 16,
+               "id": 18,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1108,7 +1278,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_compaction_ratio{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_compaction_ratio_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}-99%",
@@ -1119,6 +1289,98 @@
                "timeFrom": null,
                "timeShift": null,
                "title": "Compaction IO Ratio",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 2,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 19,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_meta_shard_split_imbalance_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99%",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "histogram_quantile(0.5, sum(rate(tici_meta_shard_split_imbalance_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-50%",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Split Imbalance Ratio",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -1169,7 +1431,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 17,
+         "id": 20,
          "panels": [
             {
                "aliasColors": { },
@@ -1186,7 +1448,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 18,
+               "id": 21,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1272,7 +1534,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 19,
+               "id": 22,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1357,7 +1619,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 20,
+               "id": 23,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1442,7 +1704,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 21,
+               "id": 24,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1535,7 +1797,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 22,
+               "id": 25,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1621,7 +1883,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 23,
+               "id": 26,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1707,7 +1969,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 24,
+               "id": 27,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1799,7 +2061,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 25,
+               "id": 28,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1888,7 +2150,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 26,
+         "id": 29,
          "panels": [
             {
                "aliasColors": { },
@@ -1904,7 +2166,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 27,
+               "id": 30,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1989,7 +2251,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 28,
+               "id": 31,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2074,7 +2336,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 29,
+               "id": 32,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2163,7 +2425,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 30,
+         "id": 33,
          "panels": [
             {
                "aliasColors": { },
@@ -2180,7 +2442,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 31,
+               "id": 34,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
