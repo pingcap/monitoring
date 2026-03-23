@@ -2140,7 +2140,7 @@
             "useTags": false
          },
          {
-            "allValue": ".*",
+            "allValue": null,
             "current": { },
             "datasource": "tidb-cluster",
             "hide": 0,
@@ -2149,7 +2149,7 @@
             "multi": false,
             "name": "instance",
             "options": [ ],
-            "query": "query_result(max by (instance) (up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", component=\"tici-worker\"} or up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-worker-.+\"}))",
+            "query": "query_result(max by (instance) (up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", component=\"tici-worker\"} or up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"tici-worker-.+\"} or up{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", job=\"tici\"}))",
             "refresh": 2,
             "regex": "/.*instance=\"([^\"]+)\".*/",
             "sort": 1,
