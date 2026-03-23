@@ -347,13 +347,6 @@
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
                      "refId": "A"
-                  },
-                  {
-                     "expr": "sum(rate(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
-                     "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "Total",
-                     "refId": "B"
                   }
                ],
                "thresholds": [ ],
@@ -440,13 +433,6 @@
                      "intervalFactor": 2,
                      "legendFormat": "{{type}}",
                      "refId": "A"
-                  },
-                  {
-                     "expr": "sum(tici_writer_cdc_event_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"})",
-                     "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "Total",
-                     "refId": "B"
                   }
                ],
                "thresholds": [ ],
