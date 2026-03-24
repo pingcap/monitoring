@@ -1591,6 +1591,99 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
+               "description": "Per-compaction sum of input fragment sizes (bytes), histogram buckets 1KiB..4GiB (×4).",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 22,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.5, sum by (le) (rate(tici_meta_compaction_input_size_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "P50",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "histogram_quantile(0.99, sum by (le) (rate(tici_meta_compaction_input_size_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "P99",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Compaction Input Size",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "bytes",
+                     "label": null,
+                     "logBase": 2,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "bytes",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
                "description": "Approximate shard size distribution from tici_meta_shard_size.",
                "fill": 1,
                "fillGradient": 0,
@@ -1600,7 +1693,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 22,
+               "id": 23,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1693,7 +1786,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 23,
+               "id": 24,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1789,7 +1882,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 24,
+         "id": 25,
          "panels": [
             {
                "aliasColors": { },
@@ -1806,7 +1899,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 25,
+               "id": 26,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1892,7 +1985,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 26,
+               "id": 27,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1977,7 +2070,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 27,
+               "id": 28,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2062,7 +2155,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 28,
+               "id": 29,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2155,7 +2248,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 29,
+               "id": 30,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2241,7 +2334,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 30,
+               "id": 31,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2327,7 +2420,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 31,
+               "id": 32,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2419,7 +2512,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 32,
+               "id": 33,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2508,7 +2601,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 33,
+         "id": 34,
          "panels": [
             {
                "aliasColors": { },
@@ -2524,7 +2617,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 34,
+               "id": 35,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2609,7 +2702,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 35,
+               "id": 36,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2694,7 +2787,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 36,
+               "id": 37,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2783,7 +2876,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 37,
+         "id": 38,
          "panels": [
             {
                "aliasColors": { },
@@ -2800,7 +2893,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 38,
+               "id": 39,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
