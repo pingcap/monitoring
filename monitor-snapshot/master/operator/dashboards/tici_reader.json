@@ -1456,7 +1456,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "S3 request duration",
+               "description": "Backend storage request duration by backend and operation type",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -1493,17 +1493,196 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "histogram_quantile(0.99, sum(rate(tici_s3_request_duration{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_storage_handle_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", service=\"reader\"}[1m])) by (le, backend, type))",
                      "format": "time_series",
                      "intervalFactor": 2,
-                     "legendFormat": "{{type}}-99%",
+                     "legendFormat": "{{backend}}/{{type}}-99",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "sum(rate(tici_storage_handle_duration_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", service=\"reader\"}[1m])) by (backend, type) / sum(rate(tici_storage_handle_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", service=\"reader\"}[1m])) by (backend, type)",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{backend}}/{{type}}-avg",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Storage Handle Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Backend storage request rate by backend, operation type, and result",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 25,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (backend, type, result) (rate(tici_storage_handle_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", service=\"reader\"}[1m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{backend}}/{{type}}-{{result}}",
                      "refId": "A"
                   }
                ],
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "S3 Request Duration",
+               "title": "Storage Handle Count",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Inflight backend storage requests by backend and operation type",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 26,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (backend, type) (tici_storage_handle_inflight{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", service=\"reader\"})",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{backend}}/{{type}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Storage Handle Inflight",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -1541,7 +1720,7 @@
          "repeatIteration": null,
          "repeatRowId": null,
          "showTitle": true,
-         "title": "S3",
+         "title": "Storage",
          "titleSize": "h6",
          "type": "row"
       }
