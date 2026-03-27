@@ -2609,7 +2609,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Total processed task count, grouped by result.",
+               "description": "Total processed task count at stage-1 (partition-upload), grouped by result.",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -2656,7 +2656,7 @@
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Total Task Count",
+               "title": "Upload Task Count (Stage-1)",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -2695,7 +2695,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Total processed index count, grouped by result.",
+               "description": "Total processed index count at stage-1 (partition-upload), grouped by result.",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -2742,7 +2742,93 @@
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Total Index Count",
+               "title": "Upload Index Count",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Total processed task count at stage-2 (partition-build), grouped by result.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 37,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (result) (tici_meta_import_partition_build_finish_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"})",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{result}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Build Task Count (Stage-2)",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -2793,7 +2879,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 37,
+         "id": 38,
          "panels": [
             {
                "aliasColors": { },
@@ -2809,7 +2895,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 38,
+               "id": 39,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2894,7 +2980,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 39,
+               "id": 40,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2979,7 +3065,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 40,
+               "id": 41,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3068,7 +3154,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 41,
+         "id": 42,
          "panels": [
             {
                "aliasColors": { },
@@ -3085,7 +3171,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 42,
+               "id": 43,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3178,7 +3264,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 43,
+               "id": 44,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3264,7 +3350,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 44,
+               "id": 45,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
