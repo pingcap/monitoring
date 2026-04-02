@@ -8,11 +8,7 @@ GrafanaPath=grafana-$TARGET_OS-$TARGET_ARCH
 grafanaFile="grafana-${grafanaVer}.${TARGET_OS}-${TARGET_ARCH}.tar.gz"
 downloadUrl="https://dl.grafana.com/oss/release/$grafanaFile"
 if [ "$TARGET_OS/$TARGET_ARCH" = "darwin/arm64" ]; then
-<<<<<<< HEAD
 	downloadUrl="https://download.pingcap.com/$grafanaFile"
-=======
-    downloadUrl="https://download.pingcap.com/$grafanaFile"
->>>>>>> cc16aed (ci: replace deprecated PingCAP domains)
 fi
 mkdir -p $GrafanaPath && cd "$GrafanaPath"
 mkdir -p grafana
