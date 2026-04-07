@@ -112,8 +112,17 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "",
+          "legendFormat": "Ping Latency",
           "refId": "A",
+          "step": 20
+        },
+        {
+          "expr": "max_over_time(probe_duration_seconds{job=\"$PingJobHost\"}[1m])",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "Max Ping Latency",
+          "refId": "B",
           "step": 20
         }
       ],
