@@ -45,6 +45,17 @@ groups:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
             summary: TiDB domain_load_schema_total error
             value: '{{ $value }}'
+        - alert: TiDB_auto_analyze_failed
+          expr: increase( tidb_statistics_auto_analyze_total{type="failed"}[10m] )  > 0
+          for: 1m
+          labels:
+            env: ENV_LABELS_ENV
+            expr: increase( tidb_statistics_auto_analyze_total{type="failed"}[10m] )  > 0
+            level: warning
+          annotations:
+            description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values:{{ $value }}'
+            summary: TiDB auto analyze failed
+            value: '{{ $value }}'
         - alert: TiDB_monitor_keep_alive
           expr: increase(tidb_monitor_keep_alive_total{job="tidb"}[10m]) < 100
           for: 1m
