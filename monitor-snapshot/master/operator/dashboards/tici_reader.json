@@ -391,6 +391,92 @@
                      "show": true
                   }
                ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Metadata rows skipped during best-effort local restore scans. reason=iterator means redb failed while iterating or reading a metadata item, indicating possible local metadata DB corruption or local disk/IO issues. SOP: check reader logs for \"Failed to access metadata item\", inspect disk/redb health, and treat repeated growth as urgent. reason=deserialize means the item was readable but its JSON metadata could not be decoded as the expected type/schema, often stale or corrupted local metadata. SOP: check warning logs for the skipped key/prefix and recent upgrade/rollback; usually not urgent if the count is low and stable, but investigate if it grows or restore misses shards/indexes/frags.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 8,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (instance, prefix, reason) (tici_metadata_scan_skipped_total{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"})",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{instance}}-{{prefix}}-{{reason}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Metadata Scan Skipped",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
             }
          ],
          "repeat": null,
@@ -410,7 +496,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 8,
+         "id": 9,
          "panels": [
             {
                "aliasColors": { },
@@ -427,7 +513,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 9,
+               "id": 10,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -523,7 +609,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 10,
+         "id": 11,
          "panels": [
             {
                "aliasColors": { },
@@ -540,7 +626,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 11,
+               "id": 12,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -633,7 +719,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 12,
+               "id": 13,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -719,7 +805,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 13,
+               "id": 14,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -812,7 +898,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 14,
+               "id": 15,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -898,7 +984,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 15,
+               "id": 16,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -984,7 +1070,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 16,
+               "id": 17,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1073,7 +1159,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 17,
+         "id": 18,
          "panels": [
             {
                "aliasColors": { },
@@ -1090,7 +1176,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 18,
+               "id": 19,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1176,7 +1262,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 19,
+               "id": 20,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1269,7 +1355,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 20,
+               "id": 21,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1362,7 +1448,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 21,
+               "id": 22,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1448,7 +1534,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 22,
+               "id": 23,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1537,7 +1623,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 23,
+         "id": 24,
          "panels": [
             {
                "aliasColors": { },
@@ -1553,7 +1639,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 24,
+               "id": 25,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1638,7 +1724,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 25,
+               "id": 26,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1723,7 +1809,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 26,
+               "id": 27,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1812,7 +1898,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 27,
+         "id": 28,
          "panels": [
             {
                "aliasColors": { },
@@ -1828,7 +1914,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 28,
+               "id": 29,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1920,7 +2006,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 29,
+               "id": 30,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2005,7 +2091,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 30,
+               "id": 31,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2094,7 +2180,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 31,
+         "id": 32,
          "panels": [
             {
                "aliasColors": { },
@@ -2111,7 +2197,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 32,
+               "id": 33,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2197,7 +2283,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 33,
+               "id": 34,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2290,7 +2376,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 34,
+               "id": 35,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2397,7 +2483,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 35,
+               "id": 36,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2490,7 +2576,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 36,
+               "id": 37,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2597,7 +2683,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 37,
+               "id": 38,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2690,7 +2776,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 38,
+               "id": 39,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2790,7 +2876,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 39,
+               "id": 40,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2897,7 +2983,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 40,
+               "id": 41,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2986,7 +3072,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 41,
+         "id": 42,
          "panels": [
             {
                "aliasColors": { },
@@ -3002,7 +3088,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 42,
+               "id": 43,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3087,7 +3173,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 43,
+               "id": 44,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3172,7 +3258,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 44,
+               "id": 45,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3268,7 +3354,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 45,
+         "id": 46,
          "panels": [
             {
                "aliasColors": { },
@@ -3285,7 +3371,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 46,
+               "id": 47,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3378,7 +3464,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 47,
+               "id": 48,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3464,7 +3550,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 48,
+               "id": 49,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
