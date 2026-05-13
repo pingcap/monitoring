@@ -2446,6 +2446,92 @@
                      "show": true
                   }
                ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Failed attempts to get a meta client pool channel.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 36,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "sum by (instance) (rate(tici_meta_client_pool_failed_attempts{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{instance}}",
+                     "refId": "A"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Meta Client Pool Failed Attempts",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "ops",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
             }
          ],
          "repeat": null,
@@ -2465,7 +2551,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 36,
+         "id": 37,
          "panels": [
             {
                "aliasColors": { },
@@ -2482,7 +2568,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 37,
+               "id": 38,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2568,7 +2654,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 38,
+               "id": 39,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2661,7 +2747,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 39,
+               "id": 40,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2768,7 +2854,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 40,
+               "id": 41,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2861,7 +2947,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 41,
+               "id": 42,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2968,7 +3054,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 42,
+               "id": 43,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3061,7 +3147,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 43,
+               "id": 44,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3161,7 +3247,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 44,
+               "id": 45,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3268,7 +3354,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 45,
+               "id": 46,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3357,7 +3443,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 46,
+         "id": 47,
          "panels": [
             {
                "aliasColors": { },
@@ -3373,7 +3459,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 47,
+               "id": 48,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3458,7 +3544,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 48,
+               "id": 49,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3543,7 +3629,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 49,
+               "id": 50,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3639,7 +3725,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 50,
+         "id": 51,
          "panels": [
             {
                "aliasColors": { },
@@ -3656,7 +3742,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 51,
+               "id": 52,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3749,7 +3835,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 52,
+               "id": 53,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3835,7 +3921,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 53,
+               "id": 54,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
