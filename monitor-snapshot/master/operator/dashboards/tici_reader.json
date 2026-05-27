@@ -1253,7 +1253,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Query ops.",
+               "description": "Query latency.",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -1263,92 +1263,6 @@
                   "y": 0
                },
                "id": 20,
-               "legend": {
-                  "alignAsTable": false,
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "rightSide": true,
-                  "show": true,
-                  "sideWidth": null,
-                  "total": false,
-                  "values": false
-               },
-               "lines": true,
-               "linewidth": 1,
-               "links": [ ],
-               "nullPointMode": "null",
-               "percentage": false,
-               "pointradius": 5,
-               "points": false,
-               "renderer": "flot",
-               "repeat": null,
-               "seriesOverrides": [ ],
-               "spaceLength": 10,
-               "stack": false,
-               "steppedLine": false,
-               "targets": [
-                  {
-                     "expr": "sum by (type) (rate(tici_reader_query_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
-                     "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "{{type}}",
-                     "refId": "A"
-                  }
-               ],
-               "thresholds": [ ],
-               "timeFrom": null,
-               "timeShift": null,
-               "title": "Query OPS",
-               "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-               },
-               "type": "graph",
-               "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": [ ]
-               },
-               "yaxes": [
-                  {
-                     "format": "ops",
-                     "label": null,
-                     "logBase": 1,
-                     "max": null,
-                     "min": null,
-                     "show": true
-                  },
-                  {
-                     "format": "ops",
-                     "label": null,
-                     "logBase": 1,
-                     "max": null,
-                     "min": null,
-                     "show": true
-                  }
-               ]
-            },
-            {
-               "aliasColors": { },
-               "bars": false,
-               "dashLength": 10,
-               "dashes": false,
-               "datasource": "tidb-cluster",
-               "description": "Query latency.",
-               "fill": 1,
-               "fillGradient": 0,
-               "gridPos": {
-                  "h": 7,
-                  "w": 12,
-                  "x": 12,
-                  "y": 0
-               },
-               "id": 21,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1432,7 +1346,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Shard reader query duration.",
+               "description": "Wall-clock duration of shard reader search streams from open to drop (includes caller idle time between next_batch calls).",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -1441,7 +1355,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 22,
+               "id": 21,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1534,7 +1448,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 23,
+               "id": 22,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1611,7 +1525,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Inflight shard reader queries.",
+               "description": "Active processing time spent opening a shard reader search stream.",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -1620,7 +1534,286 @@
                   "x": 0,
                   "y": 0
                },
+               "id": 23,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_reader_shard_query_open_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "sum(rate(tici_reader_shard_query_open_duration_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type) / sum(rate(tici_reader_shard_query_open_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-avg",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Query Open Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Total active processing time spent in next_batch across a shard reader search stream.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
                "id": 24,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_reader_shard_query_next_duration_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "sum(rate(tici_reader_shard_query_next_duration_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type) / sum(rate(tici_reader_shard_query_next_duration_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-avg",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Query Next Duration",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "s",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Number of non-empty next_batch calls per shard reader search stream.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 0,
+                  "y": 0
+               },
+               "id": 25,
+               "legend": {
+                  "alignAsTable": false,
+                  "avg": false,
+                  "current": false,
+                  "max": false,
+                  "min": false,
+                  "rightSide": true,
+                  "show": true,
+                  "sideWidth": null,
+                  "total": false,
+                  "values": false
+               },
+               "lines": true,
+               "linewidth": 1,
+               "links": [ ],
+               "nullPointMode": "null",
+               "percentage": false,
+               "pointradius": 5,
+               "points": false,
+               "renderer": "flot",
+               "repeat": null,
+               "seriesOverrides": [ ],
+               "spaceLength": 10,
+               "stack": false,
+               "steppedLine": false,
+               "targets": [
+                  {
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_reader_shard_query_batch_count_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, type))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-99",
+                     "refId": "A"
+                  },
+                  {
+                     "expr": "sum(rate(tici_reader_shard_query_batch_count_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type) / sum(rate(tici_reader_shard_query_batch_count_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (type)",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "{{type}}-avg",
+                     "refId": "B"
+                  }
+               ],
+               "thresholds": [ ],
+               "timeFrom": null,
+               "timeShift": null,
+               "title": "Shard Query Batch Count",
+               "tooltip": {
+                  "shared": true,
+                  "sort": 0,
+                  "value_type": "individual"
+               },
+               "type": "graph",
+               "xaxis": {
+                  "buckets": null,
+                  "mode": "time",
+                  "name": null,
+                  "show": true,
+                  "values": [ ]
+               },
+               "yaxes": [
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  },
+                  {
+                     "format": "none",
+                     "label": null,
+                     "logBase": 1,
+                     "max": null,
+                     "min": null,
+                     "show": true
+                  }
+               ]
+            },
+            {
+               "aliasColors": { },
+               "bars": false,
+               "dashLength": 10,
+               "dashes": false,
+               "datasource": "tidb-cluster",
+               "description": "Inflight shard reader queries.",
+               "fill": 1,
+               "fillGradient": 0,
+               "gridPos": {
+                  "h": 7,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+               },
+               "id": 26,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1709,7 +1902,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 25,
+         "id": 27,
          "panels": [
             {
                "aliasColors": { },
@@ -1726,7 +1919,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 26,
+               "id": 28,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1812,7 +2005,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 27,
+               "id": 29,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1898,7 +2091,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 28,
+               "id": 30,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -1994,7 +2187,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 29,
+         "id": 31,
          "panels": [
             {
                "aliasColors": { },
@@ -2010,7 +2203,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 30,
+               "id": 32,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2095,7 +2288,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 31,
+               "id": 33,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2180,7 +2373,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 32,
+               "id": 34,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2269,7 +2462,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 33,
+         "id": 35,
          "panels": [
             {
                "aliasColors": { },
@@ -2285,7 +2478,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 34,
+               "id": 36,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2377,7 +2570,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 35,
+               "id": 37,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2462,7 +2655,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 36,
+               "id": 38,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2548,7 +2741,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 37,
+               "id": 39,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2637,7 +2830,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 38,
+         "id": 40,
          "panels": [
             {
                "aliasColors": { },
@@ -2654,7 +2847,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 39,
+               "id": 41,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2740,7 +2933,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 40,
+               "id": 42,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2833,7 +3026,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 41,
+               "id": 43,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2940,7 +3133,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 42,
+               "id": 44,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3033,7 +3226,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 43,
+               "id": 45,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3140,7 +3333,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 44,
+               "id": 46,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3233,7 +3426,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 45,
+               "id": 47,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3333,7 +3526,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 46,
+               "id": 48,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3440,7 +3633,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 47,
+               "id": 49,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3529,7 +3722,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 48,
+         "id": 50,
          "panels": [
             {
                "aliasColors": { },
@@ -3545,7 +3738,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 49,
+               "id": 51,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3630,7 +3823,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 50,
+               "id": 52,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3715,7 +3908,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 51,
+               "id": 53,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3811,7 +4004,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 52,
+         "id": 54,
          "panels": [
             {
                "aliasColors": { },
@@ -3828,7 +4021,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 53,
+               "id": 55,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3921,7 +4114,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 54,
+               "id": 56,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -4007,7 +4200,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 55,
+               "id": 57,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
