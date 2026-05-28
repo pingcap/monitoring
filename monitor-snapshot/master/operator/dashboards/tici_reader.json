@@ -1910,7 +1910,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Doc cache access rate by hit/miss result.",
+               "description": "Doc cache access rate by access result and resident hit rate on the right Y axis.",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -1921,14 +1921,14 @@
                },
                "id": 28,
                "legend": {
-                  "alignAsTable": false,
+                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
                   "rightSide": true,
                   "show": true,
-                  "sideWidth": null,
+                  "sideWidth": 180,
                   "total": false,
                   "values": false
                },
@@ -1941,7 +1941,12 @@
                "points": false,
                "renderer": "flot",
                "repeat": null,
-               "seriesOverrides": [ ],
+               "seriesOverrides": [
+                  {
+                     "alias": "resident-hit-rate",
+                     "yaxis": 2
+                  }
+               ],
                "spaceLength": 10,
                "stack": false,
                "steppedLine": false,
@@ -1952,12 +1957,19 @@
                      "intervalFactor": 2,
                      "legendFormat": "{{result}}",
                      "refId": "A"
+                  },
+                  {
+                     "expr": "sum(rate(tici_reader_doc_cache_access_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", result=\"resident_hit\"}[1m])) / sum(rate(tici_reader_doc_cache_access_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
+                     "format": "time_series",
+                     "intervalFactor": 2,
+                     "legendFormat": "resident-hit-rate",
+                     "refId": "B"
                   }
                ],
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Doc Cache Hit/Miss QPS",
+               "title": "Doc Cache Access QPS",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -1974,18 +1986,18 @@
                "yaxes": [
                   {
                      "format": "ops",
-                     "label": null,
+                     "label": "QPS",
                      "logBase": 1,
                      "max": null,
                      "min": null,
                      "show": true
                   },
                   {
-                     "format": "ops",
-                     "label": null,
+                     "format": "percentunit",
+                     "label": "Resident Hit Rate",
                      "logBase": 1,
                      "max": null,
-                     "min": null,
+                     "min": 0,
                      "show": true
                   }
                ]
@@ -1996,7 +2008,7 @@
                "dashLength": 10,
                "dashes": false,
                "datasource": "tidb-cluster",
-               "description": "Doc cache hit rate calculated from hit and miss counters.",
+               "description": "Latency of doc cache loads by load result.",
                "fill": 1,
                "fillGradient": 0,
                "gridPos": {
@@ -2033,100 +2045,14 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum(rate(tici_reader_doc_cache_access_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\", result=\"hit\"}[1m])) / sum(rate(tici_reader_doc_cache_access_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m]))",
-                     "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "hit-rate",
-                     "refId": "A"
-                  }
-               ],
-               "thresholds": [ ],
-               "timeFrom": null,
-               "timeShift": null,
-               "title": "Doc Cache Hit Rate",
-               "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-               },
-               "type": "graph",
-               "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": [ ]
-               },
-               "yaxes": [
-                  {
-                     "format": "percentunit",
-                     "label": null,
-                     "logBase": 1,
-                     "max": null,
-                     "min": null,
-                     "show": true
-                  },
-                  {
-                     "format": "percentunit",
-                     "label": null,
-                     "logBase": 1,
-                     "max": null,
-                     "min": null,
-                     "show": true
-                  }
-               ]
-            },
-            {
-               "aliasColors": { },
-               "bars": false,
-               "dashLength": 10,
-               "dashes": false,
-               "datasource": "tidb-cluster",
-               "description": "Latency of doc cache misses by load result.",
-               "fill": 1,
-               "fillGradient": 0,
-               "gridPos": {
-                  "h": 7,
-                  "w": 24,
-                  "x": 0,
-                  "y": 0
-               },
-               "id": 30,
-               "legend": {
-                  "alignAsTable": false,
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "rightSide": true,
-                  "show": true,
-                  "sideWidth": null,
-                  "total": false,
-                  "values": false
-               },
-               "lines": true,
-               "linewidth": 1,
-               "links": [ ],
-               "nullPointMode": "null",
-               "percentage": false,
-               "pointradius": 5,
-               "points": false,
-               "renderer": "flot",
-               "repeat": null,
-               "seriesOverrides": [ ],
-               "spaceLength": 10,
-               "stack": false,
-               "steppedLine": false,
-               "targets": [
-                  {
-                     "expr": "histogram_quantile(0.99, sum(rate(tici_reader_doc_cache_miss_latency_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, result))",
+                     "expr": "histogram_quantile(0.99, sum(rate(tici_reader_doc_cache_load_latency_bucket{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (le, result))",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{result}}-99",
                      "refId": "A"
                   },
                   {
-                     "expr": "sum(rate(tici_reader_doc_cache_miss_latency_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (result) / sum(rate(tici_reader_doc_cache_miss_latency_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (result)",
+                     "expr": "sum(rate(tici_reader_doc_cache_load_latency_sum{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (result) / sum(rate(tici_reader_doc_cache_load_latency_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$instance\"}[1m])) by (result)",
                      "format": "time_series",
                      "intervalFactor": 2,
                      "legendFormat": "{{result}}-avg",
@@ -2136,7 +2062,7 @@
                "thresholds": [ ],
                "timeFrom": null,
                "timeShift": null,
-               "title": "Doc Cache Miss Latency",
+               "title": "Doc Cache Load Latency",
                "tooltip": {
                   "shared": true,
                   "sort": 0,
@@ -2187,7 +2113,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 31,
+         "id": 30,
          "panels": [
             {
                "aliasColors": { },
@@ -2203,7 +2129,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 32,
+               "id": 31,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2288,7 +2214,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 33,
+               "id": 32,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2373,7 +2299,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 34,
+               "id": 33,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2462,7 +2388,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 35,
+         "id": 34,
          "panels": [
             {
                "aliasColors": { },
@@ -2478,7 +2404,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 36,
+               "id": 35,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2570,7 +2496,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 37,
+               "id": 36,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2655,7 +2581,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 38,
+               "id": 37,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2741,7 +2667,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 39,
+               "id": 38,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2830,7 +2756,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 40,
+         "id": 39,
          "panels": [
             {
                "aliasColors": { },
@@ -2847,7 +2773,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 41,
+               "id": 40,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -2933,7 +2859,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 42,
+               "id": 41,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3026,7 +2952,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 43,
+               "id": 42,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3133,7 +3059,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 44,
+               "id": 43,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3226,7 +3152,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 45,
+               "id": 44,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3333,7 +3259,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 46,
+               "id": 45,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3426,7 +3352,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 47,
+               "id": 46,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3526,7 +3452,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 48,
+               "id": 47,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3633,7 +3559,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 49,
+               "id": 48,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3722,7 +3648,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 50,
+         "id": 49,
          "panels": [
             {
                "aliasColors": { },
@@ -3738,7 +3664,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 51,
+               "id": 50,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3823,7 +3749,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 52,
+               "id": 51,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -3908,7 +3834,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 53,
+               "id": 52,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -4004,7 +3930,7 @@
             "x": 0,
             "y": 0
          },
-         "id": 54,
+         "id": 53,
          "panels": [
             {
                "aliasColors": { },
@@ -4021,7 +3947,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 55,
+               "id": 54,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -4114,7 +4040,7 @@
                   "x": 12,
                   "y": 0
                },
-               "id": 56,
+               "id": 55,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
@@ -4200,7 +4126,7 @@
                   "x": 0,
                   "y": 0
                },
-               "id": 57,
+               "id": 56,
                "legend": {
                   "alignAsTable": false,
                   "avg": false,
