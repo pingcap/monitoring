@@ -16047,7 +16047,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -16151,7 +16151,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -16255,7 +16255,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -16358,7 +16358,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -16461,7 +16461,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -16564,7 +16564,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -19374,7 +19374,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "description": "The time duration of flush data to the external storage system",
           "fieldConfig": {
             "defaults": {},
@@ -19673,7 +19673,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "description": "The time duration of flush DMLs by the DDL",
           "fieldConfig": {
             "defaults": {},
@@ -20464,7 +20464,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "tidb-cluster",
           "description": "The time duration of waiting for the spool disk quota",
           "fieldConfig": {
             "defaults": {},
