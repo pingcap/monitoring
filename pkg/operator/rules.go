@@ -2,12 +2,14 @@ package operator
 
 import (
 	"errors"
+	"log/slog"
 	"strings"
 	"time"
 
 	"github.com/pingcap/monitoring/pkg/common"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/model/rulefmt"
+	"github.com/prometheus/prometheus/promql/parser"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
 	"gopkg.in/yaml.v3"
@@ -32,7 +34,7 @@ func WriteRule(body string, ruleName string, baseDir string, needToReplaceExpr m
 }
 
 func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]byte, error) {
-	groups, errs := rulefmt.Parse(content)
+	groups, errs := rulefmt.Parse(content, false, model.NameValidationScheme, parser.NewParser(parser.Options{}), slog.Default())
 	if len(errs) > 0 {
 		return nil, errors.Join(errs...)
 	}
@@ -42,7 +44,7 @@ func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]by
 		newG := rulefmt.RuleGroup{
 			Interval: group.Interval,
 			Name:     group.Name,
-			Rules:    make([]rulefmt.RuleNode, 0, len(group.Rules)),
+			Rules:    make([]rulefmt.Rule, 0, len(group.Rules)),
 		}
 
 		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
@@ -65,7 +67,7 @@ func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]by
 
 			return rule
 		}).ForEach(func(t streamtypes.T) {
-			rule := t.(rulefmt.RuleNode)
+			rule := t.(rulefmt.Rule)
 			newG.Rules = append(newG.Rules, rule)
 		})
 

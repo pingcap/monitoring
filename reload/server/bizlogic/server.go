@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -13,7 +14,9 @@ import (
 	"github.com/pingcap/monitoring/reload/server/types"
 	"github.com/pingcap/monitoring/reload/server/utils"
 	"github.com/pkg/errors"
+	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/model/rulefmt"
+	"github.com/prometheus/prometheus/promql/parser"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
 )
@@ -147,7 +150,7 @@ func (s *server) UpdateConfig(c *gin.Context) {
 }
 
 func parse(content []byte) error {
-	_, errs := rulefmt.Parse([]byte(content))
+	_, errs := rulefmt.Parse([]byte(content), false, model.NameValidationScheme, parser.NewParser(parser.Options{}), slog.Default())
 	if errs == nil || len(errs) == 0 {
 		return nil
 	}
