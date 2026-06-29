@@ -48,19 +48,19 @@ func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]by
 		}
 
 		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
-			rule := t.(rulefmt.RuleNode)
+			rule := t.(rulefmt.Rule)
 			if time.Duration(rule.For) <= (time.Second * 60) {
 				if err != nil {
 					rule.For = forConfig
 				}
 			}
 
-			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert.Value)]
+			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
 			if !ok {
 				return rule
 			}
 
-			rule.Expr.SetString(newExpr)
+			rule.Expr = newExpr
 			if _, ok := rule.Labels["expr"]; ok {
 				rule.Labels["expr"] = newExpr
 			}
