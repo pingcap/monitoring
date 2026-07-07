@@ -18,6 +18,7 @@ import (
 	goerrors "errors"
 	"fmt"
 	"io/ioutil"
+	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -32,6 +33,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/model/rulefmt"
+	"github.com/prometheus/prometheus/promql/parser"
 	"github.com/spf13/cobra"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -419,7 +421,7 @@ func exist(path string) bool {
 }
 
 func replaceAlertExpr(content []byte) ([]byte, error) {
-	groups, errs := rulefmt.Parse(content)
+	groups, errs := rulefmt.Parse(content, false, model.NameValidationScheme, parser.NewParser(parser.Options{}), slog.Default())
 	if len(errs) > 0 {
 		return nil, goerrors.Join(errs...)
 	}
@@ -429,29 +431,29 @@ func replaceAlertExpr(content []byte) ([]byte, error) {
 		newG := rulefmt.RuleGroup{
 			Interval: group.Interval,
 			Name:     group.Name,
-			Rules:    make([]rulefmt.RuleNode, 0, len(group.Rules)),
+			Rules:    make([]rulefmt.Rule, 0, len(group.Rules)),
 		}
 
 		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
-			rule := t.(rulefmt.RuleNode)
+			rule := t.(rulefmt.Rule)
 
 			if time.Duration(rule.For) <= (time.Second * 60) {
 				rule.For = forConfig
 			}
 
-			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert.Value)]
+			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
 			if !ok {
 				return rule
 			}
 
-			rule.Expr.SetString(newExpr)
+			rule.Expr = newExpr
 			if _, ok := rule.Labels["expr"]; ok {
 				rule.Labels["expr"] = newExpr
 			}
 
 			return rule
 		}).ForEach(func(t streamtypes.T) {
-			rule := t.(rulefmt.RuleNode)
+			rule := t.(rulefmt.Rule)
 			newG.Rules = append(newG.Rules, rule)
 		})
 
