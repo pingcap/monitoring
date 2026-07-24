@@ -5,6 +5,9 @@ on:
     tags:
       - 'reloader/v*'
 
+permissions:
+  contents: read
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
