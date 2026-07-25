@@ -8764,7 +8764,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 10
+            "y": 50
           },
           "hiddenSeries": false,
           "id": 20022,
@@ -8864,7 +8864,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 10
+            "y": 50
           },
           "hiddenSeries": false,
           "id": 22304,
@@ -8972,7 +8972,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 18
+            "y": 58
           },
           "hiddenSeries": false,
           "id": 22452,
@@ -9087,7 +9087,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 18
+            "y": 58
           },
           "hiddenSeries": false,
           "id": 12056,
@@ -9202,7 +9202,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 26
+            "y": 66
           },
           "hiddenSeries": false,
           "id": 12044,
@@ -9300,7 +9300,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 26
+            "y": 66
           },
           "hiddenSeries": false,
           "id": 20002,
@@ -9387,7 +9387,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "tidb-cluster",
-          "description": "The number of write requests received by event store",
+          "description": "The number of insert, update, and delete KV entries received by event store per second.",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -9398,7 +9398,105 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 34
+            "y": 74
+          },
+          "hiddenSeries": false,
+          "id": 62045,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.17",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum(rate(ticdc_event_store_kv_entry_count{k8s_cluster=\"$k8s_cluster\", tidb_cluster=\"$tidb_cluster\", instance=~\"$ticdc_instance\"}[1m])) by (instance, type)",
+              "format": "time_series",
+              "interval": "",
+              "legendFormat": "{{instance}}-{{type}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "KV Entry Count / s",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "tidb-cluster",
+          "description": "The number of write requests received by event store",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 74
           },
           "hiddenSeries": false,
           "id": 20034,
@@ -9498,8 +9596,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 34
+            "x": 0,
+            "y": 82
           },
           "hiddenSeries": false,
           "id": 22453,
@@ -9597,8 +9695,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 0,
-            "y": 42
+            "x": 12,
+            "y": 82
           },
           "hiddenSeries": false,
           "id": 20035,
@@ -9695,8 +9793,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 42
+            "x": 0,
+            "y": 90
           },
           "hiddenSeries": false,
           "id": 22225,
@@ -9813,8 +9911,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 0,
-            "y": 50
+            "x": 12,
+            "y": 90
           },
           "hiddenSeries": false,
           "id": 60027,
@@ -9922,8 +10020,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 50
+            "x": 0,
+            "y": 98
           },
           "hiddenSeries": false,
           "id": 60028,
@@ -10036,8 +10134,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 0,
-            "y": 58
+            "x": 12,
+            "y": 98
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10107,8 +10205,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 58
+            "x": 0,
+            "y": 106
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10172,8 +10270,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 0,
-            "y": 66
+            "x": 12,
+            "y": 106
           },
           "hiddenSeries": false,
           "id": 22234,
@@ -10269,8 +10367,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 66
+            "x": 0,
+            "y": 114
           },
           "hiddenSeries": false,
           "id": 22235,
@@ -10366,8 +10464,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 0,
-            "y": 74
+            "x": 12,
+            "y": 114
           },
           "hiddenSeries": false,
           "id": 20004,
@@ -10465,8 +10563,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 74
+            "x": 0,
+            "y": 122
           },
           "hiddenSeries": false,
           "id": 20006,
@@ -10563,8 +10661,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 0,
-            "y": 82
+            "x": 12,
+            "y": 122
           },
           "hiddenSeries": false,
           "id": 20024,
@@ -10663,8 +10761,8 @@
           "gridPos": {
             "h": 8,
             "w": 12,
-            "x": 12,
-            "y": 82
+            "x": 0,
+            "y": 130
           },
           "hiddenSeries": false,
           "id": 22300,
@@ -10749,7 +10847,22 @@
             "align": false,
             "alignLevel": null
           }
-        },
+        }
+      ],
+      "title": "Event Store",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 62046,
+      "panels": [
         {
           "aliasColors": {},
           "bars": false,
@@ -10767,7 +10880,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 90
+            "y": 1
           },
           "hiddenSeries": false,
           "id": 60011,
@@ -10866,7 +10979,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 90
+            "y": 1
           },
           "hiddenSeries": false,
           "id": 62003,
@@ -10969,7 +11082,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 98
+            "y": 9
           },
           "hiddenSeries": false,
           "id": 60006,
@@ -11072,7 +11185,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 98
+            "y": 9
           },
           "hiddenSeries": false,
           "id": 60007,
@@ -11175,7 +11288,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 106
+            "y": 17
           },
           "hiddenSeries": false,
           "id": 60013,
@@ -11280,7 +11393,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 106
+            "y": 17
           },
           "hiddenSeries": false,
           "id": 60008,
@@ -11383,7 +11496,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 114
+            "y": 25
           },
           "hiddenSeries": false,
           "id": 60010,
@@ -11482,7 +11595,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 114
+            "y": 25
           },
           "hiddenSeries": false,
           "id": 60012,
@@ -11566,7 +11679,7 @@
           }
         }
       ],
-      "title": "Event Store",
+      "title": "Pebble",
       "type": "row"
     },
     {
@@ -11576,7 +11689,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 11
       },
       "id": 12058,
       "panels": [
@@ -12159,7 +12272,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 12
       },
       "id": 20007,
       "panels": [
@@ -13929,7 +14042,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 13
       },
       "id": 20059,
       "panels": [
@@ -14160,7 +14273,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 14
       },
       "id": 20103,
       "panels": [
@@ -15332,7 +15445,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 15
       },
       "id": 20189,
       "panels": [
@@ -16161,7 +16274,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 16
       },
       "id": 608,
       "panels": [
@@ -16460,7 +16573,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 17
       },
       "id": 617,
       "panels": [
@@ -17102,7 +17215,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 18
       },
       "id": 623,
       "panels": [
@@ -18656,7 +18769,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 19
       },
       "id": 62007,
       "panels": [
@@ -20062,7 +20175,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 20
       },
       "id": 528,
       "panels": [
@@ -21416,7 +21529,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 21
       },
       "id": 58,
       "panels": [
@@ -23698,7 +23811,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 22
       },
       "id": 10021,
       "panels": [
@@ -24645,7 +24758,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 23
       },
       "id": 155,
       "panels": [
@@ -25246,7 +25359,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 243
+        "y": 244
       },
       "id": 607,
       "panels": [
@@ -25728,7 +25841,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 244
+        "y": 245
       },
       "id": 10000,
       "panels": [
