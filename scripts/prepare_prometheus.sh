@@ -39,7 +39,7 @@ main() {
     ## Compose prometheus files from the community repo.
     rm -rf ${archive_dir}/prometheus
     prometheus_dirname="prometheus-${prometheus_ver}.${prometheus_os}-${prometheus_arch}"
-    prometheus_download_url="https://download.pingcap.org/${prometheus_dirname}.tar.gz"
+    prometheus_download_url="https://github.com/prometheus/prometheus/releases/download/v${prometheus_ver}/${prometheus_dirname}.tar.gz"
     wget "$prometheus_download_url" -O - | tar -zxvf - --strip-components=0 -C "$archive_dir" "$prometheus_dirname"
     mv "$archive_dir/${prometheus_dirname}" ${archive_dir}/prometheus
 
