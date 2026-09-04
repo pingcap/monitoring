@@ -1,4 +1,4 @@
-FROM busybox:1.37.0
+FROM busybox:1.38.0
 
 # Add user and group to support run it with non-root.
 ARG PINGCAP_UID=1000
