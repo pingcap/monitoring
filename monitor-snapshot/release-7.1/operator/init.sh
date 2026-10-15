@@ -100,6 +100,9 @@ sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(ticdc_kvclient_
 cp /tmp/TiCDC-Monitor-Summary.json $GF_PROVISIONING_PATH/dashboards
 sed -i 's/Test-Cluster-TiCDC-Summary/Cluster-TiCDC-Summary/g' $GF_PROVISIONING_PATH/dashboards/TiCDC-Monitor-Summary.json
 sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(ticdc_kvclient_event_feed_count, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/TiCDC-Monitor-Summary.json
+cp /tmp/ticdc_new_arch.json "$GF_PROVISIONING_PATH/dashboards/"
+sed -i 's/Test-Cluster-TiCDC-New-Arch/Cluster-TiCDC-New-Arch/g' "$GF_PROVISIONING_PATH/dashboards/ticdc_new_arch.json"
+sed -i 's/label_values(go_goroutines, tidb_cluster)/label_values(ticdc_kvclient_event_feed_count, tidb_cluster)/g' $GF_PROVISIONING_PATH/dashboards/ticdc_new_arch.json
 
 # TiCI dashboard
 cp /tmp/tici_meta.json $GF_PROVISIONING_PATH/dashboards
