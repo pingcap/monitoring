@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 get_ref_path() {
-    current_git_desc=$(git describe --tags)
+    # CI checks out the exact commit, so HEAD is detached. The generated build
+    # script exports the target ref from the trigger, prefer it in that case.
+    if [ -n "${TARGET:-}" ]; then
+        echo "${TARGET}"
+        return
+    fi
+
+    current_git_desc=$(git describe --tags 2>/dev/null || true)
     if [[ $current_git_desc =~ -[0-9]+-g[0-9a-f]{7,10}$ ]]; then
         # Not checked out on a tag revision, or no tag added on this revision.
-        git branch --contains | grep -vE 'detached (at|from)' | sed 's/^ *//' | sed 's/^* //'
+        ref="$(git branch --contains | grep -vE 'detached (at|from)' | sed 's/^ *//' | sed 's/^* //')"
+        if [ -z "$ref" ]; then
+            # A detached HEAD may not be contained by any local branch, fall
+            # back to the remote branches that contain it.
+            ref="$(git for-each-ref --contains HEAD --format='%(refname:short)' refs/remotes/origin \
+                | sed 's#^origin/##' | grep -vx 'HEAD' | head -n 1 || true)"
+        fi
+        echo "$ref"
     elif [[ $current_git_desc =~ v[0-9]+.[0-9]+.[0-9]+$ ]]; then
         # Remove the leading 'v'
         version=${current_git_desc#"v"}
@@ -30,6 +44,15 @@ main() {
     archive_dir="output"
     ref_dir="$(get_ref_path)"
     echo "Ref directory is: $ref_dir"
+    if [ -z "$ref_dir" ]; then
+        echo "ERROR: cannot determine the monitor-snapshot ref, please set TARGET explicitly." >&2
+        exit 1
+    fi
+    rules_dir="monitor-snapshot/${ref_dir}/operator/rules"
+    if [ ! -d "$rules_dir" ]; then
+        echo "ERROR: rules directory not found: $rules_dir" >&2
+        exit 1
+    fi
 
     mkdir -p "$archive_dir"
 
@@ -41,7 +64,7 @@ main() {
     mv "$archive_dir/${prometheus_dirname}" ${archive_dir}/prometheus
 
     ## Add component rules
-    cp -v monitor-snapshot/${ref_dir}/operator/rules/* "${archive_dir}/prometheus"
+    cp -v "${rules_dir}"/* "${archive_dir}/prometheus"
     ## Add basic rules
     cp -v platform-monitoring/ansible/rule/*.rules.* "${archive_dir}/prometheus"
 
