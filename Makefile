@@ -2,6 +2,9 @@ ARCH      := "`uname -s`"
 LINUX     := "linux"
 MAC       := "Darwin"
 
+# TARGET is exported by the CI package build script (e.g. release-8.5); keep it
+# explicit so the release snapshot directory does not depend on the git checkout.
+TARGET ?=
 TARGET_OS ?= $(shell go env GOOS)
 TARGET_ARCH ?= $(shell go env GOARCH)
 
@@ -30,7 +33,7 @@ output/dashboards: pull-monitoring
 
 # prometheus binaries(without ng-monitoring) and rules.
 output/prometheus:
-	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/prepare_prometheus.sh
+	TARGET=$(TARGET) TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/prepare_prometheus.sh
 
 output/grafana-$(TARGET_OS)-$(TARGET_ARCH).tar.gz : output/dashboards
 	TARGET_OS=$(TARGET_OS) TARGET_ARCH=$(TARGET_ARCH) bash scripts/build_tiup_grafana.sh
