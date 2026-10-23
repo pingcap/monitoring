@@ -13,7 +13,7 @@ require (
 	github.com/prometheus/common v0.67.5
 	github.com/prometheus/prometheus v0.312.0
 	github.com/rakyll/statik v0.1.7
-	github.com/spf13/cobra v1.8.1
+	github.com/spf13/cobra v1.10.2
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 	github.com/youthlin/stream v0.0.3
