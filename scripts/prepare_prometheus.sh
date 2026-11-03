@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+
+script_dir=$(cd "$(dirname "$0")" && pwd)
 
 get_ref_path() {
     current_git_desc=$(git describe --tags)
@@ -37,7 +39,10 @@ main() {
     rm -rf ${archive_dir}/prometheus
     prometheus_dirname="prometheus-${prometheus_ver}.${prometheus_os}-${prometheus_arch}"
     prometheus_download_url="https://github.com/prometheus/prometheus/releases/download/v${prometheus_ver}/${prometheus_dirname}.tar.gz"
-    wget "$prometheus_download_url" -O - | tar -zxvf - --strip-components=0 -C "$archive_dir" "$prometheus_dirname"
+    archive=$(mktemp)
+    trap 'rm -f "$archive"' EXIT
+    bash "$script_dir/download_verified.sh" "$prometheus_download_url" "$archive"
+    tar -xzf "$archive" --strip-components=0 -C "$archive_dir" "$prometheus_dirname"
     mv "$archive_dir/${prometheus_dirname}" ${archive_dir}/prometheus
 
     ## Add component rules
