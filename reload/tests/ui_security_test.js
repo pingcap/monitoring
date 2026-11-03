@@ -1,0 +1,24 @@
+const fs = require("node:fs");
+const vm = require("node:vm");
+const assert = require("node:assert/strict");
+let output = "";
+let ready;
+const context = {document: {}, $: () => ({ready(callback) { ready = callback; }, on() {}, click() {}, append(value) { output += value; }})};
+context.$.each = (items, callback) => items.forEach((value, index) => callback(index, value));
+vm.createContext(context);
+vm.runInContext(fs.readFileSync(require("node:path").join(__dirname, "../ui/static/js/data.js"), "utf8"), context);
+const payload = "<img src=x onerror=alert(1)>\"'&";
+const escaped = context.escapeHtml(payload);
+assert.equal(escaped, "&lt;img src=x onerror=alert(1)&gt;&quot;&#39;&amp;");
+context.loadRules(0, {name: payload, rules: [{name: payload, query: payload, duration: payload, labels: {env: payload, expr: payload, level: payload}, annotations: {description: payload, summary: payload, value: payload}}]});
+assert.equal(output.includes(payload), false);
+assert.equal(output.split(escaped).length - 1, 10);
+assert.equal(context.escapeHtml(null), "");
+console.log("UI rule values are escaped in generated markup");
+
+output = "";
+context.$.ajax = (options) => { if (options.url === "/monitoring/configs") options.success([payload]); };
+ready();
+assert.equal(output.includes(payload), false);
+assert.equal(output.split(escaped).length - 1, 2);
+console.log("UI config filenames are escaped in text and attributes");
