@@ -2,7 +2,6 @@ package bizlogic
 
 import (
 	"context"
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -185,9 +184,6 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
 		return
 	}
-	sum := sha256.Sum256(data)
-	c.Set("config_sha256", fmt.Sprintf("%x", sum))
-	c.Set("config_bytes", len(data))
 	// The primary must still exist after the upload; only the persistence copy may be created.
 	if err := writeRegularConfig(root, name, data, 0); err != nil {
 		if os.IsNotExist(err) {
@@ -197,7 +193,7 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		}
 		return
 	}
-	c.Set("config_saved", true)
+	auditSavedConfig(c, data)
 	if s.needStoreFileToStorePath {
 		store, err := os.OpenRoot(s.storePath)
 		if err != nil {
