@@ -6,6 +6,50 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
+# Historical PVC rules may predate API authentication. Restore only after an
+# administrator has reviewed the volume and explicitly opted in.
+case "${PROM_RESTORE_RULES:-false}" in
+    true|false) ;;
+    *) echo "PROM_RESTORE_RULES must be true or false" >&2; exit 1;;
+esac
+
+reset_rules() {
+    rules_dir="$PROM_CONFIG_PATH/rules"
+    if [ -L "$rules_dir" ]; then
+        echo "Rules directory must not be a symbolic link" >&2
+        return 1
+    fi
+    mkdir -p -- "$rules_dir" || return 1
+    for entry in "$rules_dir"/* "$rules_dir"/.[!.]* "$rules_dir"/..?*; do
+        [ -e "$entry" ] || [ -L "$entry" ] || continue
+        rm -rf -- "$entry" || return 1
+    done
+}
+
+restore_rules() {
+    [ "${PROM_RESTORE_RULES:-false}" = true ] || return 0
+    [ -n "$PROM_PERSISTENT_DIR" ] || return 0
+    case "$1" in
+        ''|.|..) echo "A valid rule version is required for restore" >&2; return 1;;
+    esac
+    persisted_root="$PROM_PERSISTENT_DIR/latest-rules"
+    persisted_version="$persisted_root/$1"
+    if [ -L "$persisted_root" ] || [ -L "$persisted_version" ]; then
+        echo "Persisted rule directories must not be symbolic links" >&2
+        return 1
+    fi
+    [ -d "$persisted_version" ] || return 0
+    for rule in "$persisted_version"/*.rules.yml; do
+        [ -e "$rule" ] || [ -L "$rule" ] || continue
+        name=${rule##*/}
+        if [ -L "$rule" ] || [ ! -f "$rule" ] || [ ! -f "$PROM_CONFIG_PATH/rules/$name" ]; then
+            echo "Refusing unrecognized or non-regular persisted rule: $name" >&2
+            return 1
+        fi
+        cp -f -- "$rule" "$PROM_CONFIG_PATH/rules/$name" || return 1
+    done
+}
+
 # Multiline replacements would become new sed commands or malformed configuration.
 for value in "$DM_CLUSTER_NAME" "$TIDB_CLUSTER_NAME" "$TIDB_CLUSTER_NAMESPACE" \
     "$GF_DM_PROMETHEUS_URL" "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
@@ -34,9 +78,7 @@ if [ -n "$DM_CLUSTER_NAME" ]; then
     replace_template 'Test-Cluster-DM' "${DM_CLUSTER_NAME}-DM-Professional" "$GF_PROVISIONING_PATH/dashboards"/DM-Monitor-Professional.json
 
     # Rules
-    if [ ! -d "$PROM_CONFIG_PATH/rules" ]; then
-        mkdir -p -- "$PROM_CONFIG_PATH/rules"
-    fi
+    reset_rules || exit 1
 
     echo $META_TYPE
     echo $META_INSTANCE
@@ -47,12 +89,7 @@ if [ -n "$DM_CLUSTER_NAME" ]; then
     fi
     replace_template 'ENV_LABELS_ENV' "${DM_CLUSTER_NAME}" "$PROM_CONFIG_PATH/rules/dm_worker.rules.yml" || exit 1
 
-    # Copy Persistent rules to override raw files
-    if [ -n "$PROM_PERSISTENT_DIR" ]; then
-        if [ -d "$PROM_PERSISTENT_DIR/latest-rules/${DM_VERSION##*/}" ]; then
-            cp -f -- "$PROM_PERSISTENT_DIR/latest-rules/${DM_VERSION##*/}"/dm_worker.rules.yml "$PROM_CONFIG_PATH/rules"
-        fi
-    fi
+    restore_rules "${DM_VERSION##*/}" || exit 1
 
     # Data sources
     if [ -n "$GF_DATASOURCE_PATH" ]; then
@@ -161,27 +198,18 @@ for f in "$GF_PROVISIONING_PATH/dashboards"/*.json; do
 done
 
 # Rules
-if [ ! -d "$PROM_CONFIG_PATH/rules" ]; then
-    mkdir -p -- "$PROM_CONFIG_PATH/rules"
-else
-    rm -rf -- "$PROM_CONFIG_PATH/rules"/*
-fi
+reset_rules || exit 1
 echo $META_TYPE
 echo $META_INSTANCE
 echo $META_VALUE
-cp -- /tmp/*.rules.yml "$PROM_CONFIG_PATH/rules"
+cp -- /tmp/*.rules.yml "$PROM_CONFIG_PATH/rules" || exit 1
 for file in "$PROM_CONFIG_PATH/rules"/*; do
     sed -i 's/ENV_LABELS_ENV/Cluster/g' "$file"
     sed -i 's%job=%component=%g' "$file"
     sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' "$file"
 done
 
-# Copy Persistent rules to override raw files
-if [ -n "$PROM_PERSISTENT_DIR" ]; then
-    if [ -d "$PROM_PERSISTENT_DIR/latest-rules/${TIDB_VERSION##*/}" ]; then
-        cp -f -- "$PROM_PERSISTENT_DIR/latest-rules/${TIDB_VERSION##*/}"/*.rules.yml "$PROM_CONFIG_PATH/rules"
-    fi
-fi
+restore_rules "${TIDB_VERSION##*/}" || exit 1
 
 # Datasources
 if [ -n "$GF_DATASOURCE_PATH" ]; then
