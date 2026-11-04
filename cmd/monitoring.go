@@ -340,7 +340,7 @@ func RepoService(cfg *Config) (*common.GitRepoService, error) {
 		return common.NewGitRepoServiceWithToken(cfg.Token)
 	}
 
-	if cfg.UserName != "" || cfg.Password == "" {
+	if cfg.UserName != "" || cfg.Password != "" {
 		return common.NewGitRepoServiceWithAuth(common.BasicAuthTransport{
 			Username: cfg.UserName,
 			Password: cfg.Password,
