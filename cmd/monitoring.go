@@ -158,13 +158,14 @@ func Start() error {
 		operatorReplaceExpr[strings.ToUpper(expr.RuleName)] = expr.NewExpr
 	})
 
-	stream.OfSlice(cfg.ComponentConfigs).Peek(func(t streamtypes.T) {
-		component := t.(ComponentConfig)
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixTag)), rservice)
-	}).ForEach(func(t streamtypes.T) {
-		component := t.(ComponentConfig)
+	for _, component := range cfg.ComponentConfigs {
+		if component.MonitorPath != "" {
+			if err := ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixTag)), rservice); err != nil {
+				return errors.Wrapf(err, "generate dashboards for %s/%s", component.Owner, component.RepoName)
+			}
+		}
 		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref, component.FixTag)), rservice)
-	})
+	}
 
 	// copy ansible platform config
 	stream.OfMap(ansibleFiles).ForEach(func(t streamtypes.T) {
@@ -269,31 +270,52 @@ func fetchDirectory(rservice *common.GitRepoService, owner string, repoName stri
 	return monitorDirectory
 }
 
-func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.GitRepoService) {
-	var name string
-	stream.OfSlice(dashboards).Map(func(t streamtypes.T) streamtypes.R {
-		dashboard := t.(*common.RepositoryContent)
-		name = *dashboard.Name
-		content, err := service.DownloadContents(dashboard)
-		common.CheckErr(err, "")
+// These dashboards are already shipped in the Ansible bundle but have no operator registration.
+// Keep this list explicit so unknown upstream JSON still stops generation.
+var ansibleOnlyDashboards = map[string]bool{
+	"blackbox_exporter.json":       true,
+	"br.json":                      true,
+	"crr_checkpoint_advancer.json": true,
+	"disk_performance.json":        true,
+	"kafka.json":                   true,
+	"node.json":                    true,
+	"performance_read.json":        true,
+	"performance_write.json":       true,
+	"tidb_summary.json":            true,
+	"tiflow.json":                  true,
+	"tikv_fast_tune.json":          true,
+	"tikv_raw.json":                true,
+}
 
-		if content == nil {
-			return ""
+func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.GitRepoService) error {
+	written := 0
+	for _, dashboard := range dashboards {
+		if dashboard == nil || dashboard.Name == nil {
+			return fmt.Errorf("dashboard entry has no name")
 		}
-
-		return string(content)
-	}).Filter(func(t streamtypes.T) bool {
-		content := t.(string)
-		return content != ""
-	}).Peek(func(t streamtypes.T) {
-		content := t.(string)
-		// ansible
-		common.WriteFile(ansibleGrafanaDir, name, content)
-	}).ForEach(func(t streamtypes.T) {
-		content := t.(string)
-		// operator
-		operator.WriteDashboard(operatorGrafanaDir, content, name)
-	})
+		name := *dashboard.Name
+		if filepath.Ext(name) != ".json" {
+			continue
+		}
+		content, err := service.DownloadContents(dashboard)
+		if err != nil {
+			return errors.Wrapf(err, "download dashboard %s", name)
+		}
+		if len(content) == 0 {
+			return fmt.Errorf("dashboard %s is empty", name)
+		}
+		if !ansibleOnlyDashboards[name] {
+			if err := operator.WriteDashboard(operatorGrafanaDir, string(content), name); err != nil {
+				return err
+			}
+		}
+		common.WriteFile(ansibleGrafanaDir, name, string(content))
+		written++
+	}
+	if written == 0 {
+		return fmt.Errorf("no dashboards generated from the configured directory")
+	}
+	return nil
 }
 
 func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoService) {
