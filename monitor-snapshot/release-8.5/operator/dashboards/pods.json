@@ -173,21 +173,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kubelet_volume_stats_capacity_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_capacity_bytes{namespace=\"$namespace\", job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Total",
               "refId": "A"
             },
             {
-              "expr": "kubelet_volume_stats_used_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_used_bytes{namespace=\"$namespace\", job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Used",
               "refId": "B"
             },
             {
-              "expr": "kubelet_volume_stats_available_bytes{job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_available_bytes{namespace=\"$namespace\", job=\"kubelet\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Free",
@@ -879,14 +879,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_fs_writes_bytes_total{pod=\"$pod\",container=\"$container\"}[1m])) by (container,device)",
+          "expr": "sum(rate(container_fs_writes_bytes_total{namespace=\"$namespace\", pod=\"$pod\",container=\"$container\"}[1m])) by (container,device)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write: {{container}}-{{device}}",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(container_fs_reads_bytes_total{pod=\"$pod\",container=\"$container\"}[1m])) by (container,device)",
+          "expr": "sum(rate(container_fs_reads_bytes_total{namespace=\"$namespace\", pod=\"$pod\",container=\"$container\"}[1m])) by (container,device)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Read: {{container}}-{{device}}",
