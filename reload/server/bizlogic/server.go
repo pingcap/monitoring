@@ -58,13 +58,24 @@ func (s *server) GetConfig(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config name"))
 		return
 	}
-	f, err := os.OpenInRoot(s.dir, name)
+	root, err := os.OpenRoot(s.dir)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot open config directory"))
+		return
+	}
+	defer root.Close()
+	info, err := root.Stat(name)
+	if err != nil || !info.Mode().IsRegular() {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config file"))
+		return
+	}
+	f, err := root.Open(name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot open config"))
 		return
 	}
 	defer f.Close()
-	info, err := f.Stat()
+	info, err = f.Stat()
 	if err != nil || !info.Mode().IsRegular() {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config file"))
 		return
@@ -110,11 +121,20 @@ func (s *server) getConfigs() ([]string, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "get config list failed")
 	}
+	root, err := os.OpenRoot(s.dir)
+	if err != nil {
+		return nil, errors.Wrap(err, "get config list failed")
+	}
+	defer root.Close()
 
 	r := make([]string, 0)
 	stream.OfSlice(files).Filter(func(t streamtypes.T) bool {
 		info := t.(os.FileInfo)
-		return !info.IsDir() && filepath.Ext(info.Name()) == ".yml"
+		if info.IsDir() || filepath.Ext(info.Name()) != ".yml" {
+			return false
+		}
+		target, err := root.Stat(info.Name())
+		return err == nil && target.Mode().IsRegular()
 	}).ForEach(func(t streamtypes.T) {
 		info := t.(os.FileInfo)
 		r = append(r, info.Name())

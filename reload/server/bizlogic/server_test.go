@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -63,6 +64,41 @@ func TestConfigFileBoundary(t *testing.T) {
 	data, err := os.ReadFile(outside)
 	if err != nil || string(data) != "private" {
 		t.Fatalf("outside file changed: %q %v", data, err)
+	}
+}
+
+func TestListConfigsFileBoundary(t *testing.T) {
+	dir := t.TempDir()
+	outside := filepath.Join(t.TempDir(), "outside.yml")
+	if err := os.WriteFile(outside, []byte("private"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "rules.yml"), []byte("groups: []"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "config.txt"), nil, 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Join(dir, "directory.yml"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	for name, target := range map[string]string{
+		"alias.yml":             "rules.yml",
+		"escape.yml":            outside,
+		"outside-directory.yml": t.TempDir(),
+		"dangling.yml":          "missing.yml",
+		"directory-link.yml":    "directory.yml",
+	} {
+		if err := os.Symlink(target, filepath.Join(dir, name)); err != nil {
+			t.Fatal(err)
+		}
+	}
+	files, err := NewServer(nil, dir, false, "").getConfigs()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(files, []string{"alias.yml", "rules.yml"}) {
+		t.Fatalf("unexpected config list: %v", files)
 	}
 }
 
