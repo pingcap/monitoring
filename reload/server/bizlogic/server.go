@@ -130,7 +130,7 @@ func (s *server) getConfigs() ([]string, error) {
 			return false
 		}
 		target, err := root.Stat(info.Name())
-		return err == nil && target.Mode().IsRegular()
+		return err == nil && target.Mode().IsRegular() && target.Size() <= maxConfigBytes
 	}).ForEach(func(t streamtypes.T) {
 		info := t.(os.FileInfo)
 		r = append(r, info.Name())
@@ -171,32 +171,13 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
 		return
 	}
-	// Open without O_CREATE or O_TRUNC: a deleted/replaced file must not be recreated or truncated before checking its type.
-	f, err := root.OpenFile(name, os.O_WRONLY|nonblockOpenFlag, 0)
-	if err != nil {
+	// The primary must still exist after the upload; only the persistence copy may be created.
+	if err := writeRegularConfig(root, name, data, 0); err != nil {
 		if os.IsNotExist(err) {
 			c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
 		} else {
-			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot open config"))
+			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot write config"))
 		}
-		return
-	}
-	defer f.Close()
-	info, err = f.Stat()
-	if err != nil || !info.Mode().IsRegular() {
-		c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
-		return
-	}
-	if err := f.Truncate(0); err != nil {
-		c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot write config"))
-		return
-	}
-	if _, err := f.Write(data); err != nil {
-		c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot write config"))
-		return
-	}
-	if err := f.Close(); err != nil {
-		c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot close config"))
 		return
 	}
 	if s.needStoreFileToStorePath {
@@ -206,12 +187,35 @@ func (s *server) UpdateConfig(c *gin.Context) {
 			return
 		}
 		defer store.Close()
-		if err := store.WriteFile(name, data, 0644); err != nil {
+		if err := writeRegularConfig(store, name, data, os.O_CREATE); err != nil {
 			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot persist config"))
 			return
 		}
 	}
 	c.JSON(http.StatusOK, config)
+}
+
+// Check the opened descriptor before truncating; a FIFO replacement must not block the request.
+func writeRegularConfig(root *os.Root, name string, data []byte, createFlag int) error {
+	f, err := root.OpenFile(name, os.O_WRONLY|nonblockOpenFlag|createFlag, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	info, err := f.Stat()
+	if err != nil {
+		return err
+	}
+	if !info.Mode().IsRegular() {
+		return fmt.Errorf("config is not a regular file")
+	}
+	if err := f.Truncate(0); err != nil {
+		return err
+	}
+	if _, err := f.Write(data); err != nil {
+		return err
+	}
+	return f.Close()
 }
 
 func parse(content []byte) error {

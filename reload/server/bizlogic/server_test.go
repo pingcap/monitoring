@@ -3,6 +3,7 @@ package bizlogic
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,7 +11,9 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"strings"
+	"syscall"
 	"testing"
 	"time"
 
@@ -39,8 +42,9 @@ func TestConfigFileBoundary(t *testing.T) {
 	if err := os.WriteFile(outside, []byte("private"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Symlink(outside, filepath.Join(dir, "escape.yml")); err != nil {
-		t.Fatal(err)
+	escapeErr := os.Symlink(outside, filepath.Join(dir, "escape.yml"))
+	if escapeErr != nil && !symlinkPrivilegeUnavailable(escapeErr) {
+		t.Fatal(escapeErr)
 	}
 	if err := os.WriteFile(filepath.Join(dir, "rules.yml"), []byte("groups: []"), 0644); err != nil {
 		t.Fatal(err)
@@ -52,6 +56,9 @@ func TestConfigFileBoundary(t *testing.T) {
 	for _, name := range []string{"../outside.yml", outside, "config.txt", "escape.yml", "missing.yml"} {
 		for _, method := range []string{http.MethodGet, http.MethodPut} {
 			t.Run(method+name, func(t *testing.T) {
+				if name == "escape.yml" && escapeErr != nil {
+					t.Skipf("symbolic link privilege unavailable: %v", escapeErr)
+				}
 				w := invokeConfig(t, s, method, name, `{"content":"groups: []"}`)
 				if w.Code == http.StatusOK || strings.Contains(w.Body.String(), "private") {
 					t.Fatalf("unexpected response: %d %s", w.Code, w.Body)
@@ -59,7 +66,9 @@ func TestConfigFileBoundary(t *testing.T) {
 			})
 		}
 	}
-	if w := invokeConfig(t, s, http.MethodGet, "rules.yml", ""); w.Code != http.StatusOK {
+	w := invokeConfig(t, s, http.MethodGet, "rules.yml", "")
+	var got string
+	if w.Code != http.StatusOK || json.Unmarshal(w.Body.Bytes(), &got) != nil || got != "groups: []" {
 		t.Fatal(w.Code, w.Body)
 	}
 	data, err := os.ReadFile(outside)
@@ -83,6 +92,7 @@ func TestListConfigsFileBoundary(t *testing.T) {
 	if err := os.Mkdir(filepath.Join(dir, "directory.yml"), 0755); err != nil {
 		t.Fatal(err)
 	}
+	linked := map[string]bool{}
 	for name, target := range map[string]string{
 		"alias.yml":             "rules.yml",
 		"escape.yml":            outside,
@@ -91,14 +101,23 @@ func TestListConfigsFileBoundary(t *testing.T) {
 		"directory-link.yml":    "directory.yml",
 	} {
 		if err := os.Symlink(target, filepath.Join(dir, name)); err != nil {
-			t.Fatal(err)
+			if !symlinkPrivilegeUnavailable(err) {
+				t.Fatal(err)
+			}
+			t.Logf("symbolic link %s unavailable: %v", name, err)
+			continue
 		}
+		linked[name] = true
 	}
 	files, err := NewServer(nil, dir, false, "").getConfigs()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !reflect.DeepEqual(files, []string{"alias.yml", "rules.yml"}) {
+	want := []string{"rules.yml"}
+	if linked["alias.yml"] {
+		want = []string{"alias.yml", "rules.yml"}
+	}
+	if !reflect.DeepEqual(files, want) {
 		t.Fatalf("unexpected config list: %v", files)
 	}
 }
@@ -111,8 +130,8 @@ func TestUpdateConfigValidationAndPersistence(t *testing.T) {
 	}
 	s := NewServer(nil, dir, true, store)
 	for _, body := range []string{`{"content":"not: valid rules"}`, `{"content":"` + strings.Repeat("x", maxConfigBytes) + `"}`} {
-		if w := invokeConfig(t, s, http.MethodPut, "rules.yml", body); w.Code == http.StatusOK {
-			t.Fatal("invalid input accepted")
+		if w := invokeConfig(t, s, http.MethodPut, "rules.yml", body); w.Code != http.StatusBadRequest {
+			t.Fatalf("invalid input not rejected with 400: %d", w.Code)
 		}
 		data, _ := os.ReadFile(file)
 		if string(data) != "groups: []" {
@@ -248,4 +267,32 @@ func TestUpdateDoesNotRecreateRemovedFile(t *testing.T) {
 			t.Fatalf("file recreated: %s", path)
 		}
 	}
+}
+
+func TestListConfigsSizeBoundary(t *testing.T) {
+	dir := t.TempDir()
+	for name, size := range map[string]int64{"limit.yml": maxConfigBytes, "oversized.yml": maxConfigBytes + 1} {
+		f, err := os.Create(filepath.Join(dir, name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := f.Truncate(size); err != nil {
+			t.Fatal(err)
+		}
+		if err := f.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}
+	files, err := NewServer(nil, dir, false, "").getConfigs()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(files, []string{"limit.yml"}) {
+		t.Fatal("unexpected config list:", files)
+	}
+}
+
+// ERROR_PRIVILEGE_NOT_HELD is returned by Windows when symlink creation is not permitted.
+func symlinkPrivilegeUnavailable(err error) bool {
+	return runtime.GOOS == "windows" && errors.Is(err, syscall.Errno(1314))
 }

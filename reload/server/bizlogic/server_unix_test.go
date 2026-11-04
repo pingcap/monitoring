@@ -94,3 +94,36 @@ func TestUpdateRejectsFIFOReplacement(t *testing.T) {
 		t.Fatal("FIFO content persisted")
 	}
 }
+
+func TestUpdateRejectsPersistenceFIFO(t *testing.T) {
+	dir, store := t.TempDir(), t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "rules.yml"), []byte("groups: []"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(store, "rules.yml")
+	if err := unix.Mkfifo(path, 0600); err != nil {
+		t.Fatal(err)
+	}
+	done := make(chan *httptest.ResponseRecorder, 1)
+	go func() {
+		done <- invokeConfig(t, NewServer(nil, dir, true, store), http.MethodPut, "rules.yml", `{"content":"groups: []"}`)
+	}()
+	select {
+	case w := <-done:
+		if w.Code != http.StatusInternalServerError {
+			t.Fatalf("FIFO persistence accepted: %d %s", w.Code, w.Body)
+		}
+	case <-time.After(time.Second):
+		fd, err := unix.Open(path, unix.O_RDWR|unix.O_NONBLOCK, 0)
+		if err != nil {
+			t.Fatal("cannot unblock FIFO persistence:", err)
+		}
+		defer unix.Close(fd)
+		select {
+		case <-done:
+		case <-time.After(time.Second):
+			t.Fatal("FIFO persistence did not exit after unblocking")
+		}
+		t.Fatal("FIFO persistence blocked")
+	}
+}
