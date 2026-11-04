@@ -15,37 +15,30 @@
 package main
 
 import (
-	goerrors "errors"
 	"fmt"
 	"io/ioutil"
-	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/hashicorp/go-version"
+	"github.com/pingcap/monitoring/pkg/operator"
 	"github.com/pkg/errors"
-	"github.com/prometheus/common/model"
-	"github.com/prometheus/prometheus/model/rulefmt"
-	"github.com/prometheus/prometheus/promql/parser"
 	"github.com/spf13/cobra"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/youthlin/stream"
 	streamtypes "github.com/youthlin/stream/types"
-	"gopkg.in/yaml.v3"
 )
 
 const (
 	// expect_basic_file_size is used to check file number in auto generated directory.
 	expect_basic_file_size = 17
-	ALERT_FOR_CONFIG       = "5m"
 )
 
 var (
@@ -89,12 +82,9 @@ var (
 		strings.ToUpper("pd_cluster_lost_connect_tikv_nums"): `(sum ( pd_cluster_status{type="store_disconnected_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 		strings.ToUpper("pd_pending_peer_region_count"):      `(sum( pd_regions_status{type="pending_peer_region_count"} ) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)`,
 	}
-
-	forConfig, configerr = model.ParseDuration(ALERT_FOR_CONFIG)
 )
 
 func main() {
-	checkErr(configerr, "config for duration failed")
 	var rootCmd = &cobra.Command{
 		Use: "monitoring",
 		Run: func(co *cobra.Command, args []string) {
@@ -421,44 +411,5 @@ func exist(path string) bool {
 }
 
 func replaceAlertExpr(content []byte) ([]byte, error) {
-	groups, errs := rulefmt.Parse(content, false, model.NameValidationScheme, parser.NewParser(parser.Options{}), slog.Default())
-	if len(errs) > 0 {
-		return nil, goerrors.Join(errs...)
-	}
-
-	var newGS rulefmt.RuleGroups
-	for _, group := range groups.Groups {
-		newG := rulefmt.RuleGroup{
-			Interval: group.Interval,
-			Name:     group.Name,
-			Rules:    make([]rulefmt.Rule, 0, len(group.Rules)),
-		}
-
-		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
-			rule := t.(rulefmt.Rule)
-
-			if time.Duration(rule.For) <= (time.Second * 60) {
-				rule.For = forConfig
-			}
-
-			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
-			if !ok {
-				return rule
-			}
-
-			rule.Expr = newExpr
-			if _, ok := rule.Labels["expr"]; ok {
-				rule.Labels["expr"] = newExpr
-			}
-
-			return rule
-		}).ForEach(func(t streamtypes.T) {
-			rule := t.(rulefmt.Rule)
-			newG.Rules = append(newG.Rules, rule)
-		})
-
-		newGS.Groups = append(newGS.Groups, newG)
-	}
-
-	return yaml.Marshal(newGS)
+	return operator.TransformRules(content, needToReplaceExpr)
 }
