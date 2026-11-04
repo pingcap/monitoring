@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-SCRIPTDIR=$(dirname -- "$0")
-cd $SCRIPTDIR/..
+SCRIPTDIR=$(cd -- "$(dirname -- "$0")" && pwd)
+cd "$SCRIPTDIR/.."
 set +x
 if [ "$NOPULL" != "1" ]; then
     echo ./pull-monitoring --config=monitoring.yaml --tag=${TARGET}
@@ -9,11 +9,7 @@ if [ "$NOPULL" != "1" ]; then
 fi
 set -x
 mkdir -p output && cd output
-case "$(uname -s)" in
-    Darwin*)    tar_comp=2;;
-    *)          tar_comp=1
-esac
-tar --strip-components=$tar_comp -xzf ../monitor-snapshot/${TARGET}/ansible-monitor.tar.gz
+bash "$SCRIPTDIR/extract_dashboard_archive.sh" "../monitor-snapshot/${TARGET}/ansible-monitor.tar.gz" tidb-monitor
 mkdir -p dashboards_swp/tiup
 mkdir -p dashboards_swp/operator
 cp tidb-monitor/*.json dashboards_swp/tiup/
