@@ -173,21 +173,21 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_capacity_bytes{namespace=\"$namespace\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Total",
               "refId": "A"
             },
             {
-              "expr": "kubelet_volume_stats_used_bytes{persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_used_bytes{namespace=\"$namespace\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Used",
               "refId": "B"
             },
             {
-              "expr": "kubelet_volume_stats_available_bytes{persistentvolumeclaim=\"$pvc\"}",
+              "expr": "kubelet_volume_stats_available_bytes{namespace=\"$namespace\", persistentvolumeclaim=\"$pvc\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Free",
@@ -879,14 +879,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_fs_writes_bytes_total{pod_name=\"$pod\",container_name=\"$container\"}[2m])) by (container_name,device)",
+          "expr": "sum(rate(container_fs_writes_bytes_total{namespace=\"$namespace\", pod_name=\"$pod\",container_name=\"$container\"}[2m])) by (container_name,device)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Write: {{container_name}}-{{device}}",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(container_fs_reads_bytes_total{pod_name=\"$pod\",container_name=\"$container\"}[2m])) by (container_name,device)",
+          "expr": "sum(rate(container_fs_reads_bytes_total{namespace=\"$namespace\", pod_name=\"$pod\",container_name=\"$container\"}[2m])) by (container_name,device)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Read: {{container_name}}-{{device}}",
