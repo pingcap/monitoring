@@ -3,6 +3,7 @@ package bizlogic
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -173,4 +174,78 @@ func TestWatcherContinuesAfterUnknownEvent(t *testing.T) {
 	}
 	watcher.Close()
 	<-done
+}
+
+func TestUpdateRejectsTrailingBody(t *testing.T) {
+	for name, suffix := range map[string]string{
+		"second JSON": ` {"extra":true}`, "garbage": "garbage", "oversized whitespace": strings.Repeat(" ", maxConfigBytes),
+	} {
+		t.Run(name, func(t *testing.T) {
+			dir, store := t.TempDir(), t.TempDir()
+			file := filepath.Join(dir, "rules.yml")
+			if err := os.WriteFile(file, []byte("groups: []"), 0644); err != nil {
+				t.Fatal(err)
+			}
+			w := invokeConfig(t, NewServer(nil, dir, true, store), http.MethodPut, "rules.yml", `{"content":"groups: []"}`+suffix)
+			if w.Code != http.StatusBadRequest {
+				t.Fatalf("trailing body accepted: %d", w.Code)
+			}
+			data, err := os.ReadFile(file)
+			if err != nil || string(data) != "groups: []" {
+				t.Fatalf("invalid body changed primary file: %q %v", data, err)
+			}
+			if _, err := os.Stat(filepath.Join(store, "rules.yml")); !os.IsNotExist(err) {
+				t.Fatal("invalid body persisted")
+			}
+		})
+	}
+	// Whitespace within the limit remains legal JSON.
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "rules.yml"), []byte("groups: []"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if w := invokeConfig(t, NewServer(nil, dir, false, ""), http.MethodPut, "rules.yml", `{"content":"groups: []"}`+" \n\t"); w.Code != http.StatusOK {
+		t.Fatal(w.Code, w.Body)
+	}
+}
+
+type beforeRead struct {
+	io.Reader
+	before func()
+}
+
+func (r *beforeRead) Read(p []byte) (int, error) {
+	if r.before != nil {
+		f := r.before
+		r.before = nil
+		f()
+	}
+	return r.Reader.Read(p)
+}
+
+func TestUpdateDoesNotRecreateRemovedFile(t *testing.T) {
+	dir, store := t.TempDir(), t.TempDir()
+	file := filepath.Join(dir, "rules.yml")
+	if err := os.WriteFile(file, []byte("groups: []"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Params = gin.Params{{Key: "config", Value: "rules.yml"}}
+	reader := &beforeRead{Reader: strings.NewReader(`{"content":"groups: []"}`), before: func() {
+		if err := os.Remove(file); err != nil {
+			t.Fatal(err)
+		}
+	}}
+	c.Request = httptest.NewRequest(http.MethodPut, "/", reader)
+	c.Request.Header.Set("Content-Type", "application/json")
+	NewServer(nil, dir, true, store).UpdateConfig(c)
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("removed file accepted: %d %s", w.Code, w.Body)
+	}
+	for _, path := range []string{file, filepath.Join(store, "rules.yml")} {
+		if _, err := os.Stat(path); !os.IsNotExist(err) {
+			t.Fatalf("file recreated: %s", path)
+		}
+	}
 }

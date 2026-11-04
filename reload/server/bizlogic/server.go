@@ -1,6 +1,7 @@
 package bizlogic
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -64,18 +65,13 @@ func (s *server) GetConfig(c *gin.Context) {
 		return
 	}
 	defer root.Close()
-	info, err := root.Stat(name)
-	if err != nil || !info.Mode().IsRegular() {
-		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config file"))
-		return
-	}
-	f, err := root.Open(name)
+	f, err := root.OpenFile(name, os.O_RDONLY|nonblockOpenFlag, 0)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot open config"))
 		return
 	}
 	defer f.Close()
-	info, err = f.Stat()
+	info, err := f.Stat()
 	if err != nil || !info.Mode().IsRegular() {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config file"))
 		return
@@ -160,8 +156,13 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		return
 	}
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxConfigBytes)
+	body, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid or oversized request body"))
+		return
+	}
 	config := &types.Config{}
-	if err := c.ShouldBindJSON(config); err != nil {
+	if err := json.Unmarshal(body, config); err != nil {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid or oversized request body"))
 		return
 	}
@@ -170,8 +171,32 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
 		return
 	}
-	if err := root.WriteFile(name, data, 0644); err != nil {
+	// Open without O_CREATE or O_TRUNC: a deleted/replaced file must not be recreated or truncated before checking its type.
+	f, err := root.OpenFile(name, os.O_WRONLY|nonblockOpenFlag, 0)
+	if err != nil {
+		if os.IsNotExist(err) {
+			c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
+		} else {
+			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot open config"))
+		}
+		return
+	}
+	defer f.Close()
+	info, err = f.Stat()
+	if err != nil || !info.Mode().IsRegular() {
+		c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
+		return
+	}
+	if err := f.Truncate(0); err != nil {
 		c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot write config"))
+		return
+	}
+	if _, err := f.Write(data); err != nil {
+		c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot write config"))
+		return
+	}
+	if err := f.Close(); err != nil {
+		c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot close config"))
 		return
 	}
 	if s.needStoreFileToStorePath {
