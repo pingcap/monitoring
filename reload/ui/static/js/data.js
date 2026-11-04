@@ -111,11 +111,12 @@ function loadRules(index, group) {
 $(document).on('click', '#dropdownItems li a', function(e) {
     $("#rules").hide();
     $("#editor-container").show();
-    currentFileName= $(e.target).data('units');
+    var fileName = $(e.target).data('units');
     $.ajax({
-        url: "/monitoring/configs/" + $(e.target).data('units'),
+        url: "/monitoring/configs/" + fileName,
         dataType: "json",
         success: function (data) {
+            currentFileName = fileName;
             editor.setValue(data);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
