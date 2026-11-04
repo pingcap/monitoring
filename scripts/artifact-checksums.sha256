@@ -1,0 +1,42 @@
+# Pinned release artifacts. Update these reviewed hashes with dependencies.yaml.
+# Prometheus: https://github.com/prometheus/prometheus/releases/download/v2.49.1/sha256sums.txt
+63636e5670b1fe4dab5f35b1e53d250d6eebfe46b955dd1978212b8aef96c075  prometheus-2.49.1.darwin-amd64.tar.gz
+7654ad4c50ed7f26be17508958c714ce95653d161aea9618af173a5457545366  prometheus-2.49.1.darwin-arm64.tar.gz
+e5fe3b1918cb5b1d90366d429c5c0376ca3306e210d8cb5c5464eba3459254c7  prometheus-2.49.1.dragonfly-amd64.tar.gz
+27913fa96f9a564dad0bc97c29d0725e3ff11c4d0f13879dfdd7fbf30517b66a  prometheus-2.49.1.freebsd-386.tar.gz
+d876fe1a2b2d2a2519bfafb4c0f84a5592494790d37da689d71a47a6c3e58635  prometheus-2.49.1.freebsd-amd64.tar.gz
+ab547715146a53ede83aae3e17c45923299152bff63c83e6b131379a92a476d4  prometheus-2.49.1.freebsd-arm64.tar.gz
+40e51bb60e6a69458926188cff7dc83c6802f81ffd0bcec0a4a06630147e55f6  prometheus-2.49.1.freebsd-armv6.tar.gz
+4b030ab1995ee2aa593bea8303bf4a0c808b0b6a52f59f10d74cc3bbfa68f686  prometheus-2.49.1.freebsd-armv7.tar.gz
+46e54885143fe9f016a09364e3af27907b2596374daf4337351079ed32a4448c  prometheus-2.49.1.illumos-amd64.tar.gz
+c71ffc608a75fb023b6dd052c1e38f78b855d59b96d0d4201d06e0314c4d14c4  prometheus-2.49.1.linux-386.tar.gz
+93460f66d17ee70df899e91db350d9705c20b1576800f96acbd78fa004e7dc07  prometheus-2.49.1.linux-amd64.tar.gz
+453c530f17e899999a0ba34b5556b14a14061c22520edaac84b3376d28942664  prometheus-2.49.1.linux-arm64.tar.gz
+2b57952f59a0cac5bdf02d29e17c0978452fa86703284aa4f91d79633a88774a  prometheus-2.49.1.linux-armv5.tar.gz
+04454bab6575ddcb2a12ff9c1819fa154185cc10d59ba477c2295e4afaef8dad  prometheus-2.49.1.linux-armv6.tar.gz
+938f5e8e8bd285501610f73ba5d164222b688ac8308a98da96fa929d69e16272  prometheus-2.49.1.linux-armv7.tar.gz
+ae9729eebbc7eea7248e3ff6bf554222d9206bf05af257a2ce53eb7a0cdfc4f1  prometheus-2.49.1.linux-mips.tar.gz
+a6a52e8807c19f143758e602052183f4ffd279fb756be075a71887a42291febf  prometheus-2.49.1.linux-mips64.tar.gz
+5627c3acd3517faf17b7242103e38e6aff05e0ef68be9c709ddf90896e6d23a9  prometheus-2.49.1.linux-mips64le.tar.gz
+7a4dc08da9e399e3db7265396b220e4c93fd337f89b42b57060a97146a5d4a98  prometheus-2.49.1.linux-mipsle.tar.gz
+f6afaa5588173921ebec80eebf029571a7d846f92610cdbc4c5b3e8a907b521a  prometheus-2.49.1.linux-ppc64.tar.gz
+1905eb0218ab8988e1f67215034698f685252a0ebc36d9b25c77a57790bb6a62  prometheus-2.49.1.linux-ppc64le.tar.gz
+0c19d55c88e9d319aab5d96d666d57089fc7bf05dec697677c3063f46c3c3796  prometheus-2.49.1.linux-riscv64.tar.gz
+3df60c424bb635d640caa993d92326eb89b010f57d3b023deac97b5fb699dbdf  prometheus-2.49.1.linux-s390x.tar.gz
+6cdc6abf50db4086fd8d386f6f2355d6d82f9b3a43ee5a3f9e9c81db53e8992d  prometheus-2.49.1.netbsd-386.tar.gz
+4fd5799bbf13f666756e8d91452cb155911ecc8005117aadf89892a4c39b3a25  prometheus-2.49.1.netbsd-amd64.tar.gz
+3e496a1c119ecbe3db4277452b8fbe0a59947bcfdf4ea904f7456ddc2fac896c  prometheus-2.49.1.netbsd-arm64.tar.gz
+bc90c359749f5fb2477e75c0b6d0b9a31d2b309b3683794282148cc793a36764  prometheus-2.49.1.netbsd-armv6.tar.gz
+e3cfe8046427e6d74a9065ef6a85f4f166041f10895244abe244f7ee40a1823f  prometheus-2.49.1.netbsd-armv7.tar.gz
+2bfe611323598ca1af639acfdac4b6d19a167f5a80ba21ef72ff6ec0e28c918f  prometheus-2.49.1.windows-386.tar.gz
+1de49f180e6d73f55aebde7734b837010d9eee39da6bff5090a29cce7e0228be  prometheus-2.49.1.windows-amd64.tar.gz
+4b86ff30d357e542508e67d653b86716cb0b19c8ec3c56cf797b65270074571e  prometheus-2.49.1.windows-arm64.tar.gz
+707333bbbfd6aae46f6c252502ce14e8facb3f83c08a07583b235bbf13687880  prometheus-web-ui-2.49.1.tar.gz
+# Grafana: https://dl.grafana.com/oss/release/<filename>.sha256
+60584262a83f7a5c2e19e5c555dac410aee4b18dd173f7386a402d12ac250ac6  grafana-7.5.17.linux-amd64.tar.gz
+933b1a2837be18cd2483c7de323a0c2de4c05b38c0a39b152c3a3ef9f1aebd78  grafana-7.5.17.linux-arm64.tar.gz
+79742c57a83b1c70cfe7ef4923af123f58519b9622d1a0d2ab60393508c3eece  grafana-7.5.17.darwin-amd64.tar.gz
+# PingCAP-built Darwin ARM64 artifact (no upstream sidecar):
+# https://download.pingcap.com/grafana-7.5.17.darwin-arm64.tar.gz
+# SHA-256 calculated from the existing mirror artifact on 2026-11-03.
+a2ffc76ca2f6dcf75dc8562d0178e7e4054244f5f7a6f66eb0768a7223155c08  grafana-7.5.17.darwin-arm64.tar.gz

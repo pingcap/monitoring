@@ -1,6 +1,30 @@
 # Overview
 This repo contains three functions. One support dynamic reload rules of prometheus, the other is used to support multi TiDB version.
 
+## Release artifact integrity
+
+Grafana and Prometheus builds require `curl` and `sha256sum` (or `shasum`).
+`scripts/artifact-checksums.sha256` pins the release archives used by
+`dependencies.yaml`; update both files together after verifying the upstream
+release checksums. Missing hashes or mismatches stop the build before extraction.
+Grafana hashes cover Linux and Darwin on AMD64 and ARM64; other platform archives
+need a reviewed hash before use. The Darwin ARM64 Grafana archive is a PingCAP
+build: its pinned digest identifies the existing mirror artifact, rather than an
+independent upstream attestation.
+
+The legacy configuration generator downloads public content only from HTTPS
+`raw.githubusercontent.com` URLs, without API credentials or redirects. Private
+files fall back to the authenticated GitHub Contents API, restricted to
+`api.github.com/repos/.../contents/...` with redirects disabled. Alternate hosts
+are rejected rather than forwarding a push token.
+
+Run the build security regression checks with:
+
+```bash
+go test ./pkg/common
+python3 -m unittest discover -s scripts -p 'test_build_security.py'
+```
+
 ## Function1 - Automatic generation monitoring configurations for ansible deployment and operator deployment
 
 Generate versioned monitoring data that is used by tidb-operator or tidb-ansible. It is a binary to load monitoring configurations from special component repo and it also contain platform monitoring from `platform-monitoring` directory.

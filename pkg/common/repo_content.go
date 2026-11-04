@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"reflect"
 	"strings"
+	"time"
 
 	"golang.org/x/oauth2"
 
@@ -264,9 +265,41 @@ func (s *GitRepoService) DownloadContents(content *RepositoryContent) ([]byte, e
 		return nil, nil
 	}
 
-	resp, err := s.client.Get(*content.DownloadURL)
+	u, err := url.Parse(*content.DownloadURL)
+	if err != nil || u.Scheme != "https" || u.Host != "raw.githubusercontent.com" || u.User != nil {
+		return nil, fmt.Errorf("unsupported GitHub content download URL")
+	}
+
+	// Raw content must never inherit the API client's push credentials.
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	resp, err := client.Get(u.String())
 	if err != nil {
 		return nil, err
+	}
+	// Private files can be fetched through the authenticated Contents API instead.
+	if resp.StatusCode == http.StatusNotFound && content.URL != nil {
+		resp.Body.Close()
+		apiURL, err := url.Parse(*content.URL)
+		if err != nil || apiURL.Scheme != "https" || apiURL.Host != "api.github.com" || apiURL.User != nil || !strings.HasPrefix(apiURL.Path, "/repos/") || !strings.Contains(apiURL.Path, "/contents/") {
+			return nil, fmt.Errorf("unsupported GitHub Contents API URL")
+		}
+		req, err := http.NewRequest(http.MethodGet, apiURL.String(), nil)
+		if err != nil {
+			return nil, err
+		}
+		req.Header.Set("Accept", "application/vnd.github.raw+json")
+		apiClient := *s.client
+		apiClient.Timeout = client.Timeout
+		apiClient.CheckRedirect = client.CheckRedirect
+		resp, err = apiClient.Do(req)
+		if err != nil {
+			return nil, err
+		}
 	}
 	defer resp.Body.Close()
 
