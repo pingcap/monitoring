@@ -130,19 +130,19 @@ func stepUp() error {
 	outputDir = removeLastSlash(outputDir)
 	baseTagDir = fmt.Sprintf("%s%cmonitor-snapshot%c%s", outputDir, filepath.Separator, filepath.Separator, tag)
 	common.CheckErr(os.RemoveAll(baseTagDir), "delete path filed")
-	common.CheckErr(os.MkdirAll(baseTagDir, os.ModePerm), "create dir failed, path="+baseTagDir)
+	common.CheckErr(os.MkdirAll(baseTagDir, 0755), "create dir failed, path="+baseTagDir)
 
 	// ansible directory
 	ansibleGrafanaDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Grfana_Dir)
-	common.CheckErr(os.MkdirAll(ansibleGrafanaDir, os.ModePerm), "create dir failed, path="+ansibleGrafanaDir)
+	common.CheckErr(os.MkdirAll(ansibleGrafanaDir, 0755), "create dir failed, path="+ansibleGrafanaDir)
 	ansibleRuleDir = fmt.Sprintf("%s%c%s", getAnsibleDir(baseTagDir), filepath.Separator, Ansible_Rule_Dir)
-	common.CheckErr(os.MkdirAll(ansibleRuleDir, os.ModePerm), "create dir failed, path="+ansibleRuleDir)
+	common.CheckErr(os.MkdirAll(ansibleRuleDir, 0755), "create dir failed, path="+ansibleRuleDir)
 
 	// operator direcotry
 	operatorGrafanaDir = fmt.Sprintf("%s%cdashboards", getOperatorDir(baseTagDir), filepath.Separator)
-	common.CheckErr(os.MkdirAll(operatorGrafanaDir, os.ModePerm), "create dir failed, path="+operatorGrafanaDir)
+	common.CheckErr(os.MkdirAll(operatorGrafanaDir, 0755), "create dir failed, path="+operatorGrafanaDir)
 	operatorRuleDir = fmt.Sprintf("%s%crules", getOperatorDir(baseTagDir), filepath.Separator)
-	common.CheckErr(os.MkdirAll(operatorRuleDir, os.ModePerm), "create dir failed, path="+operatorRuleDir)
+	common.CheckErr(os.MkdirAll(operatorRuleDir, 0755), "create dir failed, path="+operatorRuleDir)
 
 	return nil
 }
@@ -379,9 +379,9 @@ func copyOperatorLocalfiles(service *common.GitRepoService, sourcePath string, d
 		content := t.(string)
 		dstDir := fmt.Sprintf("%s%c%s%c%s", baseTagDir, filepath.Separator, Opertaor, filepath.Separator, dstPath)
 		if !common.PathExist(dstDir) {
-			os.MkdirAll(dstDir, os.ModePerm)
+			os.MkdirAll(dstDir, 0755)
 		}
-		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, name), []byte(content), os.ModePerm), "create file failed")
+		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, name), []byte(content), common.GeneratedFileMode(name)), "create file failed")
 	})
 }
 
@@ -423,9 +423,9 @@ func copyAnsibleLocalFiles(service *common.GitRepoService, sourcePath string, ds
 
 		dstDir := fmt.Sprintf("%s%c%s%c%s", baseTagDir, filepath.Separator, Ansible, filepath.Separator, dstPath)
 		if !common.PathExist(dstDir) {
-			os.MkdirAll(dstDir, os.ModePerm)
+			os.MkdirAll(dstDir, 0755)
 		}
-		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, name), []byte(content), os.ModePerm), "create file failed")
+		common.CheckErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, name), []byte(content), common.GeneratedFileMode(name)), "create file failed")
 	})
 }
 

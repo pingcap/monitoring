@@ -30,6 +30,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/hashicorp/go-version"
+	"github.com/pingcap/monitoring/pkg/common"
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/model/rulefmt"
@@ -167,7 +168,7 @@ func exportMonitorData() {
 // fetchDashboard fetch dashboards from the source and replace some variables in the file.
 func fetchDashboard(tag string, baseDir string) {
 	dir := fmt.Sprintf("%s%cdashboards", baseDir, filepath.Separator)
-	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path="+dir)
+	checkErr(os.MkdirAll(dir, 0755), "create dir failed, path="+dir)
 
 	stream.OfMap(dashboards).ForEach(func(t streamtypes.T) {
 		pair := t.(streamtypes.Pair)
@@ -191,7 +192,7 @@ func convertDashboardFileName(dashboard string) string {
 // fetchRules fetch rules from the source
 func fetchRules(tag string, baseDir string) {
 	dir := fmt.Sprintf("%s%crules", baseDir, filepath.Separator)
-	checkErr(os.MkdirAll(dir, os.ModePerm), "create dir failed, path="+dir)
+	checkErr(os.MkdirAll(dir, 0755), "create dir failed, path="+dir)
 
 	stream.OfSlice(rules).ForEach(func(t streamtypes.T) {
 		rule := t.(string)
@@ -236,7 +237,7 @@ func writeFile(baseDir string, fileName string, body string) {
 	}
 
 	fn := fmt.Sprintf("%s%c%s", baseDir, filepath.Separator, fileName)
-	f, err := os.Create(fn)
+	f, err := os.OpenFile(fn, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, common.GeneratedFileMode(fileName))
 	checkErr(err, "create file failed, f="+fn)
 	defer f.Close()
 
@@ -383,9 +384,9 @@ func copyLocalfiles(baseDir string, currentDir string, sourceFile string, dstPat
 	checkErr(err, fmt.Sprintf("read file failed, file=%s", sourceFile))
 	dstDir := fmt.Sprintf("%s%c%s", currentDir, filepath.Separator, dstPath)
 	if !exist(dstDir) {
-		os.Mkdir(dstDir, os.ModePerm)
+		os.Mkdir(dstDir, 0755)
 	}
-	checkErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, extract(sourceFile)), df, os.ModePerm), "create file failed")
+	checkErr(ioutil.WriteFile(fmt.Sprintf("%s%c%s", dstDir, filepath.Separator, extract(sourceFile)), df, common.GeneratedFileMode(sourceFile)), "create file failed")
 }
 
 func checkErr(err error, msg string) {
