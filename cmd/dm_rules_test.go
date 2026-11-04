@@ -101,11 +101,11 @@ func TestDMRulesAreGenerated(t *testing.T) {
 			t.Fatal(err)
 		}
 		switch header.Name {
-		case "/ansible/tidb-monitor/README.md":
+		case "ansible/tidb-monitor/README.md":
 			t.Error("repository README leaked into Ansible dashboards")
-		case "/ansible/tidb-monitor/TiCDC-Monitor-Summary.json":
+		case "ansible/tidb-monitor/TiCDC-Monitor-Summary.json":
 			hasDashboard = true
-		case "/ansible/tidb-rule/dm_worker.rules.yml":
+		case "ansible/tidb-rule/dm_worker.rules.yml":
 			raw, err := io.ReadAll(archive)
 			if err != nil || string(raw) != string(body) {
 				t.Fatalf("Ansible rule changed: %v", err)
