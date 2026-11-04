@@ -3,7 +3,7 @@ groups:
       rules:
         - alert: PD_cluster_down_store_nums
           expr: (sum(pd_cluster_status{type="store_down_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_cluster_status{type="store_down_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -14,7 +14,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_etcd_write_disk_latency
           expr: histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m])) by (instance,job,le) ) > 1
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[1m])) by (instance,job,le) ) > 1
@@ -25,7 +25,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_miss_peer_region_count
           expr: (sum(pd_regions_status{type="miss_peer_region_count"}) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_regions_status{type="miss_peer_region_count"}) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -36,7 +36,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_cluster_lost_connect_store_nums
           expr: (sum(pd_cluster_status{type="store_disconnected_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_cluster_status{type="store_disconnected_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -47,7 +47,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_cluster_unhealthy_store_nums
           expr: (sum ( pd_cluster_status{type="store_unhealth_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum ( pd_cluster_status{type="store_unhealth_count"} ) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -58,7 +58,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_cluster_low_space
           expr: (sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_cluster_status{type="store_low_space_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -69,7 +69,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_etcd_network_peer_latency
           expr: histogram_quantile(0.99, sum(rate(etcd_network_peer_round_trip_time_seconds_bucket[1m])) by (To,instance,job,le) ) > 1
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: histogram_quantile(0.99, sum(rate(etcd_network_peer_round_trip_time_seconds_bucket[1m])) by (To,instance,job,le) ) > 1
@@ -80,7 +80,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_tidb_handle_requests_duration
           expr: histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{type="tso"}[1m])) by (instance,job,le) ) > 0.1
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: histogram_quantile(0.99, sum(rate(pd_client_request_handle_requests_duration_seconds_bucket{type="tso"}[1m])) by (instance,job,le) ) > 0.1
@@ -91,7 +91,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_down_peer_region_nums
           expr: (sum(pd_regions_status{type="down-peer-region-count"}) by (instance)  > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_regions_status{type="down-peer-region-count"}) by (instance)  > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -102,7 +102,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_pending_peer_region_count
           expr: (sum(pd_regions_status{type="pending-peer-region-count"}) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_regions_status{type="pending-peer-region-count"}) by (instance)  > 100) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -113,7 +113,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_leader_change
           expr: count( changes(pd_tso_events{type="save"}[10m]) > 0 )   >= 2
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: count( changes(pd_tso_events{type="save"}[10m]) > 0 )   >= 2
@@ -129,7 +129,7 @@ groups:
             and (service_member_role{job="pd",service="PD"} == 1)
             and on() (sum(changes(etcd_server_is_leader{job="pd"}[10m])) == 0)
             and on() (sum(changes(process_start_time_seconds{job="pd"}[10m]) * on(instance,job) etcd_server_is_leader{job="pd"}) == 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (changes(service_member_role{job="pd",service="PD"}[10m]) >= 2) and (min_over_time(service_member_role{job="pd",service="PD"}[10m]) == 0) and (service_member_role{job="pd",service="PD"} == 1) and on() (sum(changes(etcd_server_is_leader{job="pd"}[10m])) == 0) and on() (sum(changes(process_start_time_seconds{job="pd"}[10m]) * on(instance,job) etcd_server_is_leader{job="pd"}) == 0)
@@ -140,7 +140,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_cluster_store_space_used_more_than_80%
           expr: sum(pd_cluster_status{type="storage_size"}) / sum(pd_cluster_status{type="storage_capacity"}) * 100  > 80
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: sum(pd_cluster_status{type="storage_size"}) / sum(pd_cluster_status{type="storage_capacity"}) * 100  > 80
@@ -151,7 +151,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_system_time_slow
           expr: changes(pd_tso_events{type="system_time_slow"}[10m]) >= 1
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: changes(pd_tso_events{type="system_time_slow"}[10m]) >= 1
@@ -162,7 +162,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_node_restart
           expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: changes(process_start_time_seconds{job="pd"}[5m]) > 0
@@ -173,7 +173,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_cluster_slow_tikv_nums
           expr: (sum(pd_cluster_status{type="store_slow_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: (sum(pd_cluster_status{type="store_slow_count"}) by (instance) > 0) and (sum(etcd_server_is_leader) by (instance) > 0)
@@ -184,7 +184,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_cpu_quota
           expr: irate(process_cpu_seconds_total{job="pd"}[30s]) / pd_service_maxprocs > 0.8
-          for: 45s
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: irate(process_cpu_seconds_total{job="pd"}[30s]) / pd_service_maxprocs > 0.8
@@ -195,7 +195,7 @@ groups:
             value: '{{ $value }}'
         - alert: PD_memory_quota
           expr: process_resident_memory_bytes{job="pd"} / pd_service_memory_quota_bytes > 0.8
-          for: 15s
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: process_resident_memory_bytes{job="pd"} / pd_service_memory_quota_bytes > 0.8
@@ -206,7 +206,7 @@ groups:
             value: '{{ $value }}'
         - alert: pd_etcd_quota
           expr: etcd_mvcc_db_total_size_in_bytes{instance=~".*pd.*"} / etcd_server_quota_backend_bytes{instance=~".*pd.*"} > 0.8
-          for: 15s
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: etcd_mvcc_db_total_size_in_bytes{instance=~".*pd.*"} / etcd_server_quota_backend_bytes{instance=~".*pd.*"} > 0.8
