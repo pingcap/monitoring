@@ -59,7 +59,8 @@ func startServer() {
 		}
 	}
 
-	engine := apis.NewService(u, watchDir, len(subStorePath) != 0, storePath)
+	reloader := bizlogic.NewReloader(u, watchDir)
+	engine := apis.NewService(u, watchDir, len(subStorePath) != 0, storePath, reloader)
 	statikFS, err := fs.New()
 	if err != nil {
 		log.Fatal("failed to embed static files into your binary", err)
@@ -70,7 +71,7 @@ func startServer() {
 		staticHandler.ServeHTTP(c.Writer, c.Request)
 	})
 
-	if err := bizlogic.NewReloader(u, watchDir).Start(); err != nil {
+	if err := reloader.Start(); err != nil {
 		log.Fatal("Watch dir failed", err)
 	}
 

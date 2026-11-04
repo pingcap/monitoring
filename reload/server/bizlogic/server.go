@@ -1,6 +1,7 @@
 package bizlogic
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -27,6 +28,7 @@ const prometheusRequestTimeout = 10 * time.Second
 const maxRulesBytes = 16 << 20
 
 type server struct {
+	reload                   func(context.Context) error
 	httpClient               *http.Client
 	url                      *url.URL
 	dir                      string
@@ -34,8 +36,13 @@ type server struct {
 	needStoreFileToStorePath bool
 }
 
-func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool, storePath string) *server {
+func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool, storePath string, reloaders ...*Reloader) *server {
+	reloader := NewReloader(promURL, watchDir)
+	if len(reloaders) > 0 && reloaders[0] != nil {
+		reloader = reloaders[0]
+	}
 	return &server{
+		reload:                   reloader.Reload,
 		httpClient:               &http.Client{Timeout: prometheusRequestTimeout},
 		url:                      promURL,
 		dir:                      watchDir,
@@ -197,6 +204,10 @@ func (s *server) UpdateConfig(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot persist config"))
 			return
 		}
+	}
+	if err := s.reload(c.Request.Context()); err != nil {
+		c.JSON(http.StatusBadGateway, utils.NewErrorResponse("config saved but Prometheus reload failed"))
+		return
 	}
 	c.JSON(http.StatusOK, config)
 }

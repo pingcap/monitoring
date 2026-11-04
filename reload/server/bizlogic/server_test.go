@@ -2,6 +2,7 @@ package bizlogic
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
@@ -52,7 +53,7 @@ func TestConfigFileBoundary(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(dir, "config.txt"), []byte("private"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	s := NewServer(nil, dir, false, "")
+	s := newConfigTestServer(nil, dir, false, "")
 	for _, name := range []string{"../outside.yml", outside, "config.txt", "escape.yml", "missing.yml"} {
 		for _, method := range []string{http.MethodGet, http.MethodPut} {
 			t.Run(method+name, func(t *testing.T) {
@@ -109,7 +110,7 @@ func TestListConfigsFileBoundary(t *testing.T) {
 		}
 		linked[name] = true
 	}
-	files, err := NewServer(nil, dir, false, "").getConfigs()
+	files, err := newConfigTestServer(nil, dir, false, "").getConfigs()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,7 +129,7 @@ func TestUpdateConfigValidationAndPersistence(t *testing.T) {
 	if err := os.WriteFile(file, []byte("groups: []"), 0644); err != nil {
 		t.Fatal(err)
 	}
-	s := NewServer(nil, dir, true, store)
+	s := newConfigTestServer(nil, dir, true, store)
 	for _, body := range []string{`{"content":"not: valid rules"}`, `{"content":"` + strings.Repeat("x", maxConfigBytes) + `"}`} {
 		if w := invokeConfig(t, s, http.MethodPut, "rules.yml", body); w.Code != http.StatusBadRequest {
 			t.Fatalf("invalid input not rejected with 400: %d", w.Code)
@@ -205,7 +206,7 @@ func TestUpdateRejectsTrailingBody(t *testing.T) {
 			if err := os.WriteFile(file, []byte("groups: []"), 0644); err != nil {
 				t.Fatal(err)
 			}
-			w := invokeConfig(t, NewServer(nil, dir, true, store), http.MethodPut, "rules.yml", `{"content":"groups: []"}`+suffix)
+			w := invokeConfig(t, newConfigTestServer(nil, dir, true, store), http.MethodPut, "rules.yml", `{"content":"groups: []"}`+suffix)
 			if w.Code != http.StatusBadRequest {
 				t.Fatalf("trailing body accepted: %d", w.Code)
 			}
@@ -223,7 +224,7 @@ func TestUpdateRejectsTrailingBody(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(dir, "rules.yml"), []byte("groups: []"), 0644); err != nil {
 		t.Fatal(err)
 	}
-	if w := invokeConfig(t, NewServer(nil, dir, false, ""), http.MethodPut, "rules.yml", `{"content":"groups: []"}`+" \n\t"); w.Code != http.StatusOK {
+	if w := invokeConfig(t, newConfigTestServer(nil, dir, false, ""), http.MethodPut, "rules.yml", `{"content":"groups: []"}`+" \n\t"); w.Code != http.StatusOK {
 		t.Fatal(w.Code, w.Body)
 	}
 }
@@ -258,7 +259,7 @@ func TestUpdateDoesNotRecreateRemovedFile(t *testing.T) {
 	}}
 	c.Request = httptest.NewRequest(http.MethodPut, "/", reader)
 	c.Request.Header.Set("Content-Type", "application/json")
-	NewServer(nil, dir, true, store).UpdateConfig(c)
+	newConfigTestServer(nil, dir, true, store).UpdateConfig(c)
 	if w.Code != http.StatusNotFound {
 		t.Fatalf("removed file accepted: %d %s", w.Code, w.Body)
 	}
@@ -283,7 +284,7 @@ func TestListConfigsSizeBoundary(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	files, err := NewServer(nil, dir, false, "").getConfigs()
+	files, err := newConfigTestServer(nil, dir, false, "").getConfigs()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -295,4 +296,11 @@ func TestListConfigsSizeBoundary(t *testing.T) {
 // ERROR_PRIVILEGE_NOT_HELD is returned by Windows when symlink creation is not permitted.
 func symlinkPrivilegeUnavailable(err error) bool {
 	return runtime.GOOS == "windows" && errors.Is(err, syscall.Errno(1314))
+}
+
+// File-operation tests isolate persistence from the separately tested Prometheus acknowledgement.
+func newConfigTestServer(url *url.URL, dir string, persist bool, store string) *server {
+	s := NewServer(url, dir, persist, store)
+	s.reload = func(context.Context) error { return nil }
+	return s
 }
