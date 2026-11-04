@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"io"
 	"os"
+	"path"
 )
 
 func Compress(sourceDir string, dest string) error {
@@ -33,7 +34,7 @@ func compress(file *os.File, prefix string, tw *tar.Writer) error {
 		return err
 	}
 	if info.IsDir() {
-		prefix = prefix + "/" + info.Name()
+		prefix = path.Join(prefix, info.Name())
 		fileInfos, err := file.Readdir(-1)
 		if err != nil {
 			return err
@@ -50,10 +51,10 @@ func compress(file *os.File, prefix string, tw *tar.Writer) error {
 		}
 	} else {
 		header, err := tar.FileInfoHeader(info, "")
-		header.Name = prefix + "/" + header.Name
 		if err != nil {
 			return err
 		}
+		header.Name = path.Join(prefix, header.Name)
 		err = tw.WriteHeader(header)
 		if err != nil {
 			return err
