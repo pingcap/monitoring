@@ -20,7 +20,7 @@ func TestConfigRejectsFIFO(t *testing.T) {
 	if err := unix.Mkfifo(filepath.Join(dir, "pipe.yml"), 0600); err != nil {
 		t.Fatal(err)
 	}
-	s := NewServer(nil, dir, false, "")
+	s := newConfigTestServer(nil, dir, false, "")
 	files, err := s.getConfigs()
 	if err != nil {
 		t.Fatal(err)
@@ -71,7 +71,7 @@ func TestUpdateRejectsFIFOReplacement(t *testing.T) {
 	c.Request = httptest.NewRequest(http.MethodPut, "/", reader)
 	c.Request.Header.Set("Content-Type", "application/json")
 	done := make(chan struct{})
-	go func() { defer close(done); NewServer(nil, dir, true, store).UpdateConfig(c) }()
+	go func() { defer close(done); newConfigTestServer(nil, dir, true, store).UpdateConfig(c) }()
 	select {
 	case <-done:
 	case <-time.After(time.Second):
@@ -106,7 +106,7 @@ func TestUpdateRejectsPersistenceFIFO(t *testing.T) {
 	}
 	done := make(chan *httptest.ResponseRecorder, 1)
 	go func() {
-		done <- invokeConfig(t, NewServer(nil, dir, true, store), http.MethodPut, "rules.yml", `{"content":"groups: []"}`)
+		done <- invokeConfig(t, newConfigTestServer(nil, dir, true, store), http.MethodPut, "rules.yml", `{"content":"groups: []"}`)
 	}()
 	select {
 	case w := <-done:

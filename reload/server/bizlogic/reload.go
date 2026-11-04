@@ -1,6 +1,7 @@
 package bizlogic
 
 import (
+	"context"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/pkg/errors"
@@ -11,6 +12,8 @@ import (
 )
 
 type Reloader struct {
+	reloadSlot chan struct{}
+	lastReload time.Time
 	httpClient *http.Client
 	promUrl    *url.URL
 	wathDir    string
@@ -18,6 +21,7 @@ type Reloader struct {
 
 func NewReloader(url *url.URL, watchDir string) *Reloader {
 	return &Reloader{
+		reloadSlot: make(chan struct{}, 1),
 		httpClient: &http.Client{Timeout: prometheusRequestTimeout},
 		promUrl:    url,
 		wathDir:    watchDir,
@@ -72,21 +76,48 @@ func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 }
 
 func (r *Reloader) promReload(event fsnotify.Event) error {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/-/reload", r.promUrl), nil)
+	if err := r.Reload(context.Background()); err != nil {
+		return err
+	}
+	log.Printf("successfully triggered reload, event=%s, name=%s", event.Op.String(), event.Name)
+	return nil
+}
+
+// Reload waits for a completed reload, sharing the same rate limit with file events.
+func (r *Reloader) Reload(ctx context.Context) error {
+	ctx, cancel := context.WithTimeout(ctx, prometheusRequestTimeout)
+	defer cancel()
+	select {
+	case r.reloadSlot <- struct{}{}:
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+	defer func() { <-r.reloadSlot }()
+	if wait := time.Until(r.lastReload.Add(time.Second)); wait > 0 {
+		timer := time.NewTimer(wait)
+		defer timer.Stop()
+		select {
+		case <-timer.C:
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	req, err := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("%s/-/reload", r.promUrl), nil)
 	if err != nil {
 		return errors.Wrap(err, "init prometheus request failed")
 	}
-
+	r.lastReload = time.Now()
 	resp, err := r.httpClient.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "request prometheus failed")
 	}
-	resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return errors.New(fmt.Sprintf("Received error response code, %d", resp.StatusCode))
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("reload returned HTTP %d", resp.StatusCode)
 	}
-	log.Println(fmt.Printf("successfully triggered reload, event=%s, name=%s", event.Op.String(), event.Name))
 	return nil
 }
 
