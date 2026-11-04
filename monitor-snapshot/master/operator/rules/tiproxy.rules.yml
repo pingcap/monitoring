@@ -3,7 +3,7 @@ groups:
       rules:
         - alert: TiProxyServerIsDown
           expr: up{job="tiproxy"} == 0
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: up{job="tiproxy"} == 0
@@ -14,7 +14,7 @@ groups:
             value: '{{ $value }}'
         - alert: TiProxyDiscoveredTimeJumpBack
           expr: increase(tiproxy_monitor_time_jump_back_total[10m])  > 0
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: increase(tiproxy_monitor_time_jump_back_total[10m])  > 0
@@ -25,7 +25,7 @@ groups:
             value: '{{ $value }}'
         - alert: TiProxyReportErr
           expr: increase(tiproxy_server_err[10m]) > 0
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: increase(tiproxy_server_err[10m]) > 0
@@ -36,7 +36,7 @@ groups:
             value: '{{ $value }}'
         - alert: TiProxyGetBackendFail
           expr: sum(rate(tiproxy_backend_get_backend{res="fail"}[1m])) by (instance) > 10
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: sum(rate(tiproxy_backend_get_backend{res="fail"}[1m])) by (instance) > 10

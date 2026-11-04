@@ -3,7 +3,7 @@ groups:
       rules:
         - alert: TiFlash_server_is_down
           expr: probe_success{group="tiflash"} == 0
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: probe_success{group="tiflash"} == 0
@@ -14,7 +14,7 @@ groups:
             value: '{{ $value }}'
         - alert: TiFlash_schema_apply_duration
           expr: histogram_quantile(0.99, sum(rate(tiflash_schema_apply_duration_seconds_bucket[1m])) BY (le, instance)) > 20
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: histogram_quantile(0.99, sum(rate(tiflash_schema_apply_duration_seconds_bucket[1m])) BY (le, instance)) > 20
@@ -25,7 +25,7 @@ groups:
             value: '{{ $value }}'
         - alert: TiFlash_raft_read_index_duration
           expr: histogram_quantile(0.99, sum(rate(tiflash_raft_read_index_duration_seconds_bucket[1m])) BY (le, instance)) > 3
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: histogram_quantile(0.99, sum(rate(tiflash_raft_read_index_duration_seconds_bucket[1m])) BY (le, instance)) > 3
@@ -36,7 +36,7 @@ groups:
             value: '{{ $value }}'
         - alert: TiFlash_raft_wait_index_duration
           expr: histogram_quantile(0.99, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket[1m])) BY (le, instance)) > 2
-          for: 1m
+          for: 5m
           labels:
             env: ENV_LABELS_ENV
             expr: histogram_quantile(0.99, sum(rate(tiflash_raft_wait_index_duration_seconds_bucket[1m])) BY (le, instance)) > 2
