@@ -7,5 +7,7 @@ RUN addgroup -g ${PINGCAP_GID} pingcap && \
     adduser -u ${PINGCAP_UID} -G pingcap -h /home/pingcap -D pingcap
 
 COPY --chmod=755 ./build/linux/reload  /bin/reload
+USER ${PINGCAP_UID}:${PINGCAP_GID}
+
 ENTRYPOINT ["/bin/reload"]
 CMD        ["--watch-path=/etc/prometheus/rules", "--prometheus-url=http://127.0.0.1:9090"]
