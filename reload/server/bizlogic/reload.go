@@ -7,17 +7,20 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type Reloader struct {
-	promUrl *url.URL
-	wathDir string
+	httpClient *http.Client
+	promUrl    *url.URL
+	wathDir    string
 }
 
 func NewReloader(url *url.URL, watchDir string) *Reloader {
 	return &Reloader{
-		promUrl: url,
-		wathDir: watchDir,
+		httpClient: &http.Client{Timeout: prometheusRequestTimeout},
+		promUrl:    url,
+		wathDir:    watchDir,
 	}
 }
 
@@ -36,6 +39,9 @@ func (r *Reloader) Start() error {
 
 func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 	defer watcher.Close()
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+	var pending *fsnotify.Event
 	for {
 		select {
 		case event, ok := <-watcher.Events:
@@ -47,8 +53,13 @@ func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 				continue
 			}
 
-			if err := r.promReload(event); err != nil {
-				log.Println("reload failed", err)
+			pending = &event
+		case <-ticker.C:
+			if pending != nil {
+				if err := r.promReload(*pending); err != nil {
+					log.Println("reload failed", err)
+				}
+				pending = nil
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {
@@ -66,7 +77,7 @@ func (r *Reloader) promReload(event fsnotify.Event) error {
 		return errors.Wrap(err, "init prometheus request failed")
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := r.httpClient.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "request prometheus failed")
 	}
