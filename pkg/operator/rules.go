@@ -10,21 +10,13 @@ import (
 	"github.com/prometheus/common/model"
 	"github.com/prometheus/prometheus/model/rulefmt"
 	"github.com/prometheus/prometheus/promql/parser"
-	"github.com/youthlin/stream"
-	streamtypes "github.com/youthlin/stream/types"
 	"gopkg.in/yaml.v3"
 )
 
-const (
-	ALERT_FOR_CONFIG = "5m"
-)
-
-var (
-	forConfig, err = model.ParseDuration(ALERT_FOR_CONFIG)
-)
+const forConfig = model.Duration(5 * time.Minute)
 
 func WriteRule(body string, ruleName string, baseDir string, needToReplaceExpr map[string]string) error {
-	newRule, err := replaceAlertExpr([]byte(body), needToReplaceExpr)
+	newRule, err := TransformRules([]byte(body), needToReplaceExpr)
 	if err != nil {
 		return err
 	}
@@ -33,46 +25,37 @@ func WriteRule(body string, ruleName string, baseDir string, needToReplaceExpr m
 	return nil
 }
 
-func replaceAlertExpr(content []byte, needToReplaceExpr map[string]string) ([]byte, error) {
+// TransformRules preserves rule-group settings while applying alert overrides.
+func TransformRules(content []byte, needToReplaceExpr map[string]string) ([]byte, error) {
 	groups, errs := rulefmt.Parse(content, false, model.NameValidationScheme, parser.NewParser(parser.Options{}), slog.Default())
 	if len(errs) > 0 {
 		return nil, errors.Join(errs...)
 	}
-
-	var newGS rulefmt.RuleGroups
-	for _, group := range groups.Groups {
-		newG := rulefmt.RuleGroup{
-			Interval: group.Interval,
-			Name:     group.Name,
-			Rules:    make([]rulefmt.Rule, 0, len(group.Rules)),
-		}
-
-		stream.OfSlice(group.Rules).Map(func(t streamtypes.T) streamtypes.R {
-			rule := t.(rulefmt.Rule)
-			if time.Duration(rule.For) <= (time.Second * 60) {
-				if err != nil {
-					rule.For = forConfig
+	for i := range groups.Groups {
+		group := &groups.Groups[i]
+		for j := range group.Rules {
+			rule := &group.Rules[j]
+			if rule.Alert == "" {
+				continue
+			}
+			if time.Duration(rule.For) <= time.Minute {
+				rule.For = forConfig
+			}
+			if newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]; ok {
+				rule.Expr = newExpr
+				if _, ok := rule.Labels["expr"]; ok {
+					rule.Labels["expr"] = newExpr
 				}
 			}
-
-			newExpr, ok := needToReplaceExpr[strings.ToUpper(rule.Alert)]
-			if !ok {
-				return rule
-			}
-
-			rule.Expr = newExpr
-			if _, ok := rule.Labels["expr"]; ok {
-				rule.Labels["expr"] = newExpr
-			}
-
-			return rule
-		}).ForEach(func(t streamtypes.T) {
-			rule := t.(rulefmt.Rule)
-			newG.Rules = append(newG.Rules, rule)
-		})
-
-		newGS.Groups = append(newGS.Groups, newG)
+		}
 	}
-
-	return yaml.Marshal(newGS)
+	output, err := yaml.Marshal(groups)
+	if err != nil {
+		return nil, err
+	}
+	_, errs = rulefmt.Parse(output, false, model.NameValidationScheme, parser.NewParser(parser.Options{}), slog.Default())
+	if len(errs) > 0 {
+		return nil, errors.Join(errs...)
+	}
+	return output, nil
 }
