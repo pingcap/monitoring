@@ -270,6 +270,23 @@ func fetchDirectory(rservice *common.GitRepoService, owner string, repoName stri
 	return monitorDirectory
 }
 
+// These dashboards are already shipped in the Ansible bundle but have no operator registration.
+// Keep this list explicit so unknown upstream JSON still stops generation.
+var ansibleOnlyDashboards = map[string]bool{
+	"blackbox_exporter.json":       true,
+	"br.json":                      true,
+	"crr_checkpoint_advancer.json": true,
+	"disk_performance.json":        true,
+	"kafka.json":                   true,
+	"node.json":                    true,
+	"performance_read.json":        true,
+	"performance_write.json":       true,
+	"tidb_summary.json":            true,
+	"tiflow.json":                  true,
+	"tikv_fast_tune.json":          true,
+	"tikv_raw.json":                true,
+}
+
 func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.GitRepoService) error {
 	written := 0
 	for _, dashboard := range dashboards {
@@ -287,8 +304,10 @@ func ProcessDashboards(dashboards []*common.RepositoryContent, service *common.G
 		if len(content) == 0 {
 			return fmt.Errorf("dashboard %s is empty", name)
 		}
-		if err := operator.WriteDashboard(operatorGrafanaDir, string(content), name); err != nil {
-			return err
+		if !ansibleOnlyDashboards[name] {
+			if err := operator.WriteDashboard(operatorGrafanaDir, string(content), name); err != nil {
+				return err
+			}
 		}
 		common.WriteFile(ansibleGrafanaDir, name, string(content))
 		written++

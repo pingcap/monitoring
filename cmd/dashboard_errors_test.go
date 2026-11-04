@@ -1,6 +1,8 @@
 package main
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -107,5 +109,76 @@ func TestRegisteredDashboardAndEmptyInput(t *testing.T) {
 		if _, err := os.Stat(filepath.Join(dir, name)); err != nil {
 			t.Fatal(err)
 		}
+	}
+}
+
+func TestExistingMasterDashboardsRemainSupported(t *testing.T) {
+	f, err := os.Open("../monitor-snapshot/master/ansible-monitor.tar.gz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+	gz, err := gzip.NewReader(f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer gz.Close()
+	tr := tar.NewReader(gz)
+	bodies := map[string]string{}
+	for {
+		header, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		if strings.HasSuffix(header.Name, ".json") {
+			b, err := io.ReadAll(tr)
+			if err != nil {
+				t.Fatal(err)
+			}
+			bodies[filepath.Base(header.Name)] = string(b)
+		}
+	}
+	oldTransport, oldAnsible, oldOperator := http.DefaultTransport, ansibleGrafanaDir, operatorGrafanaDir
+	t.Cleanup(func() {
+		http.DefaultTransport, ansibleGrafanaDir, operatorGrafanaDir = oldTransport, oldAnsible, oldOperator
+	})
+	ansibleGrafanaDir, operatorGrafanaDir = t.TempDir(), t.TempDir()
+	http.DefaultTransport = dashboardResponseTransport(func(r *http.Request) (*http.Response, error) {
+		body, ok := bodies[filepath.Base(r.URL.Path)]
+		if !ok {
+			t.Fatalf("unexpected dashboard request: %s", r.URL)
+		}
+		return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(body))}, nil
+	})
+	service, err := common.NewGitRepoService()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for name, body := range bodies {
+		t.Run(name, func(t *testing.T) {
+			target := "https://raw.githubusercontent.com/pingcap/component/master/" + name
+			if err := ProcessDashboards([]*common.RepositoryContent{{Name: &name, DownloadURL: &target}}, service); err != nil {
+				t.Fatal(err)
+			}
+			got, err := os.ReadFile(filepath.Join(ansibleGrafanaDir, name))
+			if err != nil || string(got) != body {
+				t.Fatalf("existing ansible input changed: %v", err)
+			}
+			_, err = os.Stat(filepath.Join(operatorGrafanaDir, name))
+			if ansibleOnlyDashboards[name] {
+				if !os.IsNotExist(err) {
+					t.Fatalf("Ansible-only dashboard entered operator output: %s", name)
+				}
+			} else if err != nil {
+				t.Fatalf("registered dashboard missing from operator output: %s: %v", name, err)
+			}
+
+		})
+	}
+	if _, ok := bodies["tidb_summary.json"]; !ok {
+		t.Fatal("fixture lacks the reported existing input")
 	}
 }
