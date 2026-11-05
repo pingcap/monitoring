@@ -20,7 +20,7 @@ import (
 // explicit non-root runtime identity is already authoritative and is left alone.
 func Prepare(watchDir, storeRoot, version string) error {
 	if os.Geteuid() != 0 {
-		return nil
+		return checkPaths(watchDir, storeRoot, version, false)
 	}
 	account, err := user.Lookup("pingcap")
 	if err != nil {
@@ -34,17 +34,21 @@ func Prepare(watchDir, storeRoot, version string) error {
 	if err != nil || gid <= 0 {
 		return fmt.Errorf("invalid non-root GID %q", account.Gid)
 	}
-	if err := preparePaths(watchDir, storeRoot, version, uid, gid); err != nil {
+	// Kubernetes may explicitly set runAsGroup independently of runAsUser.
+	if os.Getgid() != 0 {
+		gid = os.Getgid()
+	}
+	if err := preparePaths(watchDir, storeRoot, version, uid); err != nil {
 		return err
 	}
 	return dropAndExec(uid, gid)
 }
 
-func preparePaths(watchDir, storeRoot, version string, uid, gid int) error {
+func preparePaths(watchDir, storeRoot, version string, uid int) error {
 	if version != "" && (version != filepath.Base(version) || version == "." || version == "..") {
 		return fmt.Errorf("invalid rules version %q", version)
 	}
-	if err := prepareDirectory(watchDir, false, true, uid, gid); err != nil {
+	if err := prepareDirectory(watchDir, false, true, uid); err != nil {
 		return err
 	}
 	if version == "" {
@@ -57,10 +61,10 @@ func preparePaths(watchDir, storeRoot, version string, uid, gid int) error {
 	}
 	root.Close()
 	parent := filepath.Join(storeRoot, "latest-rules")
-	if err := prepareDirectory(parent, true, false, uid, gid); err != nil {
+	if err := prepareDirectory(parent, true, false, uid); err != nil {
 		return err
 	}
-	return prepareDirectory(filepath.Join(parent, version), true, true, uid, gid)
+	return prepareDirectory(filepath.Join(parent, version), true, true, uid)
 }
 
 // Open each component with NOFOLLOW, retaining directory descriptors so renames
@@ -68,6 +72,11 @@ func preparePaths(watchDir, storeRoot, version string, uid, gid int) error {
 func openDirectory(path string, create bool) (*os.File, error) {
 	if !filepath.IsAbs(path) || filepath.Clean(path) == "/" {
 		return nil, fmt.Errorf("rules path must be an absolute non-root directory: %q", path)
+	}
+	for _, part := range strings.Split(path, "/") {
+		if part == ".." {
+			return nil, fmt.Errorf("rules path must not contain ..: %q", path)
+		}
 	}
 	fd, err := unix.Open("/", unix.O_RDONLY|unix.O_DIRECTORY|unix.O_CLOEXEC, 0)
 	if err != nil {
@@ -92,7 +101,7 @@ func openDirectory(path string, create bool) (*os.File, error) {
 	return os.NewFile(uintptr(fd), path), nil
 }
 
-func setOwnerMode(file *os.File, uid, gid int, directory bool) error {
+func setOwnerMode(file *os.File, uid int, directory bool) error {
 	var st unix.Stat_t
 	if err := unix.Fstat(int(file.Fd()), &st); err != nil {
 		return err
@@ -100,25 +109,45 @@ func setOwnerMode(file *os.File, uid, gid int, directory bool) error {
 	if !directory && (st.Mode&unix.S_IFMT != unix.S_IFREG || st.Nlink != 1) {
 		return fmt.Errorf("rule must be a regular file with one link: %s", file.Name())
 	}
-	if int(st.Uid) != uid || int(st.Gid) != gid {
-		if err := file.Chown(uid, gid); err != nil {
+	ownershipChanged := int(st.Uid) != uid
+	if ownershipChanged {
+		if err := file.Chown(uid, -1); err != nil {
 			return err
 		}
 	}
 	mode := os.FileMode(st.Mode&0644) | 0600
 	if directory {
-		mode = os.FileMode(st.Mode&0055) | 0700
+		// Retain existing reader/writer groups and let atomic replacements inherit
+		// that group, without granting the service additional group memberships.
+		mode = os.FileMode(st.Mode&0075) | 0700 | os.ModeSetgid
+		if st.Mode&unix.S_ISVTX != 0 {
+			mode |= os.ModeSticky
+		}
+	}
+	info, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	if info.Mode()&(os.ModePerm|os.ModeSetgid|os.ModeSetuid|os.ModeSticky) == mode {
+		return nil
 	}
 	return file.Chmod(mode)
 }
 
-func prepareDirectory(path string, create, rules bool, uid, gid int) error {
+func prepareDirectory(path string, create, rules bool, uid int) error {
 	dir, err := openDirectory(path, create)
 	if err != nil {
 		return err
 	}
 	defer dir.Close()
-	if err := setOwnerMode(dir, uid, gid, true); err != nil {
+	readOnly, err := readOnlyDirectory(dir)
+	if err != nil {
+		return err
+	}
+	if readOnly {
+		return nil
+	}
+	if err := setOwnerMode(dir, uid, true); err != nil {
 		return fmt.Errorf("prepare %s: %w", path, err)
 	}
 	if !rules {
@@ -137,7 +166,7 @@ func prepareDirectory(path string, create, rules bool, uid, gid int) error {
 			return fmt.Errorf("open rule %s: %w", name, err)
 		}
 		file := os.NewFile(uintptr(fd), filepath.Join(path, name))
-		err = setOwnerMode(file, uid, gid, false)
+		err = setOwnerMode(file, uid, false)
 		file.Close()
 		if err != nil {
 			return err
@@ -156,7 +185,13 @@ func dropAndExec(uid, gid int) error {
 	if err := unix.Prctl(unix.PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0); err != nil {
 		return err
 	}
-	if err := syscall.Setgroups([]int{}); err != nil {
+	// Keep groups already granted by the Pod, including a valid fsGroup 0.
+	// Group 0 does not grant UID 0 or capabilities; never infer new groups from files.
+	groups, err := os.Getgroups()
+	if err != nil {
+		return err
+	}
+	if err := syscall.Setgroups(groups); err != nil {
 		return err
 	}
 	if err := syscall.Setgid(gid); err != nil {
@@ -173,4 +208,109 @@ func dropAndExec(uid, gid int) error {
 	// Replace the entire process: no root supervisor, bootstrap marker, extra
 	// arguments, or inherited rule descriptors remain in the serving process.
 	return syscall.Exec("/proc/self/exe", os.Args, os.Environ())
+}
+
+// Rechecked after exec under the actual serving identity, before listening.
+// This catches inaccessible PVC roots instead of failing after an active save.
+// CheckWritable is called only when an administrator can edit rules. Watch-only
+// and viewer-only services do not need ownership suitable for atomic saves.
+func CheckWritable(watchDir, storeRoot, version string) error {
+	return checkPaths(watchDir, storeRoot, version, true)
+}
+
+func checkPaths(watchDir, storeRoot, version string, writable bool) error {
+	paths := []string{watchDir}
+	if version != "" {
+		paths = append(paths, filepath.Join(storeRoot, "latest-rules"), filepath.Join(storeRoot, "latest-rules", version))
+	}
+	for i, path := range paths {
+		dir, err := openDirectory(path, i > 0)
+		if err != nil {
+			return fmt.Errorf("access rules as serving user: %w", err)
+		}
+		access := uint32(unix.R_OK | unix.X_OK)
+		readOnly, err := readOnlyDirectory(dir)
+		if err != nil {
+			dir.Close()
+			return err
+		}
+		if writable && i != 1 && !readOnly {
+			access |= unix.W_OK
+		}
+		if err := unix.Faccessat(int(dir.Fd()), ".", access, unix.AT_EACCESS); err != nil {
+			dir.Close()
+			return fmt.Errorf("serving identity cannot access rules directory %s: %w", path, err)
+		}
+		if writable && i != 1 {
+			if err := checkReplacementGroups(dir); err != nil {
+				dir.Close()
+				return err
+			}
+		}
+		dir.Close()
+	}
+	return nil
+}
+
+// Atomic saves preserve file groups. A non-root service can restore a different
+// group only when Kubernetes has explicitly granted that group to the process.
+func checkReplacementGroups(dir *os.File) error {
+	readOnly, err := readOnlyDirectory(dir)
+	if err != nil {
+		return err
+	}
+	if readOnly {
+		return nil
+	} // Watch-only read-only mounts need no metadata writes.
+	info, err := dir.Stat()
+	if err != nil {
+		return err
+	}
+	inherited := os.Getegid()
+	if info.Mode()&os.ModeSetgid != 0 {
+		inherited = int(info.Sys().(*syscall.Stat_t).Gid)
+	}
+	allowed, err := os.Getgroups()
+	if err != nil {
+		return err
+	}
+	allowed = append(allowed, os.Getegid(), inherited)
+	names, err := dir.Readdirnames(-1)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		if filepath.Ext(name) != ".yml" {
+			continue
+		}
+		var st unix.Stat_t
+		if err = unix.Fstatat(int(dir.Fd()), name, &st, unix.AT_SYMLINK_NOFOLLOW); err != nil {
+			return err
+		}
+		if st.Mode&unix.S_IFMT != unix.S_IFREG {
+			continue
+		}
+		if st.Uid != uint32(os.Geteuid()) {
+			return fmt.Errorf("rule %s owner %d cannot be preserved by serving UID %d; prepare ownership for the configured runtime identity", filepath.Join(dir.Name(), name), st.Uid, os.Geteuid())
+		}
+		ok := false
+		for _, group := range allowed {
+			if uint32(group) == st.Gid {
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			return fmt.Errorf("rule %s group %d cannot be preserved by serving identity; align the rule directory group or grant it with pod supplementalGroups", filepath.Join(dir.Name(), name), st.Gid)
+		}
+	}
+	return nil
+}
+
+func readOnlyDirectory(dir *os.File) (bool, error) {
+	var stat unix.Statfs_t
+	if err := unix.Fstatfs(int(dir.Fd()), &stat); err != nil {
+		return false, err
+	}
+	return stat.Flags&unix.ST_RDONLY != 0, nil
 }

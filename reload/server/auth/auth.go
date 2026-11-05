@@ -112,3 +112,16 @@ func Middleware(p *Policy) gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// HasAdmins reports whether this policy enables rule editing.
+func (p *Policy) HasAdmins() bool {
+	if p == nil {
+		return false
+	}
+	for _, user := range p.users {
+		if user.Role == "admin" {
+			return true
+		}
+	}
+	return false
+}

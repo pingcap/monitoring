@@ -6,6 +6,25 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
+# Reject symlink ancestors before any rule deletion, copy or ownership changes.
+validate_rule_path() {
+    case "$1" in
+        /*) ;;
+        *) echo "Rules path must be absolute: $1" >&2; return 1;;
+    esac
+    case "/$1/" in
+        */../*) echo "Rules path must not contain ..: $1" >&2; return 1;;
+    esac
+    checked_path=$1
+    while [ "$checked_path" != / ]; do
+        if [ -L "$checked_path" ]; then
+            echo "Rules path must not contain symlinks: $1" >&2; return 1
+        fi
+        checked_path=${checked_path%/*}
+        [ -n "$checked_path" ] || checked_path=/
+    done
+}
+
 validate_rule_file() {
     if [ -L "$1" ] || [ ! -f "$1" ] || [ -z "$(find "$1" -prune -type f -links 1 -print)" ]; then
         echo "Rule must be a regular file with one link: $1" >&2
@@ -16,10 +35,10 @@ validate_rule_file() {
 # Run after copying/restoring rules on every Pod initialization. Do not chown /data.
 prepare_reloader_rules() {
     reloader_uid=${RELOADER_UID:-1000}
-    reloader_gid=${RELOADER_GID:-2000}
-    for reloader_id in "$reloader_uid" "$reloader_gid"; do
+    initializer_uid=$(id -u) || return 1
+    for reloader_id in "$reloader_uid"; do
         case "$reloader_id" in
-            ''|*[!0-9]*) echo "Reloader UID/GID must be numeric" >&2; return 1;;
+            ''|*[!0-9]*) echo "Reloader UID must be numeric" >&2; return 1;;
         esac
     done
     reloader_version=$1
@@ -37,17 +56,26 @@ prepare_reloader_rules() {
             echo "Rules path must be a directory, not a symlink: $reloader_dir" >&2
             return 1
         fi
-        mkdir -p -- "$reloader_dir" &&
-            chown "$reloader_uid:$reloader_gid" "$reloader_dir" &&
-            chmod u+rwx,go-w "$reloader_dir" || return 1
+        mkdir -p -- "$reloader_dir" || return 1
+        if [ "$initializer_uid" = 0 ]; then
+            chown "$reloader_uid" "$reloader_dir" || return 1
+        fi
+        if [ "$initializer_uid" = 0 ]; then
+            # Preserve the volume group and inherit it on atomic replacements.
+            chmod u+rwx,g+s,o-w "$reloader_dir" || return 1
+        fi
     done
     for reloader_dir in "$PROM_CONFIG_PATH/rules" "$reloader_store"; do
         [ -n "$reloader_dir" ] || continue
-        for reloader_file in "$reloader_dir"/*.yml; do
+        for reloader_file in "$reloader_dir"/*.yml "$reloader_dir"/.*.yml "$reloader_dir"/.yml; do
             [ -e "$reloader_file" ] || [ -L "$reloader_file" ] || continue
             validate_rule_file "$reloader_file" || return 1
-            chown "$reloader_uid:$reloader_gid" "$reloader_file" &&
+            if [ "$initializer_uid" = 0 ]; then
+                chown "$reloader_uid" "$reloader_file" || return 1
+            fi
+            if [ "$initializer_uid" = 0 ]; then
                 chmod u+rw,go-w,a-x "$reloader_file" || return 1
+            fi
         done
     done
 }
@@ -84,7 +112,7 @@ restore_rules() {
         echo "Persisted rules path must be a directory" >&2; return 1
     fi
     [ -d "$saved_version" ] || return 0
-    for rule in "$saved_version"/*.rules.yml; do
+    for rule in "$saved_version"/*.rules.yml "$saved_version"/.rules.yml "$saved_version"/.*.rules.yml; do
         [ -e "$rule" ] || [ -L "$rule" ] || continue
         validate_rule_file "$rule" || return 1
         destination="$PROM_CONFIG_PATH/rules/${rule##*/}"
@@ -106,6 +134,11 @@ done
 if [ -z "$GF_PROVISIONING_PATH" ] || [ -z "$PROM_CONFIG_PATH" ]; then
     echo "Grafana and Prometheus output paths are required" >&2
     exit 1
+fi
+
+validate_rule_path "$PROM_CONFIG_PATH/rules" || exit 1
+if [ -n "$PROM_PERSISTENT_DIR" ]; then
+    validate_rule_path "$PROM_PERSISTENT_DIR/latest-rules" || exit 1
 fi
 
 if [ -n "$DM_CLUSTER_NAME" ]; then

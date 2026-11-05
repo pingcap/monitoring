@@ -75,6 +75,11 @@ func startServer() {
 	if err := validateWebOptions(listenAddress, tlsCertFile, tlsKeyFile, policy != nil, allowInsecure); err != nil {
 		log.Fatal(err)
 	}
+	if policy.HasAdmins() {
+		if err := identity.CheckWritable(watchDir, rootStorePath, extract(subStorePath)); err != nil {
+			log.Fatal(err)
+		}
+	}
 	if policy == nil {
 		log.Print("administrative API disabled: configure --web.auth-file to enable access")
 	}

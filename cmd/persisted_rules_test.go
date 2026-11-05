@@ -17,12 +17,12 @@ func TestInitializerRestoresRulesWithoutOptIn(t *testing.T) {
 	}
 	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
 		for _, dm := range []bool{false, true} {
-			for _, scenario := range []string{"default", "custom-name", "symlink", "hardlink", "directory-link", "invalid-version", "active-symlink", "active-hardlink", "restore-destination-symlink"} {
+			for _, scenario := range []string{"default", "custom-name", "hidden-name", "symlink", "hardlink", "directory-link", "invalid-version", "config-link", "config-parent-link", "active-symlink", "active-hardlink", "restore-destination-symlink"} {
 				t.Run(source+"/"+map[bool]string{false: "tidb", true: "dm"}[dm]+"/"+scenario, func(t *testing.T) {
 					if !dm && (scenario == "active-symlink" || scenario == "active-hardlink" || scenario == "restore-destination-symlink") {
 						t.Skip("DM shares an existing active directory")
 					}
-					root := t.TempDir()
+					root := initializerTempDir(t)
 					assets, output, persistent := filepath.Join(root, "assets"), filepath.Join(root, "prometheus"), filepath.Join(root, "persistent")
 					for _, dir := range []string{assets, filepath.Join(output, "rules"), filepath.Join(persistent, "latest-rules", "v1")} {
 						if err := os.MkdirAll(dir, 0755); err != nil {
@@ -93,6 +93,26 @@ func TestInitializerRestoresRulesWithoutOptIn(t *testing.T) {
 						if err := os.Symlink(outside, filepath.Join(output, "rules", "custom.rules.yml")); err != nil {
 							t.Fatal(err)
 						}
+					case "config-link":
+						actual := filepath.Join(root, "actual-prometheus")
+						if err := os.Rename(output, actual); err != nil {
+							t.Fatal(err)
+						}
+						if err := os.Symlink(actual, output); err != nil {
+							t.Fatal(err)
+						}
+					case "config-parent-link":
+						link := filepath.Join(root, "link")
+						if err := os.Symlink(root, link); err != nil {
+							t.Fatal(err)
+						}
+						output = filepath.Join(link, "prometheus")
+					case "hidden-name":
+						for _, hidden := range []string{".custom.rules.yml", ".rules.yml"} {
+							if err := os.WriteFile(filepath.Join(filepath.Dir(saved), hidden), []byte(restored), 0644); err != nil {
+								t.Fatal(err)
+							}
+						}
 					case "custom-name":
 						if err := os.WriteFile(filepath.Join(filepath.Dir(saved), "foreign.rules.yml"), []byte(restored), 0644); err != nil {
 							t.Fatal(err)
@@ -127,7 +147,7 @@ func TestInitializerRestoresRulesWithoutOptIn(t *testing.T) {
 					cmd := exec.Command("sh", scriptPath)
 					cmd.Env = append(os.Environ(), "DM_CLUSTER_NAME="+cluster, "TIDB_CLUSTER_NAME=test", "DM_VERSION="+map[bool]string{true: "..", false: "v1"}[scenario == "invalid-version"], "TIDB_VERSION="+map[bool]string{true: "..", false: "v1"}[scenario == "invalid-version"], "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana"), "PROM_CONFIG_PATH="+output, "PROM_PERSISTENT_DIR="+persistent, fmt.Sprintf("RELOADER_UID=%d", os.Geteuid()), fmt.Sprintf("RELOADER_GID=%d", os.Getegid()), "GF_DATASOURCE_PATH=", "PATH="+extraPath+os.Getenv("PATH"))
 					out, err := cmd.CombinedOutput()
-					success := scenario == "default" || scenario == "custom-name"
+					success := scenario == "default" || scenario == "custom-name" || scenario == "hidden-name"
 					if success && err != nil {
 						t.Fatalf("initializer failed: %v %s", err, out)
 					}
@@ -135,6 +155,11 @@ func TestInitializerRestoresRulesWithoutOptIn(t *testing.T) {
 						t.Fatalf("unsafe restore succeeded: %s", out)
 					}
 					if !success {
+						if scenario == "config-link" || scenario == "config-parent-link" {
+							if _, err := os.Stat(old); err != nil {
+								t.Fatal("deleted files through a symlink ancestor", err)
+							}
+						}
 						got, readErr := os.ReadFile(outside)
 						if readErr != nil || string(got) != "unchanged target" {
 							t.Fatalf("outside target changed: %q %v", got, readErr)
@@ -145,6 +170,14 @@ func TestInitializerRestoresRulesWithoutOptIn(t *testing.T) {
 					got, err := os.ReadFile(filepath.Join(output, "rules", name))
 					if err != nil || string(got) != want {
 						t.Fatalf("rules = %q, want %q: %v", got, want, err)
+					}
+					if scenario == "hidden-name" {
+						for _, hidden := range []string{".custom.rules.yml", ".rules.yml"} {
+							got, err := os.ReadFile(filepath.Join(output, "rules", hidden))
+							if err != nil || string(got) != restored {
+								t.Fatalf("hidden rule not restored: %s %v", hidden, err)
+							}
+						}
 					}
 					if scenario == "custom-name" {
 						custom, err := os.ReadFile(filepath.Join(output, "rules", "foreign.rules.yml"))
@@ -173,7 +206,7 @@ func TestTiDBAndDMInitializeSharedRules(t *testing.T) {
 	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
 		for _, persisted := range []bool{false, true} {
 			t.Run(fmt.Sprintf("%s/persisted=%t", source, persisted), func(t *testing.T) {
-				root := t.TempDir()
+				root := initializerTempDir(t)
 				output, data := filepath.Join(root, "prometheus"), filepath.Join(root, "persistent")
 				store := filepath.Join(data, "latest-rules", "tidb:v1")
 				if err := os.MkdirAll(store, 0755); err != nil {

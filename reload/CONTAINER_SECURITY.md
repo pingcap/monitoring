@@ -4,7 +4,8 @@ Updating the reloader does not require a new initializer, new CR fields, a
 restore opt-in, or a change to `alertManagerRulesVersion`. Keep the deployed
 initializer and its version. Rules continue to be restored from the existing
 current-version directory on the PVC. Authentication/TLS settings follow
-[UPGRADING.md](UPGRADING.md); this change adds no web configuration requirements.
+[UPGRADING.md](UPGRADING.md). Mounted credentials must be readable by the serving
+identity (default UID 1000/GID 2000); root-only custom modes prevent startup.
 
 ## Existing initializer images
 
@@ -13,11 +14,14 @@ filesystem preparation only. Before loading web credentials, starting watchers
 or listening, it prepares the active rules directory and the current
 `latest-rules/<version>` directory for the image's existing `pingcap` account
 (default UID 1000/GID 2000). It does not recursively change `/data`, Prometheus,
-Grafana or other rule versions. Directories and regular `.yml` rule files lose
-unnecessary write/execute permissions; existing read permissions are retained.
+Grafana or other rule versions. Existing file/directory groups and reader access
+are retained; setgid on rule directories makes atomic replacements inherit the
+original group. Only the serving UID is assigned ownership. Files lose unnecessary
+write/execute permissions.
 Symlink paths and symlink, hard-linked or non-regular rule files are rejected.
 
-The process clears supplementary groups, switches GID/UID, clears capabilities,
+The process retains existing Pod supplementary groups (including a configured
+fsGroup 0), switches GID/UID, clears capabilities,
 sets `no_new_privs`, and replaces itself before starting the service. There is no
 root supervisor. A preparation or privilege-drop failure stops startup rather
 than serving as root. The image intentionally retains root as its startup user:
@@ -35,16 +39,28 @@ Current TiDB and DM initializer sources prepare the same rule permissions after
 generating and restoring rules on every startup. Once deployed, they also allow
 the reloader to start directly as UID 1000/GID 2000, including after Pod rebuilds.
 An explicit non-root runtime user bypasses reloader ownership preparation;
-volume permissions must already permit editing. No identity override is needed
+volume permissions must already permit editing. Accessibility is checked under
+the serving identity before listening, so an inaccessible PVC root fails startup
+rather than allowing an active save followed by a persistence failure. When
+an admin account enables editing, atomic saves also require a file group to
+match the directory's inherited group or a Kubernetes-granted serving group. Inconsistent custom groups fail startup with
+an actionable message; the process does not grant itself extra group access.
+Watch-only and viewer-only services need only their existing read/traverse access;
+read-only mounts do not trigger metadata writes. No identity override is needed
 for the compatible default startup path.
 
 Custom builds retain the existing `PINGCAP_UID`/`PINGCAP_GID` build arguments.
 The reloader looks up the image's `pingcap` account; initializer permission
-preparation uses matching `RELOADER_UID`/`RELOADER_GID` defaults or existing env
-configuration (`spec.initializer.envs`, and `spec.dm.initializer.envs` for DM).
-Explicit custom runtime identities must match the prepared ownership. Mounted
+preparation uses `RELOADER_UID` (default 1000) or existing env configuration
+(`spec.initializer.envs`, and `spec.dm.initializer.envs` for DM). File groups are
+inherited from the volumes, not reassigned to the image GID. Explicit runAsGroup
+is honored. Non-root initializers retain their identity and do not attempt chown;
+they leave existing ownership/modes untouched, including setgid directories
+created by a previous bootstrap. Unprivileged chmod can otherwise clear setgid
+when its inherited group is not one of the initializer's groups. Matching
+explicit non-root initializer/reloader identities therefore need no new env overrides. Mounted
 web credentials must be readable by the serving identity, as with any non-root
-service; root-only custom Secret modes may require an access adjustment.
+service; root-only custom Secret modes must be adjusted or startup fails.
 
 The compatibility startup needs permission to chown/chmod rule files and change
 UID/GID. Storage that prohibits ownership changes (for example root-squashed
@@ -56,9 +72,9 @@ filesystem permissions.
 ## Rule restore behavior
 
 Current initializers continue to restore persisted `*.rules.yml` files for the
-selected version automatically, including names not present in the image's
-bundle. TiDB clears the dedicated active rules directory, including hidden
-leftovers, before installing bundled rules and restoring saved ones. DM runs
+selected version automatically, including hidden names and names not present in
+the image's bundle. TiDB clears the dedicated active rules directory, including
+hidden leftovers, before installing bundled rules and restoring saved ones. DM runs
 after TiDB against the shared directory, preserving TiDB rules while installing
 DM rules and restoring saved ones. Existing destination rule files are validated
 before replacement. Invalid paths, symlink/hard-linked/non-regular saved rules,

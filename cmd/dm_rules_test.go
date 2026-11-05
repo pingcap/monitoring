@@ -19,6 +19,9 @@ import (
 type dmTransport func(*http.Request) (*http.Response, error)
 
 func TestInitializerPreparesRuleAccess(t *testing.T) {
+	if os.Geteuid() != 0 {
+		t.Skip("ownership preparation requires a disposable root container")
+	}
 	if runtime.GOOS == "windows" {
 		t.Skip("initializer requires POSIX permissions")
 	}
@@ -32,7 +35,7 @@ func TestInitializerPreparesRuleAccess(t *testing.T) {
 			if !ok || !strings.Contains(prefix, "prepare_reloader_rules()") {
 				t.Fatal("initializer does not prepare reloader access")
 			}
-			dir := t.TempDir()
+			dir := initializerTempDir(t)
 			active := filepath.Join(dir, "active rules", "rules")
 			data := filepath.Join(dir, "data")
 			store := filepath.Join(data, "latest-rules", "tidb:test")
@@ -41,6 +44,9 @@ func TestInitializerPreparesRuleAccess(t *testing.T) {
 					t.Fatal(err)
 				}
 				if err := os.WriteFile(filepath.Join(path, "test.yml"), []byte("groups: []"), 0444); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Chmod(filepath.Join(path, "test.yml"), 0444); err != nil {
 					t.Fatal(err)
 				}
 			}
@@ -115,7 +121,7 @@ func TestDMRulesAreGenerated(t *testing.T) {
 	}
 	oldTransport, oldAnsible, oldOperator := http.DefaultTransport, ansibleRuleDir, operatorRuleDir
 	t.Cleanup(func() { http.DefaultTransport, ansibleRuleDir, operatorRuleDir = oldTransport, oldAnsible, oldOperator })
-	ansibleRuleDir, operatorRuleDir = t.TempDir(), t.TempDir()
+	ansibleRuleDir, operatorRuleDir = initializerTempDir(t), initializerTempDir(t)
 	http.DefaultTransport = dmTransport(func(*http.Request) (*http.Response, error) {
 		return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(body)))}, nil
 	})
@@ -139,7 +145,7 @@ func TestDMInitializerRejectsMissingRules(t *testing.T) {
 	}
 	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
 		t.Run(source, func(t *testing.T) {
-			root := t.TempDir()
+			root := initializerTempDir(t)
 			assets := filepath.Join(root, "assets")
 			extraPath := ""
 			if runtime.GOOS == "darwin" {
@@ -218,7 +224,7 @@ func TestInitializerRejectsMultilineReplacement(t *testing.T) {
 	}
 	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
 		t.Run(source, func(t *testing.T) {
-			root := t.TempDir()
+			root := initializerTempDir(t)
 			cmd := exec.Command("sh", source)
 			cmd.Env = append(os.Environ(), fmt.Sprintf("RELOADER_UID=%d", os.Geteuid()), fmt.Sprintf("RELOADER_GID=%d", os.Getegid()), "DM_CLUSTER_NAME=test", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus"), "GF_DM_PROMETHEUS_URL=bad\nreplacement")
 			out, err := cmd.CombinedOutput()
@@ -239,7 +245,7 @@ func TestTiDBInitializerPreservesDatasourceURLs(t *testing.T) {
 	}
 	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
 		t.Run(source, func(t *testing.T) {
-			root := t.TempDir()
+			root := initializerTempDir(t)
 			assets := filepath.Join(root, "assets")
 			datasource := filepath.Join(root, "data sources")
 			for _, dir := range []string{assets, datasource} {
@@ -308,4 +314,13 @@ func TestTiDBInitializerPreservesDatasourceURLs(t *testing.T) {
 			}
 		})
 	}
+}
+
+func initializerTempDir(t *testing.T) string {
+	t.Helper()
+	dir, err := filepath.EvalSymlinks(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	return dir
 }
