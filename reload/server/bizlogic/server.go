@@ -240,7 +240,11 @@ func writeRegularConfig(root *os.Root, name string, data []byte, createFlag int)
 		mode = info.Mode().Perm() & 0644
 	}
 	tmp := ".rule-update-" + rand.Text()
-	f, err := root.OpenFile(tmp, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
+	createMode := mode
+	if info != nil {
+		createMode = 0600 // Keep staged contents private until ownership is restored.
+	}
+	f, err := root.OpenFile(tmp, os.O_WRONLY|os.O_CREATE|os.O_EXCL, createMode)
 	if err != nil {
 		return err
 	}
@@ -248,6 +252,16 @@ func writeRegularConfig(root *os.Root, name string, data []byte, createFlag int)
 	defer root.Remove(tmp)
 	if _, err := f.Write(data); err != nil {
 		return err
+	}
+	if info != nil {
+		if err := preserveConfigOwnership(f, info); err != nil {
+			return fmt.Errorf("preserve config ownership: %w", err)
+		}
+		// Chown can clear mode bits; restore the intended permissions afterwards,
+		// independently of umask. New files retain their umask-filtered mode.
+		if err := f.Chmod(mode); err != nil {
+			return err
+		}
 	}
 	if err := f.Sync(); err != nil {
 		return err
