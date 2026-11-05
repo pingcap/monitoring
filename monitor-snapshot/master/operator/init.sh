@@ -6,6 +6,13 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
+validate_rule_file() {
+    if [ -L "$1" ] || [ ! -f "$1" ] || [ -z "$(find "$1" -prune -type f -links 1 -print)" ]; then
+        echo "Rule must be a regular file with one link: $1" >&2
+        return 1
+    fi
+}
+
 # Run after copying/restoring rules on every Pod initialization. Do not chown /data.
 prepare_reloader_rules() {
     reloader_uid=${RELOADER_UID:-1000}
@@ -38,10 +45,7 @@ prepare_reloader_rules() {
         [ -n "$reloader_dir" ] || continue
         for reloader_file in "$reloader_dir"/*.yml; do
             [ -e "$reloader_file" ] || [ -L "$reloader_file" ] || continue
-            if [ -L "$reloader_file" ] || [ ! -f "$reloader_file" ] || [ -z "$(find "$reloader_file" -prune -type f -links 1 -print)" ]; then
-                echo "Rule must be a regular file: $reloader_file" >&2
-                return 1
-            fi
+            validate_rule_file "$reloader_file" || return 1
             chown "$reloader_uid:$reloader_gid" "$reloader_file" &&
                 chmod u+rw,go-w,a-x "$reloader_file" || return 1
         done
@@ -50,12 +54,16 @@ prepare_reloader_rules() {
 
 # Restore current-version customizations automatically, as before. Validate the
 # filesystem entries rather than treating all historical user edits as untrusted.
-reset_rules() {
+ensure_rules_directory() {
     rules_dir="$PROM_CONFIG_PATH/rules"
     if [ -L "$rules_dir" ] || { [ -e "$rules_dir" ] && [ ! -d "$rules_dir" ]; }; then
         echo "Rules path must be a directory" >&2; return 1
     fi
     mkdir -p -- "$rules_dir" || return 1
+}
+
+reset_rules() {
+    ensure_rules_directory || return 1
     for entry in "$rules_dir"/* "$rules_dir"/.[!.]* "$rules_dir"/..?*; do
         [ -e "$entry" ] || [ -L "$entry" ] || continue
         rm -rf -- "$entry" || return 1
@@ -78,8 +86,10 @@ restore_rules() {
     [ -d "$saved_version" ] || return 0
     for rule in "$saved_version"/*.rules.yml; do
         [ -e "$rule" ] || [ -L "$rule" ] || continue
-        if [ -L "$rule" ] || [ ! -f "$rule" ] || [ -z "$(find "$rule" -prune -type f -links 1 -print)" ]; then
-            echo "Persisted rule must be a regular file with one link: $rule" >&2; return 1
+        validate_rule_file "$rule" || return 1
+        destination="$PROM_CONFIG_PATH/rules/${rule##*/}"
+        if [ -e "$destination" ] || [ -L "$destination" ]; then
+            validate_rule_file "$destination" || return 1
         fi
         cp -f -- "$rule" "$PROM_CONFIG_PATH/rules/${rule##*/}" || return 1
     done
@@ -112,8 +122,12 @@ if [ -n "$DM_CLUSTER_NAME" ]; then
     cp -f -- /tmp/DM-Monitor-Professional.json "$GF_PROVISIONING_PATH/dashboards"
     replace_template 'Test-Cluster-DM' "${DM_CLUSTER_NAME}-DM-Professional" "$GF_PROVISIONING_PATH/dashboards"/DM-Monitor-Professional.json
 
-    # Rules
-    reset_rules || exit 1
+    # Operator runs DM after TiDB against the same directory. Keep TiDB rules.
+    ensure_rules_directory || exit 1
+    dm_rule="$PROM_CONFIG_PATH/rules/dm_worker.rules.yml"
+    if [ -e "$dm_rule" ] || [ -L "$dm_rule" ]; then
+        validate_rule_file "$dm_rule" || exit 1
+    fi
 
     echo $META_TYPE
     echo $META_INSTANCE

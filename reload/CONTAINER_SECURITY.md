@@ -57,10 +57,12 @@ filesystem permissions.
 
 Current initializers continue to restore persisted `*.rules.yml` files for the
 selected version automatically, including names not present in the image's
-bundle. Both TiDB and DM first clear only the dedicated active rules directory,
-including hidden leftovers, and then install bundled rules and restore saved
-ones. Invalid paths, symlink/hard-linked/non-regular saved rules, and copy errors
-stop initialization. The PVC copies are not deleted. There is no
+bundle. TiDB clears the dedicated active rules directory, including hidden
+leftovers, before installing bundled rules and restoring saved ones. DM runs
+after TiDB against the shared directory, preserving TiDB rules while installing
+DM rules and restoring saved ones. Existing destination rule files are validated
+before replacement. Invalid paths, symlink/hard-linked/non-regular saved rules,
+and copy errors stop initialization. The PVC copies are not deleted. There is no
 `PROM_RESTORE_RULES` option and no cross-version directory discovery or migration.
 
 The existing version-selection semantics are unchanged: without an explicit
