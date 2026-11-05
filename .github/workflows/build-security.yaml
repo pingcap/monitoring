@@ -15,6 +15,7 @@ on:
       - 'go.mod'
       - 'go.sum'
       - 'dependencies.yaml'
+      - 'Makefile'
 
 permissions:
   contents: read
@@ -36,3 +37,18 @@ jobs:
       - run: go test ./cmd/monitoring.go ./cmd/auth_test.go ./cmd/dm_rules_test.go ./cmd/rule_errors_test.go ./cmd/dashboard_errors_test.go
       - run: python3 -m unittest discover -s scripts -p 'test_build_security.py' -v
       - run: docker build -f reload/Dockerfile_buildx -t monitoring-reloader:backport-check .
+
+  reloader:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+      - run: go test -race ./reload/...
+      - name: Verify ownership failure as root
+        run: sudo env GOCACHE="$(go env GOCACHE)" GOMODCACHE="$(go env GOMODCACHE)" "$(command -v go)" test -mod=readonly -buildvcs=false -race ./reload/server/bizlogic -run '^TestRuleReplacementRejectsOwnershipFailure$' -count=1
+      - run: go vet ./reload/...
+      - run: CGO_ENABLED=0 go build -o /tmp/reloader ./reload
