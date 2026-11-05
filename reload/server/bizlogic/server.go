@@ -2,6 +2,7 @@ package bizlogic
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -28,6 +29,7 @@ const prometheusRequestTimeout = 10 * time.Second
 const maxRulesBytes = 16 << 20
 
 type server struct {
+	updates                  chan struct{}
 	reload                   func(context.Context) error
 	httpClient               *http.Client
 	url                      *url.URL
@@ -42,6 +44,7 @@ func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool,
 		reloader = reloaders[0]
 	}
 	return &server{
+		updates:                  make(chan struct{}, 1),
 		reload:                   reloader.Reload,
 		httpClient:               &http.Client{Timeout: prometheusRequestTimeout},
 		url:                      promURL,
@@ -142,7 +145,7 @@ func (s *server) getConfigs() ([]string, error) {
 		if info.IsDir() || filepath.Ext(info.Name()) != ".yml" {
 			return false
 		}
-		target, err := root.Stat(info.Name())
+		target, err := root.Lstat(info.Name())
 		return err == nil && target.Mode().IsRegular() && target.Size() <= maxConfigBytes
 	}).ForEach(func(t streamtypes.T) {
 		info := t.(os.FileInfo)
@@ -163,7 +166,7 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		return
 	}
 	defer root.Close()
-	info, err := root.Stat(name)
+	info, err := root.Lstat(name)
 	if err != nil || !info.Mode().IsRegular() {
 		c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
 		return
@@ -184,6 +187,16 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
 		return
 	}
+	updateCtx, cancel := context.WithTimeout(c.Request.Context(), prometheusRequestTimeout)
+	defer cancel()
+	select {
+	case s.updates <- struct{}{}:
+	case <-updateCtx.Done():
+		c.JSON(http.StatusServiceUnavailable, utils.NewErrorResponse("config update is busy"))
+		return
+	}
+	defer func() { <-s.updates }()
+	c.Request = c.Request.WithContext(updateCtx)
 	// The primary must still exist after the upload; only the persistence copy may be created.
 	if err := writeRegularConfig(root, name, data, 0); err != nil {
 		if os.IsNotExist(err) {
@@ -213,27 +226,60 @@ func (s *server) UpdateConfig(c *gin.Context) {
 	c.JSON(http.StatusOK, config)
 }
 
-// Check the opened descriptor before truncating; a FIFO replacement must not block the request.
+// Publish complete contents with a same-directory rename; only persistence may create a new name.
 func writeRegularConfig(root *os.Root, name string, data []byte, createFlag int) error {
-	f, err := root.OpenFile(name, os.O_WRONLY|nonblockOpenFlag|createFlag, 0644)
+	mode := os.FileMode(0644)
+	info, err := root.Lstat(name)
+	if err != nil {
+		if !os.IsNotExist(err) || createFlag&os.O_CREATE == 0 {
+			return err
+		}
+	} else {
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("config must be a regular file, not a symlink")
+		}
+		mode = info.Mode().Perm() & 0644
+	}
+	tmp := ".rule-update-" + rand.Text()
+	createMode := mode
+	if info != nil {
+		createMode = 0600 // Keep staged contents private until ownership is restored.
+	}
+	f, err := root.OpenFile(tmp, os.O_WRONLY|os.O_CREATE|os.O_EXCL, createMode)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	info, err := f.Stat()
-	if err != nil {
-		return err
-	}
-	if !info.Mode().IsRegular() {
-		return fmt.Errorf("config is not a regular file")
-	}
-	if err := f.Truncate(0); err != nil {
-		return err
-	}
+	defer root.Remove(tmp)
 	if _, err := f.Write(data); err != nil {
 		return err
 	}
-	return f.Close()
+	if info != nil {
+		if err := preserveConfigOwnership(f, info); err != nil {
+			return fmt.Errorf("preserve config ownership: %w", err)
+		}
+		// Chown can clear mode bits; restore the intended permissions afterwards,
+		// independently of umask. New files retain their umask-filtered mode.
+		if err := f.Chmod(mode); err != nil {
+			return err
+		}
+	}
+	if err := f.Sync(); err != nil {
+		return err
+	}
+	if err := f.Close(); err != nil {
+		return err
+	}
+	// Recheck after upload/staging so a removed primary is not deliberately recreated.
+	info, err = root.Lstat(name)
+	if err != nil {
+		if !os.IsNotExist(err) || createFlag&os.O_CREATE == 0 {
+			return err
+		}
+	} else if !info.Mode().IsRegular() {
+		return fmt.Errorf("config is not a regular file")
+	}
+	return root.Rename(tmp, name)
 }
 
 func parse(content []byte) error {
