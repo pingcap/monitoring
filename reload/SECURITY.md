@@ -42,6 +42,10 @@ trusted.
 
 ## TiDB Operator v1 deployments
 
+For the complete migration procedure, see [Upgrading with TiDB Operator](UPGRADING.md),
+including authentication and TLS Secret creation, CR configuration, verification,
+rotation and rollback. No Operator code change is required for supported versions.
+
 The existing `TidbMonitor.spec.additionalContainers` merge can append `args` and
 mounts to the generated `reloader` container while retaining its generated
 command, watch path, Prometheus URL and persistence version. For example:
