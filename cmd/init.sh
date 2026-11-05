@@ -6,6 +6,48 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
+# Run after copying/restoring rules on every Pod initialization. Do not chown /data.
+prepare_reloader_rules() {
+    reloader_uid=${RELOADER_UID:-1000}
+    reloader_gid=${RELOADER_GID:-2000}
+    for reloader_id in "$reloader_uid" "$reloader_gid"; do
+        case "$reloader_id" in
+            ''|*[!0-9]*) echo "Reloader UID/GID must be numeric" >&2; return 1;;
+        esac
+    done
+    reloader_version=$1
+    reloader_store=
+    set -- "$PROM_CONFIG_PATH/rules"
+    if [ -n "$PROM_PERSISTENT_DIR" ]; then
+        case "$reloader_version" in
+            ''|.|..) echo "Invalid persistent rules version" >&2; return 1;;
+        esac
+        reloader_store="$PROM_PERSISTENT_DIR/latest-rules/$reloader_version"
+        set -- "$@" "$PROM_PERSISTENT_DIR/latest-rules" "$reloader_store"
+    fi
+    for reloader_dir do
+        if [ -L "$reloader_dir" ] || { [ -e "$reloader_dir" ] && [ ! -d "$reloader_dir" ]; }; then
+            echo "Rules path must be a directory, not a symlink: $reloader_dir" >&2
+            return 1
+        fi
+        mkdir -p -- "$reloader_dir" &&
+            chown "$reloader_uid:$reloader_gid" "$reloader_dir" &&
+            chmod u+rwx,go-w "$reloader_dir" || return 1
+    done
+    for reloader_dir in "$PROM_CONFIG_PATH/rules" "$reloader_store"; do
+        [ -n "$reloader_dir" ] || continue
+        for reloader_file in "$reloader_dir"/*.yml; do
+            [ -e "$reloader_file" ] || [ -L "$reloader_file" ] || continue
+            if [ -L "$reloader_file" ] || [ ! -f "$reloader_file" ]; then
+                echo "Rule must be a regular file: $reloader_file" >&2
+                return 1
+            fi
+            chown "$reloader_uid:$reloader_gid" "$reloader_file" &&
+                chmod u+rw,go-w,a-x "$reloader_file" || return 1
+        done
+    done
+}
+
 # Multiline replacements would become new sed commands or malformed configuration.
 for value in "$DM_CLUSTER_NAME" "$TIDB_CLUSTER_NAME" "$TIDB_CLUSTER_NAMESPACE" \
     "$GF_DM_PROMETHEUS_URL" "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
@@ -61,6 +103,7 @@ if [ -n "$DM_CLUSTER_NAME" ]; then
         fi
         cp -f -- /tmp/dm-cluster-datasource.yaml "$GF_DATASOURCE_PATH/"
     fi
+    prepare_reloader_rules "${DM_VERSION##*/}" || exit 1
     echo "running for DM done"
     exit
 fi
@@ -176,6 +219,8 @@ if [ -n "$PROM_PERSISTENT_DIR" ]; then
 fi
 
 # Datasources
+prepare_reloader_rules "${TIDB_VERSION##*/}" || exit 1
+
 if [ -n "$GF_DATASOURCE_PATH" ]; then
     if [ -n "$GF_K8S_PROMETHEUS_URL" ]; then
         replace_template 'http://prometheus-k8s.monitoring.svc:9090' "${GF_K8S_PROMETHEUS_URL}" /tmp/k8s-datasource.yaml
