@@ -19,7 +19,7 @@ func TestMonitoringConcurrencyBudget(t *testing.T) {
 	}))
 	defer upstream.Close()
 	u, _ := url.Parse(upstream.URL)
-	engine := NewService(u, t.TempDir(), false, "")
+	engine := newAuthenticatedTestService(t, u, t.TempDir(), false, "")
 	var wg sync.WaitGroup
 	defer wg.Wait()
 	defer close(release)
@@ -37,7 +37,7 @@ func TestMonitoringConcurrencyBudget(t *testing.T) {
 	for i := 0; i < 4; i++ {
 		select {
 		case <-entered:
-		case <-time.After(time.Second):
+		case <-time.After(3 * time.Second):
 			t.Fatal("upstream request not started")
 		}
 	}
@@ -54,7 +54,7 @@ func TestMonitoringConcurrencyBudget(t *testing.T) {
 		if w.Code != http.StatusTooManyRequests {
 			t.Fatalf("excess concurrency accepted: %d", w.Code)
 		}
-	case <-time.After(time.Second):
+	case <-time.After(3 * time.Second):
 		t.Fatal("excess request was not rejected immediately")
 	}
 

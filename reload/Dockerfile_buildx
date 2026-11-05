@@ -2,7 +2,7 @@ FROM golang:1.25 as builder
 WORKDIR /app
 COPY go.mod go.sum ./
 COPY reload ./reload
-RUN CGO_ENABLED=0 go build -v ./reload/main.go
+RUN CGO_ENABLED=0 go build -v -o /app/main ./reload
 
 FROM busybox:1.37.0
 

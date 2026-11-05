@@ -19,8 +19,8 @@ all:
 	else \
 		echo "ARCH unknown"; \
 	fi
-	GOOS=linux go build -o ./reload/build/linux/reload  ./reload/main.go; \
-    GOOS=darwin go build -o ./reload/build/macos/reload  ./reload/main.go; \
+	GOOS=linux go build -o ./reload/build/linux/reload  ./reload; \
+    GOOS=darwin go build -o ./reload/build/macos/reload  ./reload; \
 
 pull-monitoring:
 	go build -o pull-monitoring cmd/monitoring.go

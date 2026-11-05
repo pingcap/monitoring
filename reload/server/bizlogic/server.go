@@ -193,6 +193,7 @@ func (s *server) UpdateConfig(c *gin.Context) {
 		}
 		return
 	}
+	auditSavedConfig(c, data)
 	if s.needStoreFileToStorePath {
 		store, err := os.OpenRoot(s.storePath)
 		if err != nil {
