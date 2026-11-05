@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/pingcap/monitoring/reload/identity"
 	"github.com/pingcap/monitoring/reload/server/apis"
 	"github.com/pingcap/monitoring/reload/server/auth"
 	"github.com/pingcap/monitoring/reload/server/bizlogic"
@@ -37,6 +38,12 @@ func main() {
 	var rootCmd = &cobra.Command{
 		Use: "reload",
 		Run: func(co *cobra.Command, args []string) {
+			if subStorePath != "" && (extract(subStorePath) == "" || extract(subStorePath) == "." || extract(subStorePath) == "..") {
+				log.Fatal("invalid persistent rules version")
+			}
+			if err := identity.Prepare(watchDir, rootStorePath, extract(subStorePath)); err != nil {
+				log.Fatalf("prepare non-root reloader: %v", err)
+			}
 			startServer()
 		},
 		FParseErrWhitelist: cobra.FParseErrWhitelist{

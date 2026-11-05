@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -16,6 +17,77 @@ import (
 )
 
 type dmTransport func(*http.Request) (*http.Response, error)
+
+func TestInitializerPreparesRuleAccess(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("initializer requires POSIX permissions")
+	}
+	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
+		t.Run(source, func(t *testing.T) {
+			script, err := os.ReadFile(source)
+			if err != nil {
+				t.Fatal(err)
+			}
+			prefix, _, ok := strings.Cut(string(script), "# Multiline replacements")
+			if !ok || !strings.Contains(prefix, "prepare_reloader_rules()") {
+				t.Fatal("initializer does not prepare reloader access")
+			}
+			dir := t.TempDir()
+			active := filepath.Join(dir, "active rules", "rules")
+			data := filepath.Join(dir, "data")
+			store := filepath.Join(data, "latest-rules", "tidb:test")
+			for _, path := range []string{active, store} {
+				if err := os.MkdirAll(path, 0755); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(filepath.Join(path, "test.yml"), []byte("groups: []"), 0444); err != nil {
+					t.Fatal(err)
+				}
+			}
+			unrelated := filepath.Join(data, "prometheus")
+			if err := os.Mkdir(unrelated, 0700); err != nil {
+				t.Fatal(err)
+			}
+			run := func() error {
+				cmd := exec.Command("sh", "-c", prefix+"\nprepare_reloader_rules tidb:test")
+				cmd.Env = append(os.Environ(), "PROM_CONFIG_PATH="+filepath.Dir(active), "PROM_PERSISTENT_DIR="+data,
+					fmt.Sprintf("RELOADER_UID=%d", os.Geteuid()), fmt.Sprintf("RELOADER_GID=%d", os.Getegid()))
+				output, err := cmd.CombinedOutput()
+				if err != nil {
+					return fmt.Errorf("%w: %s", err, output)
+				}
+				return nil
+			}
+			if err := run(); err != nil {
+				t.Fatal(err)
+			}
+			for _, path := range []string{active, store} {
+				info, err := os.Stat(filepath.Join(path, "test.yml"))
+				if err != nil || info.Mode().Perm() != 0644 {
+					t.Fatalf("rule permissions: %v, %v", info, err)
+				}
+			}
+			info, err := os.Stat(unrelated)
+			if err != nil || info.Mode().Perm() != 0700 {
+				t.Fatal("unrelated data directory permissions changed", err)
+			}
+			outside := filepath.Join(dir, "outside.yml")
+			if err := os.WriteFile(outside, []byte("private"), 0400); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.Symlink(outside, filepath.Join(active, "alias.yml")); err != nil {
+				t.Fatal(err)
+			}
+			if err := run(); err == nil {
+				t.Fatal("symbolic-link rule accepted")
+			}
+			info, err = os.Stat(outside)
+			if err != nil || info.Mode().Perm() != 0400 {
+				t.Fatal("permissions changed through symlink", err)
+			}
+		})
+	}
+}
 
 func (f dmTransport) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
 
@@ -120,7 +192,7 @@ func TestDMInitializerRejectsMissingRules(t *testing.T) {
 					}
 				}
 				cmd := exec.Command("sh", scriptPath)
-				cmd.Env = append(os.Environ(), "DM_CLUSTER_NAME=test", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana space"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus space"), "PROM_PERSISTENT_DIR=", "GF_DATASOURCE_PATH="+datasource, "GF_DM_PROMETHEUS_URL=http://example.test/?a=1&b=2", "PATH="+extraPath+os.Getenv("PATH"))
+				cmd.Env = append(os.Environ(), fmt.Sprintf("RELOADER_UID=%d", os.Geteuid()), fmt.Sprintf("RELOADER_GID=%d", os.Getegid()), "DM_CLUSTER_NAME=test", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana space"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus space"), "PROM_PERSISTENT_DIR=", "GF_DATASOURCE_PATH="+datasource, "GF_DM_PROMETHEUS_URL=http://example.test/?a=1&b=2", "PATH="+extraPath+os.Getenv("PATH"))
 				out, err := cmd.CombinedOutput()
 				if !hasRules && err == nil {
 					t.Errorf("missing rules reported success: %s", out)
@@ -148,7 +220,7 @@ func TestInitializerRejectsMultilineReplacement(t *testing.T) {
 		t.Run(source, func(t *testing.T) {
 			root := t.TempDir()
 			cmd := exec.Command("sh", source)
-			cmd.Env = append(os.Environ(), "DM_CLUSTER_NAME=test", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus"), "GF_DM_PROMETHEUS_URL=bad\nreplacement")
+			cmd.Env = append(os.Environ(), fmt.Sprintf("RELOADER_UID=%d", os.Geteuid()), fmt.Sprintf("RELOADER_GID=%d", os.Getegid()), "DM_CLUSTER_NAME=test", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus"), "GF_DM_PROMETHEUS_URL=bad\nreplacement")
 			out, err := cmd.CombinedOutput()
 			if err == nil || !strings.Contains(string(out), "must be single-line") {
 				t.Fatalf("multiline value not rejected: %v %s", err, out)
@@ -224,7 +296,7 @@ func TestTiDBInitializerPreservesDatasourceURLs(t *testing.T) {
 			cmd.Dir = root
 			k8sURL := "http://example.test/?a=1&b=2,tail"
 			tidbURL := "http://example.test/tidb?a=1&b=2"
-			cmd.Env = append(os.Environ(), "DM_CLUSTER_NAME=", "TIDB_CLUSTER_NAME=test", "TIDB_CLUSTER_NAMESPACE=default", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana space"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus space"), "PROM_PERSISTENT_DIR=", "GF_DATASOURCE_PATH="+datasource, "GF_K8S_PROMETHEUS_URL="+k8sURL, "GF_TIDB_PROMETHEUS_URL="+tidbURL, "PATH="+extraPath+os.Getenv("PATH"))
+			cmd.Env = append(os.Environ(), fmt.Sprintf("RELOADER_UID=%d", os.Geteuid()), fmt.Sprintf("RELOADER_GID=%d", os.Getegid()), "DM_CLUSTER_NAME=", "TIDB_CLUSTER_NAME=test", "TIDB_CLUSTER_NAMESPACE=default", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana space"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus space"), "PROM_PERSISTENT_DIR=", "GF_DATASOURCE_PATH="+datasource, "GF_K8S_PROMETHEUS_URL="+k8sURL, "GF_TIDB_PROMETHEUS_URL="+tidbURL, "PATH="+extraPath+os.Getenv("PATH"))
 			if out, err := cmd.CombinedOutput(); err != nil {
 				t.Fatalf("TiDB initializer failed: %v %s", err, out)
 			}
