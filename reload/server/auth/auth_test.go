@@ -125,3 +125,18 @@ func TestAuthenticationSlotReleasedBeforeDownstreamHandler(t *testing.T) {
 		t.Fatalf("second authentication blocked by downstream handler: status %d", response.Code)
 	}
 }
+
+func TestHasAdmins(t *testing.T) {
+	var disabled *Policy
+	if disabled.HasAdmins() {
+		t.Fatal("disabled policy enables writes")
+	}
+	viewer := &Policy{users: map[string]User{"reader": {Role: "viewer"}}}
+	if viewer.HasAdmins() {
+		t.Fatal("viewer-only policy enables writes")
+	}
+	viewer.users["editor"] = User{Role: "admin"}
+	if !viewer.HasAdmins() {
+		t.Fatal("admin policy disables writes")
+	}
+}
