@@ -73,7 +73,8 @@ var (
 
 func main() {
 	var rootCmd = &cobra.Command{
-		Use: "load",
+		Use:  "load",
+		Args: cobra.NoArgs,
 		Run: func(co *cobra.Command, args []string) {
 			defer func() {
 				if err := recover(); err != nil {
@@ -86,9 +87,6 @@ func main() {
 			common.CheckErr(stepUp(), "init env failed")
 			common.CheckErr(Start(), "generate monitoring configuration failed")
 		},
-		FParseErrWhitelist: cobra.FParseErrWhitelist{
-			UnknownFlags: true,
-		},
 	}
 
 	rootCmd.Flags().StringVar(&configFile, "config", "", "the monitoring configuration file.")
@@ -98,7 +96,9 @@ func main() {
 	rootCmd.Flags().BoolVar(&autoPush, "auto-push", false, "auto generate new branch from master and push auto-generate files to the branch")
 	rootCmd.MarkFlagRequired("config")
 
-	rootCmd.Execute()
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }
 
 func stepUp() error {

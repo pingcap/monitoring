@@ -30,7 +30,7 @@ jobs:
         with:
           go-version-file: go.mod
       - run: go test ./pkg/common
-      - run: go test ./cmd/monitoring.go ./cmd/dm_rules_test.go ./cmd/persisted_rules_test.go
+      - run: go test ./cmd/monitoring.go ./cmd/cli_test.go ./cmd/dm_rules_test.go ./cmd/persisted_rules_test.go
       - run: python3 -m unittest discover -s scripts -p 'test_build_security.py' -v
 
   reloader:
