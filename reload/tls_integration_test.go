@@ -89,10 +89,11 @@ func TestRealTLSListenerRequiresAuthentication(t *testing.T) {
 	defer func() { cancel(); cmd.Wait() }()
 	pool := x509.NewCertPool()
 	pool.AppendCertsFromPEM(certPEM)
-	client := &http.Client{Timeout: time.Second, Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: pool, MinVersion: tls.VersionTLS12}}}
+	// Bcrypt can exceed one second under -race while other packages run concurrently.
+	client := &http.Client{Timeout: 10 * time.Second, Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: pool, MinVersion: tls.VersionTLS12}}}
 	defer client.CloseIdleConnections()
 	endpoint := "https://" + address + "/monitoring/configs"
-	deadline := time.Now().Add(5 * time.Second)
+	deadline := time.Now().Add(30 * time.Second)
 	for {
 		resp, err := client.Get(endpoint)
 		if err == nil {
