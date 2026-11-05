@@ -36,7 +36,8 @@ var (
 
 func main() {
 	var rootCmd = &cobra.Command{
-		Use: "reload",
+		Use:  "reload",
+		Args: cobra.NoArgs,
 		Run: func(co *cobra.Command, args []string) {
 			if subStorePath != "" && (extract(subStorePath) == "" || extract(subStorePath) == "." || extract(subStorePath) == "..") {
 				log.Fatal("invalid persistent rules version")
@@ -45,9 +46,6 @@ func main() {
 				log.Fatalf("prepare non-root reloader: %v", err)
 			}
 			startServer()
-		},
-		FParseErrWhitelist: cobra.FParseErrWhitelist{
-			UnknownFlags: true,
 		},
 	}
 
@@ -62,7 +60,9 @@ func main() {
 	rootCmd.Flags().StringVar(&promUrl, "prometheus-url", "http://localhost:9090", "the url to send a request to when the files are updated.")
 	rootCmd.MarkFlagRequired("watch-path")
 
-	rootCmd.Execute()
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }
 
 func startServer() {
