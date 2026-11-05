@@ -1,0 +1,28 @@
+# Build from the exact deployed initializer digest, preserving its asset lineage.
+ARG INITIALIZER_IMAGE
+FROM ${INITIALIZER_IMAGE}
+
+USER 0:0
+ARG PINGCAP_UID=1000
+ARG PINGCAP_GID=2000
+ENV RELOADER_UID=${PINGCAP_UID} RELOADER_GID=${PINGCAP_GID}
+
+# Keep the original initializer logic paired with its original rule/dashboard assets.
+RUN cp /usr/bin/init.sh /usr/bin/init-before-nonroot.sh
+COPY platform-monitoring/operator/init.sh /tmp/nonroot-init.sh
+RUN grep -q '^# Multiline replacements' /tmp/nonroot-init.sh && \
+    awk '/^# Multiline replacements/ {exit} {print}' /tmp/nonroot-init.sh > /usr/bin/init.sh && \
+    printf '%s\n' \
+      '/usr/bin/init-before-nonroot.sh "$@" || exit $?' \
+      'if [ -n "${DM_CLUSTER_NAME:-}" ]; then' \
+      '    prepare_reloader_rules "${DM_VERSION##*/}"' \
+      'else' \
+      '    prepare_reloader_rules "${TIDB_VERSION##*/}"' \
+      'fi' >> /usr/bin/init.sh && \
+    chmod 0755 /usr/bin/init.sh && \
+    rm /tmp/nonroot-init.sh
+
+# Apply the datasource change without replacing version-specific rules/dashboards.
+RUN if [ -f /tmp/k8s-datasource.yaml ]; then \
+      sed -i 's/^\([[:space:]]*editable:[[:space:]]*\)true[[:space:]]*$/\1false/' /tmp/k8s-datasource.yaml; \
+    fi

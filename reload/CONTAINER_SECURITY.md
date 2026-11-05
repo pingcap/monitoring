@@ -12,6 +12,48 @@ from these changes in both `spec.initializer` and `spec.reloader`. For DM, also
 update `spec.dm.initializer`. Retain the
 authentication/TLS configuration required by the secured reloader.
 
+## Preserve the existing rules version when upgrading
+
+An unchanged Operator defaults the saved-rules directory to
+`tidb:<spec.initializer.version>`. Changing that tag can select an empty directory
+and stop restoring custom rules. For an existing deployment, keep the initializer
+version unchanged and use a new image repository containing its compatible build:
+
+```yaml
+spec:
+  initializer:
+    baseImage: <new-registry>/tidb-monitor-initializer-compatible
+    version: v8.5.7 # Keep the deployment's original value; this is an example.
+```
+
+Use `platform-monitoring/operator/Dockerfile.compat` to build from the exact
+deployed initializer digest. It preserves that image's rules, dashboards and
+original initialization logic, then prepares their ownership after initialization
+succeeds. Do not rebuild an old version from current master assets or overwrite
+an already-published image tag. Publish under a new repository and the original
+tag so both the image reference and its version lineage are unambiguous:
+
+```bash
+docker build --file platform-monitoring/operator/Dockerfile.compat \
+  --build-arg INITIALIZER_IMAGE='<original-repository>@sha256:<deployed-digest>' \
+  --tag '<new-registry>/tidb-monitor-initializer-compatible:v8.5.7' .
+```
+
+Build and publish each required original version separately. The command above
+only builds locally. For DM, apply the corresponding compatible image to
+`spec.dm.initializer` and retain its original version as well; the shared rules
+directory still follows the top-level initializer version. Keep any explicitly
+configured `spec.alertManagerRulesVersion` unchanged. This path requires no
+Operator change, PVC directory scan, rule copying between versions or automatic
+selection among historical directories.
+
+If changing `spec.initializer.version` intentionally, preserve the current rule
+directory by retaining the existing explicit `alertManagerRulesVersion`, or set
+it to the old top-level initializer version when it was previously unset. Do not
+include the `tidb:` prefix in that field. Back up rules before changing versions.
+
+## Runtime permissions
+
 After generating rules and restoring saved rules, both the TiDB and DM
 initializer paths prepare the active rules directory and the current version's
 `/data/latest-rules/<version>` directory and files for the reloader UID/GID.
@@ -30,8 +72,8 @@ commands:
 ```yaml
 spec:
   initializer:
-    baseImage: <registry>/tidb-monitor-initializer
-    version: <new-initializer-tag>
+    baseImage: <new-registry>/tidb-monitor-initializer-compatible
+    version: v8.5.7 # Keep the existing initializer version.
     envs:
       RELOADER_UID: "1000"
       RELOADER_GID: "2000"
