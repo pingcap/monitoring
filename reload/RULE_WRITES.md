@@ -4,6 +4,9 @@ The editing API publishes a complete rule file using a temporary file and a
 same-directory rename. Readers holding the previous file open finish reading the
 previous contents; new readers see the complete replacement. Existing restrictive
 permission bits are retained, with executable and group/other write bits removed.
+On Unix, replacements also retain the original UID/GID. Ownership and the intended
+mode are restored before publication; a failure leaves the old file in place.
+The process umask does not further restrict replacements of existing files.
 New persistence files are created with mode 0644 (subject to the process umask).
 Temporary files are removed on normal error paths.
 
