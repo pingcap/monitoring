@@ -6,96 +6,68 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
-# JSON string contents also work inside YAML double-quoted scalars.
-json_string() {
-    printf '%s' "$1" | LC_ALL=C awk '
-        BEGIN {
-            for (i = 1; i < 32; i++)
-                escapes[sprintf("%c", i)] = sprintf("\\u%04x", i)
-            escapes[sprintf("%c", 127)] = "\\u007f"
-            for (i = 128; i < 160; i++)
-                escapes[sprintf("%c%c", 194, i)] = sprintf("\\u%04x", i)
-            escapes[sprintf("%c%c%c", 226, 128, 168)] = "\\u2028"
-            escapes[sprintf("%c%c%c", 226, 128, 169)] = "\\u2029"
-            escapes["\\"] = "\\\\"
-            escapes["\""] = "\\\""
-        }
-        {
-            for (i = 1; i <= length($0); i++) {
-                c = substr($0, i, 1)
-                if (substr($0, i, 2) in escapes) {
-                    c = substr($0, i, 2)
-                    i++
-                } else if (substr($0, i, 3) in escapes) {
-                    c = substr($0, i, 3)
-                    i += 2
-                }
-                printf "%s", (c in escapes ? escapes[c] : c)
-            }
-        }
-    '
-}
-
-replace_dashboard_title() {
-    json_value=$(json_string "$2") || return 1
-    replace_template "$1" "$json_value" "$3"
-}
-
-# Validate before deleting or copying any existing dashboards or rules.
-for value in "$TIDB_CLUSTER_NAME" "$TIDB_CLUSTER_NAMESPACE" \
-    "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
+# Keep replacement values safe in the existing JSON, YAML and alert templates.
+LC_ALL=C
+export LC_ALL
+for value in "$TIDB_CLUSTER_NAME" "$TIDB_CLUSTER_NAMESPACE"; do
     case "$value" in
-        *'
-'*|*"$(printf '\r')"*) echo "Initializer values must be single-line" >&2; exit 1;;
+        -|*[!a-zA-Z0-9_.-]*) echo "Cluster name and namespace must contain only letters, digits, _, . or -" >&2; exit 1;;
     esac
 done
-if [ -z "$GF_PROVISIONING_PATH" ] || [ -z "$PROM_CONFIG_PATH" ]; then
-    echo "Grafana and Prometheus output paths are required" >&2
+for value in "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
+    case "$value" in
+        *[![:graph:]]*|*:) echo "Datasource URLs must be printable ASCII without whitespace or a trailing colon" >&2; exit 1;;
+    esac
+    case "$value" in
+        ''|http://?*|https://?*) ;;
+        *) echo "Datasource URLs must use HTTP or HTTPS" >&2; exit 1;;
+    esac
+done
+if [ -z "$PROM_CONFIG_PATH" ]; then
+    echo "Prometheus output path is required" >&2
     exit 1
 fi
 
-if [ ! -d "$GF_PROVISIONING_PATH/dashboards"  ];then
-    mkdir -p -- "$GF_PROVISIONING_PATH/dashboards"
-else
-    rm -rf --  "$GF_PROVISIONING_PATH/dashboards"/*
+if [ -n "$GF_PROVISIONING_PATH" ]; then
+    if [ ! -d "$GF_PROVISIONING_PATH/dashboards"  ];then
+        mkdir -p -- "$GF_PROVISIONING_PATH/dashboards"
+    else
+        rm -rf --  "$GF_PROVISIONING_PATH/dashboards"/*
+    fi
+
+    # TiDB dashboard
+    cp -- /tmp/tidb.json "$GF_PROVISIONING_PATH/dashboards"
+    replace_template 'Test-Cluster-TiDB' "${TIDB_CLUSTER_NAME}-TiDB" "$GF_PROVISIONING_PATH/dashboards"/tidb.json
+
+    # Overview dashboard
+    cp -- /tmp/overview.json "$GF_PROVISIONING_PATH/dashboards"
+    replace_template 'Test-Cluster-Overview' "${TIDB_CLUSTER_NAME}-Overview" "$GF_PROVISIONING_PATH/dashboards"/overview.json
+
+    # PD dashboard
+    cp -- /tmp/pd.json "$GF_PROVISIONING_PATH/dashboards"
+    replace_template 'Test-Cluster-PD' "${TIDB_CLUSTER_NAME}-PD" "$GF_PROVISIONING_PATH/dashboards"/pd.json
+
+    # TiKV dashboard
+    cp -- /tmp/tikv*.json "$GF_PROVISIONING_PATH/dashboards"
+    if [ ! -f /tmp/tikv_pull.json ];then
+        replace_template 'Test-Cluster-TiKV-Details' "${TIDB_CLUSTER_NAME}-TiKV-Details" "$GF_PROVISIONING_PATH/dashboards"/tikv_details.json
+        replace_template 'Test-Cluster-TiKV-Summary' "${TIDB_CLUSTER_NAME}-TiKV-Summary" "$GF_PROVISIONING_PATH/dashboards"/tikv_summary.json
+        replace_template 'Test-Cluster-TiKV-Trouble-Shooting' "${TIDB_CLUSTER_NAME}-TiKV-Trouble-Shooting" "$GF_PROVISIONING_PATH/dashboards"/tikv_trouble_shooting.json
+    else
+        replace_template 'Test-Cluster-TiKV' "${TIDB_CLUSTER_NAME}-TiKV" "$GF_PROVISIONING_PATH/dashboards"/tikv_pull.json
+    fi
+
+    # Binlog dashboard
+    cp -- /tmp/binlog.json "$GF_PROVISIONING_PATH/dashboards"
+    replace_template 'Test-Cluster-Binlog' "${TIDB_CLUSTER_NAME}-Binlog" "$GF_PROVISIONING_PATH/dashboards"/binlog.json
+
+    # Lighting
+    cp -- /tmp/lightning.json "$GF_PROVISIONING_PATH/dashboards"
+    replace_template 'Test-Cluster-Lightning' "${TIDB_CLUSTER_NAME}-Lightning" "$GF_PROVISIONING_PATH/dashboards"/lightning.json
+
 fi
-
-# TiDB dashboard
-cp -- /tmp/tidb.json "$GF_PROVISIONING_PATH/dashboards"
-replace_dashboard_title 'Test-Cluster-TiDB' "${TIDB_CLUSTER_NAME}-TiDB" "$GF_PROVISIONING_PATH/dashboards"/tidb.json
-
-# Overview dashboard
-cp -- /tmp/overview.json "$GF_PROVISIONING_PATH/dashboards"
-replace_dashboard_title 'Test-Cluster-Overview' "${TIDB_CLUSTER_NAME}-Overview" "$GF_PROVISIONING_PATH/dashboards"/overview.json
-
-# PD dashboard
-cp -- /tmp/pd.json "$GF_PROVISIONING_PATH/dashboards"
-replace_dashboard_title 'Test-Cluster-PD' "${TIDB_CLUSTER_NAME}-PD" "$GF_PROVISIONING_PATH/dashboards"/pd.json
-
-# TiKV dashboard
-cp -- /tmp/tikv*.json "$GF_PROVISIONING_PATH/dashboards"
-if [ ! -f /tmp/tikv_pull.json ];then
-    replace_dashboard_title 'Test-Cluster-TiKV-Details' "${TIDB_CLUSTER_NAME}-TiKV-Details" "$GF_PROVISIONING_PATH/dashboards"/tikv_details.json
-    replace_dashboard_title 'Test-Cluster-TiKV-Summary' "${TIDB_CLUSTER_NAME}-TiKV-Summary" "$GF_PROVISIONING_PATH/dashboards"/tikv_summary.json
-    replace_dashboard_title 'Test-Cluster-TiKV-Trouble-Shooting' "${TIDB_CLUSTER_NAME}-TiKV-Trouble-Shooting" "$GF_PROVISIONING_PATH/dashboards"/tikv_trouble_shooting.json
-else
-    replace_dashboard_title 'Test-Cluster-TiKV' "${TIDB_CLUSTER_NAME}-TiKV" "$GF_PROVISIONING_PATH/dashboards"/tikv_pull.json
-fi
-
-# Binlog dashboard
-cp -- /tmp/binlog.json "$GF_PROVISIONING_PATH/dashboards"
-replace_dashboard_title 'Test-Cluster-Binlog' "${TIDB_CLUSTER_NAME}-Binlog" "$GF_PROVISIONING_PATH/dashboards"/binlog.json
-
-# Lighting
-cp -- /tmp/lightning.json "$GF_PROVISIONING_PATH/dashboards"
-replace_dashboard_title 'Test-Cluster-Lightning' "${TIDB_CLUSTER_NAME}-Lightning" "$GF_PROVISIONING_PATH/dashboards"/lightning.json
-
 
 # Rules
-json_cluster_name=$(json_string "$TIDB_CLUSTER_NAME") || exit 1
-rule_label=$(printf '%s' "$json_cluster_name" | sed 's/[\\&|]/\\&/g') || exit 1
-# A constant template preserves the name without relying on sample labels.env.
-rule_description=$(printf '%s' "$json_cluster_name" | sed "s/'/''/g" | sed 's/[\\&|]/\\&/g') || exit 1
 if [ ! -d "$PROM_CONFIG_PATH/rules"  ];then
     mkdir -p -- "$PROM_CONFIG_PATH/rules"
 else
@@ -107,10 +79,7 @@ echo "$META_VALUE"
 cp -- /tmp/*.rules.yml "$PROM_CONFIG_PATH/rules"
 for file in "$PROM_CONFIG_PATH/rules"/*
 do
-    sed -i \
-        -e "s|^\\([[:space:]]*env: \\)ENV_LABELS_ENV$|\\1\"$rule_label\"|" \
-        -e "s|^\\([[:space:]]*description: 'cluster: \\)ENV_LABELS_ENV,|\\1{{ \"$rule_description\" }},|" \
-        -- "$file"
+    replace_template 'ENV_LABELS_ENV' "$TIDB_CLUSTER_NAME" "$file"
 done
 
 # Copy Persistent rules to override raw files
@@ -138,17 +107,19 @@ then
     cp -- /tmp/k8s-datasource.yaml "$GF_DATASOURCE_PATH/"
     cp -- /tmp/tidb-cluster-datasource.yaml "$GF_DATASOURCE_PATH/"
 
-    # pods
-    if [ -n "$TIDB_CLUSTER_NAMESPACE" ];
-    then
-         replace_template '$namespace' "${TIDB_CLUSTER_NAMESPACE}" /tmp/pods.json
-    else
-         sed -i 's/$namespace/default/g' /tmp/pods.json
-    fi
-    replace_dashboard_title 'Test-Cluster-Pods-Info' "${TIDB_CLUSTER_NAME}-Pods-Info" /tmp/pods.json
-    cp -- /tmp/pods.json "$GF_PROVISIONING_PATH/dashboards"
+    if [ -n "$GF_PROVISIONING_PATH" ]; then
+        # pods
+        if [ -n "$TIDB_CLUSTER_NAMESPACE" ];
+        then
+             replace_template '$namespace' "${TIDB_CLUSTER_NAMESPACE}" /tmp/pods.json
+        else
+             sed -i 's/$namespace/default/g' /tmp/pods.json
+        fi
+        replace_template 'Test-Cluster-Pods-Info' "${TIDB_CLUSTER_NAME}-Pods-Info" /tmp/pods.json
+        cp -- /tmp/pods.json "$GF_PROVISIONING_PATH/dashboards"
 
-    # nodes
-     cp -- /tmp/nodes.json "$GF_PROVISIONING_PATH/dashboards"
+        # nodes
+         cp -- /tmp/nodes.json "$GF_PROVISIONING_PATH/dashboards"
+    fi
 fi
 

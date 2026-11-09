@@ -29,169 +29,115 @@ class LegacyInitializerTests(unittest.TestCase):
             (tools / "sed").symlink_to(sed)
             self.env["PATH"] = f"{tools}:{self.env['PATH']}"
         self.env.update(
-            TIDB_CLUSTER_NAME="test-cluster",
-            TIDB_CLUSTER_NAMESPACE="",
+            TIDB_CLUSTER_NAME="test-cluster", TIDB_CLUSTER_NAMESPACE="",
             TIDB_VERSION="pingcap/tidb:v3.0.0",
             GF_PROVISIONING_PATH=str(self.root / "grafana"),
             PROM_CONFIG_PATH=str(self.root / "prometheus"),
-            GF_DATASOURCE_PATH="",
-            GF_K8S_PROMETHEUS_URL="",
-            GF_TIDB_PROMETHEUS_URL="",
-            PROM_PERSISTENT_DIR="",
+            GF_DATASOURCE_PATH="", GF_K8S_PROMETHEUS_URL="",
+            GF_TIDB_PROMETHEUS_URL="", PROM_PERSISTENT_DIR="",
         )
-        self.titles = {
-            "tidb": "TiDB", "overview": "Overview", "pd": "PD",
-            "tikv_details": "TiKV-Details", "tikv_summary": "TiKV-Summary",
-            "tikv_trouble_shooting": "TiKV-Trouble-Shooting",
-            "binlog": "Binlog", "lightning": "Lightning",
-        }
 
-    def run_initializer(self, source, pull=False, real_dashboards=False):
-        # Isolate only the image's /tmp assets; run the complete release script.
+    def run_initializer(self, source):
+        # Run the complete script against real release assets in an isolated tree.
         for path in self.assets.iterdir():
             path.unlink()
-        for name, title in self.titles.items():
-            (self.assets / f"{name}.json").write_text(json.dumps({"title": f"Test-Cluster-{title}"}))
-        if pull:
-            (self.assets / "tikv_pull.json").write_text(json.dumps({"title": "Test-Cluster-TiKV"}))
-        (self.assets / "pods.json").write_text(json.dumps({"title": "Test-Cluster-Pods-Info", "namespace": "$namespace"}))
-        (self.assets / "nodes.json").write_text(json.dumps({"title": "nodes"}))
-        if real_dashboards:
-            for path in self.assets.glob("*.json"):
-                path.unlink()
-            for path in (source.parent / "dashboards").glob("*.json"):
-                shutil.copyfile(path, self.assets / path.name)
-        for name in ("cluster", "persistent"):
-            (self.assets / f"{name}.rules.yml").write_text("env: ENV_LABELS_ENV\n")
-        for name in ("k8s", "tidb-cluster"):
-            shutil.copyfile(source.parent / "datasources" / f"{name}-datasource.yaml",
-                            self.assets / f"{name}-datasource.yaml")
+        for kind in ("dashboards", "rules", "datasources"):
+            for path in (source.parent / kind).iterdir():
+                if path.is_file():
+                    shutil.copyfile(path, self.assets / path.name)
         script = self.root / "init.sh"
         script.write_text(source.read_text().replace("/tmp/", f"{self.assets}/"))
         return subprocess.run(["sh", str(script)], env=self.env, cwd=self.root,
                               capture_output=True, text=True, timeout=20)
 
-    def test_all_release_scripts_preserve_outputs(self):
+    def test_all_releases_keep_existing_output_format(self):
         self.assertEqual(len(INITIALIZERS), 36)
-        for source in INITIALIZERS:
-            for configured in (False, True):
-                with self.subTest(version=source.parent.name, configured=configured):
-                    self.env.update(GF_DATASOURCE_PATH="", PROM_PERSISTENT_DIR="")
-                    if configured:
-                        datasources = self.root / "datasources"
-                        datasources.mkdir(exist_ok=True)
-                        persistent = self.root / "store/latest-rules/tidb:v3.0.0"
-                        persistent.mkdir(parents=True, exist_ok=True)
-                        (persistent / "persistent.rules.yml").write_text("saved rules\n")
-                        self.env.update(
-                            GF_DATASOURCE_PATH=str(datasources),
-                            PROM_PERSISTENT_DIR=str(self.root / "store"),
-                            TIDB_CLUSTER_NAMESPACE="tenant-a",
-                            GF_K8S_PROMETHEUS_URL="http://k8s:9090",
-                            GF_TIDB_PROMETHEUS_URL="http://tidb:9090",
-                        )
-                    result = self.run_initializer(source, pull=configured)
-                    self.assertEqual(result.returncode, 0, result.stderr)
-                    self.assertEqual(result.stderr, "")
-                    dashboards = self.root / "grafana/dashboards"
-                    for name, title in self.titles.items():
-                        prefix = "Test-Cluster" if configured and name.startswith("tikv_") else "test-cluster"
-                        self.assertEqual(json.loads((dashboards / f"{name}.json").read_text())["title"], f"{prefix}-{title}")
-                    rules = self.root / "prometheus/rules"
-                    self.assertEqual((rules / "cluster.rules.yml").read_text(), 'env: "test-cluster"\n')
-                    self.assertEqual((rules / "persistent.rules.yml").read_text(),
-                                     "saved rules\n" if configured else 'env: "test-cluster"\n')
-                    if configured:
-                        self.assertEqual(json.loads((dashboards / "tikv_pull.json").read_text())["title"], "test-cluster-TiKV")
-                        self.assertEqual(json.loads((dashboards / "pods.json").read_text()), {"title": "test-cluster-Pods-Info", "namespace": "tenant-a"})
-                        self.assertIn("url: http://k8s:9090", (datasources / "k8s-datasource.yaml").read_text())
-
-    def test_real_dashboards_preserve_cluster_names(self):
+        self.assertEqual(len({p.read_bytes() for p in INITIALIZERS}), 1)
         datasources = self.root / "datasources"
         datasources.mkdir()
-        self.env["GF_DATASOURCE_PATH"] = str(datasources)
-        controls = "".join(chr(i) for i in range(1, 32) if i not in (10, 13))
         for source in INITIALIZERS:
-            for cluster in ("test-cluster", r"region\qa", r"region\new", 'region"qa',
-                            "region\\", "区域&qa|test", "region" + controls):
-                with self.subTest(version=source.parent.name, cluster=cluster):
-                    self.env["TIDB_CLUSTER_NAME"] = cluster
-                    result = self.run_initializer(source, real_dashboards=True)
-                    self.assertEqual(result.returncode, 0, result.stderr)
-                    self.assertEqual(result.stderr, "")
-                    for template in (source.parent / "dashboards").glob("*.json"):
-                        content = template.read_text()
-                        if template.name == "pods.json":
-                            content = content.replace("$namespace", "default")
-                        expected = json.loads(content)
-                        if expected["title"].startswith("Test-Cluster-"):
-                            expected["title"] = cluster + expected["title"][len("Test-Cluster"):]
-                        actual = json.loads((self.root / "grafana/dashboards" / template.name).read_text())
-                        self.assertEqual(actual, expected, template.name)
+            for grafana, provision in ((False, False), (False, True), (True, False), (True, True)):
+                with self.subTest(version=source.parent.name, grafana=grafana, datasources=provision):
+                    dashboard_root = self.root / "grafana"
+                    shutil.rmtree(dashboard_root, ignore_errors=True)
+                    self.env.update(
+                        GF_PROVISIONING_PATH=str(dashboard_root) if grafana else "",
+                        GF_DATASOURCE_PATH=str(datasources) if provision else "",
+                    )
+                    result = self.run_initializer(source)
+                    self.assertEqual((result.returncode, result.stderr), (0, ""))
+                    for template in (source.parent / "rules").glob("*.rules.yml"):
+                        expected = template.read_text().replace("ENV_LABELS_ENV", "test-cluster")
+                        self.assertEqual((self.root / "prometheus/rules" / template.name).read_text(), expected)
+                    self.assertEqual(dashboard_root.exists(), grafana)
+                    if grafana:
+                        for template in (source.parent / "dashboards").glob("*.json"):
+                            if not provision and template.name in ("pods.json", "nodes.json"):
+                                continue
+                            expected = template.read_text().replace("Test-Cluster-", "test-cluster-")
+                            if template.name == "pods.json":
+                                expected = expected.replace("$namespace", "default")
+                            actual = (dashboard_root / "dashboards" / template.name).read_text()
+                            self.assertEqual(actual, expected)
+                            json.loads(actual)
+                    if provision:
+                        for template in (source.parent / "datasources").glob("*.yaml"):
+                            self.assertEqual((datasources / template.name).read_bytes(), template.read_bytes())
 
-    def test_sed_arguments_cannot_write_another_file(self):
+    def test_paths_urls_and_persisted_rules(self):
+        for key in ("GF_PROVISIONING_PATH", "PROM_CONFIG_PATH", "GF_DATASOURCE_PATH", "PROM_PERSISTENT_DIR"):
+            path = self.root / f"{key} with spaces"
+            path.mkdir()
+            self.env[key] = str(path)
+        saved = Path(self.env["PROM_PERSISTENT_DIR"]) / "latest-rules/tidb:v3.0.0"
+        saved.mkdir(parents=True)
+        (saved / "tidb.rules.yml").write_text("saved rules\n")
         victim = self.root / "victim"
-        self.env["TIDB_CLUSTER_NAME"] = f"X -e s/Test-Cluster-TiDB/PWNED/w{victim} -e s/q/"
-        for source in INITIALIZERS:
-            with self.subTest(version=source.parent.name):
-                victim.write_text("untouched\n")
-                result = self.run_initializer(source)
-                self.assertEqual(victim.read_text(), "untouched\n")
-                self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual(result.stderr, "")
-
-    def test_replacements_and_paths_are_literal(self):
+        victim.write_text("untouched\n")
+        url = rf"https://metrics.example/query?a=1&b=2,three=3|four=\value;w{victim}"
+        self.env.update(GF_K8S_PROMETHEUS_URL=url, GF_TIDB_PROMETHEUS_URL=url, TIDB_CLUSTER_NAMESPACE="tenant-a")
         source = INITIALIZERS[0]
+        result = self.run_initializer(source)
+        self.assertEqual((result.returncode, result.stderr), (0, ""))
+        self.assertEqual(victim.read_text(), "untouched\n")
+        self.assertEqual((Path(self.env["PROM_CONFIG_PATH"]) / "rules/tidb.rules.yml").read_text(), "saved rules\n")
+        pods = Path(self.env["GF_PROVISIONING_PATH"]) / "dashboards/pods.json"
+        expected = (source.parent / "dashboards/pods.json").read_text().replace("Test-Cluster-", "test-cluster-").replace("$namespace", "tenant-a")
+        self.assertEqual(pods.read_text(), expected)
+        for name, original in (("k8s", "http://prometheus-k8s.monitoring.svc:9090"), ("tidb-cluster", "http://127.0.0.1:9090")):
+            filename = f"{name}-datasource.yaml"
+            expected = (source.parent / "datasources" / filename).read_text().replace(original, url)
+            self.assertEqual((Path(self.env["GF_DATASOURCE_PATH"]) / filename).read_text(), expected)
+
+    def test_unsafe_values_fail_before_any_output_changes(self):
+        existing = []
+        for relative in ("grafana/dashboards/existing.json", "prometheus/rules/existing.yml"):
+            path = self.root / relative
+            path.parent.mkdir(parents=True)
+            path.write_text("keep\n")
+            existing.append(path)
         victim = self.root / "victim"
         victim.write_text("untouched\n")
         payload = f"X -e s/Test-Cluster-TiDB/PWNED/w{victim} -e s/q/"
-        for cluster in ("normal-cluster", payload, r"name&with|slash/and\backslash"):
-            with self.subTest(cluster=cluster):
-                self.env.update(TIDB_CLUSTER_NAME=cluster)
-                for key in ("GF_PROVISIONING_PATH", "PROM_CONFIG_PATH", "GF_DATASOURCE_PATH", "PROM_PERSISTENT_DIR"):
-                    path = self.root / f"{key} with spaces"
-                    path.mkdir(exist_ok=True)
-                    self.env[key] = str(path)
-                persistent = Path(self.env["PROM_PERSISTENT_DIR"]) / "latest-rules/tidb:v3.0.0"
-                persistent.mkdir(parents=True, exist_ok=True)
-                (persistent / "persistent.rules.yml").write_text("saved rules\n")
-                url = r"https://metrics.example/query?one=1&two=2,three=3|four=\value"
-                self.env.update(GF_K8S_PROMETHEUS_URL=url, GF_TIDB_PROMETHEUS_URL=url)
-                result = self.run_initializer(source)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual(result.stderr, "")
-                dashboards = Path(self.env["GF_PROVISIONING_PATH"]) / "dashboards"
-                self.assertEqual(json.loads((dashboards / "tidb.json").read_text())["title"], f"{cluster}-TiDB")
-                self.assertEqual(json.loads((dashboards / "pods.json").read_text()), {"title": f"{cluster}-Pods-Info", "namespace": "default"})
-                rules = Path(self.env["PROM_CONFIG_PATH"]) / "rules"
-                self.assertEqual(json.loads((rules / "cluster.rules.yml").read_text().removeprefix("env: ")), cluster)
-                self.assertEqual((rules / "persistent.rules.yml").read_text(), "saved rules\n")
-                for name in ("k8s", "tidb-cluster"):
-                    data = Path(self.env["GF_DATASOURCE_PATH"]) / f"{name}-datasource.yaml"
-                    self.assertIn(f"url: {url}", data.read_text())
-                self.assertEqual(victim.read_text(), "untouched\n")
-
-    def test_invalid_values_fail_before_modifying_output(self):
-        dashboard = self.root / "grafana/dashboards/existing.json"
-        dashboard.parent.mkdir(parents=True)
-        dashboard.write_text("keep\n")
-        for key in ("TIDB_CLUSTER_NAME", "TIDB_CLUSTER_NAMESPACE", "GF_K8S_PROMETHEUS_URL", "GF_TIDB_PROMETHEUS_URL"):
-            for value in ("first\nsecond", "first\rsecond"):
+        cases = {key: [payload, "&", "-", r"team\qa", 'team"qa', "team'qa", '{{ "other-cluster" }}', "team\nqa", "team\rqa", "team\tqa", "team\u0085qa"]
+                 for key in ("TIDB_CLUSTER_NAME", "TIDB_CLUSTER_NAMESPACE")}
+        for key in ("GF_K8S_PROMETHEUS_URL", "GF_TIDB_PROMETHEUS_URL"):
+            cases[key] = ["https://example.com" + c + "    jsonData: {tlsSkipVerify: true}" for c in ("\n", "\r", "\u0085", "\u2028", "\u2029")]
+            cases[key] += ["https://example.com\n", "https://example.com\t", "https://example.com:", "file:///tmp/rules", "https://"]
+        cases["PROM_CONFIG_PATH"] = [""]
+        for key, values in cases.items():
+            for value in values:
                 with self.subTest(key=key, value=value):
-                    original = self.env[key]
+                    old = self.env[key]
                     self.env[key] = value
                     result = self.run_initializer(INITIALIZERS[0])
-                    self.env[key] = original
+                    self.env[key] = old
                     self.assertNotEqual(result.returncode, 0)
-                    self.assertEqual(dashboard.read_text(), "keep\n")
-        for key in ("GF_PROVISIONING_PATH", "PROM_CONFIG_PATH"):
-            with self.subTest(key=key):
-                original = self.env[key]
-                self.env[key] = ""
-                result = self.run_initializer(INITIALIZERS[0])
-                self.env[key] = original
-                self.assertNotEqual(result.returncode, 0)
-                self.assertEqual(dashboard.read_text(), "keep\n")
+                    for path in existing:
+                        self.assertEqual(path.read_text(), "keep\n")
+                    self.assertEqual(victim.read_text(), "untouched\n")
+                    self.assertEqual(sorted((self.root / "grafana/dashboards").iterdir()), existing[:1])
+                    self.assertEqual(sorted((self.root / "prometheus/rules").iterdir()), existing[1:])
 
 
 if __name__ == "__main__":

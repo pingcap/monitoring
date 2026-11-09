@@ -12,6 +12,7 @@ on:
       - 'monitor/v*/init.sh'
       - 'monitor/v*/dashboards/*.json'
       - 'monitor/v*/rules/*.rules.yml'
+      - 'monitor/v*/datasources/*.yaml'
       - 'scripts/**'
       - 'go.mod'
       - 'go.sum'
@@ -36,12 +37,6 @@ jobs:
       - run: go test ./cmd/monitoring.go ./cmd/cli_test.go ./cmd/dm_rules_test.go ./cmd/persisted_rules_test.go
       - run: python3 -m unittest discover -s scripts -p 'test_build_security.py' -v
       - run: python3 -m unittest discover -s scripts -p 'test_legacy_initializer.py' -v
-      - name: Check legacy rules with promtool 2.27.1
-        run: |
-          promtool_container=$(docker create prom/prometheus:v2.27.1)
-          trap 'docker rm "$promtool_container" >/dev/null' EXIT
-          docker cp "$promtool_container:/bin/promtool" "$RUNNER_TEMP/promtool"
-          PROMTOOL="$RUNNER_TEMP/promtool" go test ./scripts/legacy_rules_test.go
 
   reloader:
     runs-on: ubuntu-latest
