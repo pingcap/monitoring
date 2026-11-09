@@ -57,7 +57,8 @@ func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool,
 func (s *server) ListConfigs(c *gin.Context) {
 	list, err := s.getConfigs()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
+		slog.Error("cannot list configs", "error", err)
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot list configs"))
 	} else {
 		c.JSON(http.StatusOK, list)
 	}

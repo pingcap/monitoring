@@ -78,6 +78,34 @@ func TestConfigFileBoundary(t *testing.T) {
 	}
 }
 
+func TestListConfigsResponse(t *testing.T) {
+	dir := t.TempDir()
+	rule := filepath.Join(dir, "rules.yml")
+	if err := os.WriteFile(rule, []byte("groups: []"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		name string
+		dir  string
+		code int
+		body string
+	}{
+		{"success", dir, http.StatusOK, `["rules.yml"]`},
+		{"missing directory", filepath.Join(dir, "private-missing-directory"), http.StatusBadRequest, `{"errorCode":400,"errorMessage":"cannot list configs"}`},
+		{"not a directory", rule, http.StatusBadRequest, `{"errorCode":400,"errorMessage":"cannot list configs"}`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			c, _ := gin.CreateTestContext(w)
+			c.Request = httptest.NewRequest(http.MethodGet, "/monitoring/configs", nil)
+			newConfigTestServer(nil, tc.dir, false, "").ListConfigs(c)
+			if w.Code != tc.code || w.Body.String() != tc.body {
+				t.Fatalf("unexpected response: %d %s", w.Code, w.Body)
+			}
+		})
+	}
+}
+
 func TestListConfigsFileBoundary(t *testing.T) {
 	dir := t.TempDir()
 	outside := filepath.Join(t.TempDir(), "outside.yml")
