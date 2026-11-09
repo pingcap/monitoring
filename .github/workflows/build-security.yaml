@@ -10,6 +10,7 @@ on:
       - 'platform-monitoring/operator/**'
       - 'monitor-snapshot/master/operator/**'
       - 'monitor/v*/init.sh'
+      - 'monitor/v*/dashboards/*.json'
       - 'scripts/**'
       - 'go.mod'
       - 'go.sum'

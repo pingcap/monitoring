@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 import shutil
@@ -45,16 +46,21 @@ class LegacyInitializerTests(unittest.TestCase):
             "binlog": "Binlog", "lightning": "Lightning",
         }
 
-    def run_initializer(self, source, pull=False):
+    def run_initializer(self, source, pull=False, real_dashboards=False):
         # Isolate only the image's /tmp assets; run the complete release script.
         for path in self.assets.iterdir():
             path.unlink()
         for name, title in self.titles.items():
-            (self.assets / f"{name}.json").write_text(f"Test-Cluster-{title}\n")
+            (self.assets / f"{name}.json").write_text(json.dumps({"title": f"Test-Cluster-{title}"}))
         if pull:
-            (self.assets / "tikv_pull.json").write_text("Test-Cluster-TiKV\n")
-        (self.assets / "pods.json").write_text("Test-Cluster-Pods-Info $namespace\n")
-        (self.assets / "nodes.json").write_text("nodes\n")
+            (self.assets / "tikv_pull.json").write_text(json.dumps({"title": "Test-Cluster-TiKV"}))
+        (self.assets / "pods.json").write_text(json.dumps({"title": "Test-Cluster-Pods-Info", "namespace": "$namespace"}))
+        (self.assets / "nodes.json").write_text(json.dumps({"title": "nodes"}))
+        if real_dashboards:
+            for path in self.assets.glob("*.json"):
+                path.unlink()
+            for path in (source.parent / "dashboards").glob("*.json"):
+                shutil.copyfile(path, self.assets / path.name)
         for name in ("cluster", "persistent"):
             (self.assets / f"{name}.rules.yml").write_text("env: ENV_LABELS_ENV\n")
         for name in ("k8s", "tidb-cluster"):
@@ -90,15 +96,38 @@ class LegacyInitializerTests(unittest.TestCase):
                     dashboards = self.root / "grafana/dashboards"
                     for name, title in self.titles.items():
                         prefix = "Test-Cluster" if configured and name.startswith("tikv_") else "test-cluster"
-                        self.assertEqual((dashboards / f"{name}.json").read_text(), f"{prefix}-{title}\n")
+                        self.assertEqual(json.loads((dashboards / f"{name}.json").read_text())["title"], f"{prefix}-{title}")
                     rules = self.root / "prometheus/rules"
                     self.assertEqual((rules / "cluster.rules.yml").read_text(), "env: test-cluster\n")
                     self.assertEqual((rules / "persistent.rules.yml").read_text(),
                                      "saved rules\n" if configured else "env: test-cluster\n")
                     if configured:
-                        self.assertEqual((dashboards / "tikv_pull.json").read_text(), "test-cluster-TiKV\n")
-                        self.assertEqual((dashboards / "pods.json").read_text(), "test-cluster-Pods-Info tenant-a\n")
+                        self.assertEqual(json.loads((dashboards / "tikv_pull.json").read_text())["title"], "test-cluster-TiKV")
+                        self.assertEqual(json.loads((dashboards / "pods.json").read_text()), {"title": "test-cluster-Pods-Info", "namespace": "tenant-a"})
                         self.assertIn("url: http://k8s:9090", (datasources / "k8s-datasource.yaml").read_text())
+
+    def test_real_dashboards_preserve_cluster_names(self):
+        datasources = self.root / "datasources"
+        datasources.mkdir()
+        self.env["GF_DATASOURCE_PATH"] = str(datasources)
+        controls = "".join(chr(i) for i in range(1, 32) if i not in (10, 13))
+        for source in INITIALIZERS:
+            for cluster in ("test-cluster", r"region\qa", r"region\new", 'region"qa',
+                            "region\\", "区域&qa|test", "region" + controls):
+                with self.subTest(version=source.parent.name, cluster=cluster):
+                    self.env["TIDB_CLUSTER_NAME"] = cluster
+                    result = self.run_initializer(source, real_dashboards=True)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(result.stderr, "")
+                    for template in (source.parent / "dashboards").glob("*.json"):
+                        content = template.read_text()
+                        if template.name == "pods.json":
+                            content = content.replace("$namespace", "default")
+                        expected = json.loads(content)
+                        if expected["title"].startswith("Test-Cluster-"):
+                            expected["title"] = cluster + expected["title"][len("Test-Cluster"):]
+                        actual = json.loads((self.root / "grafana/dashboards" / template.name).read_text())
+                        self.assertEqual(actual, expected, template.name)
 
     def test_sed_arguments_cannot_write_another_file(self):
         victim = self.root / "victim"
@@ -132,8 +161,8 @@ class LegacyInitializerTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stderr, "")
                 dashboards = Path(self.env["GF_PROVISIONING_PATH"]) / "dashboards"
-                self.assertEqual((dashboards / "tidb.json").read_text(), f"{cluster}-TiDB\n")
-                self.assertEqual((dashboards / "pods.json").read_text(), f"{cluster}-Pods-Info default\n")
+                self.assertEqual(json.loads((dashboards / "tidb.json").read_text())["title"], f"{cluster}-TiDB")
+                self.assertEqual(json.loads((dashboards / "pods.json").read_text()), {"title": f"{cluster}-Pods-Info", "namespace": "default"})
                 rules = Path(self.env["PROM_CONFIG_PATH"]) / "rules"
                 self.assertEqual((rules / "cluster.rules.yml").read_text(), f"env: {cluster}\n")
                 self.assertEqual((rules / "persistent.rules.yml").read_text(), "saved rules\n")

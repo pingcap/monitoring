@@ -6,6 +6,25 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
+# Encode JSON string contents before protecting them from sed interpretation.
+replace_dashboard_title() {
+    json_value=$(printf '%s' "$2" | LC_ALL=C awk '
+        BEGIN {
+            for (i = 1; i < 32; i++)
+                escapes[sprintf("%c", i)] = sprintf("\\u%04x", i)
+            escapes["\\"] = "\\\\"
+            escapes["\""] = "\\\""
+        }
+        {
+            for (i = 1; i <= length($0); i++) {
+                c = substr($0, i, 1)
+                printf "%s", (c in escapes ? escapes[c] : c)
+            }
+        }
+    ') || return 1
+    replace_template "$1" "$json_value" "$3"
+}
+
 # Validate before deleting or copying any existing dashboards or rules.
 for value in "$TIDB_CLUSTER_NAME" "$TIDB_CLUSTER_NAMESPACE" \
     "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
@@ -27,33 +46,33 @@ fi
 
 # TiDB dashboard
 cp -- /tmp/tidb.json "$GF_PROVISIONING_PATH/dashboards"
-replace_template 'Test-Cluster-TiDB' "${TIDB_CLUSTER_NAME}-TiDB" "$GF_PROVISIONING_PATH/dashboards"/tidb.json
+replace_dashboard_title 'Test-Cluster-TiDB' "${TIDB_CLUSTER_NAME}-TiDB" "$GF_PROVISIONING_PATH/dashboards"/tidb.json
 
 # Overview dashboard
 cp -- /tmp/overview.json "$GF_PROVISIONING_PATH/dashboards"
-replace_template 'Test-Cluster-Overview' "${TIDB_CLUSTER_NAME}-Overview" "$GF_PROVISIONING_PATH/dashboards"/overview.json
+replace_dashboard_title 'Test-Cluster-Overview' "${TIDB_CLUSTER_NAME}-Overview" "$GF_PROVISIONING_PATH/dashboards"/overview.json
 
 # PD dashboard
 cp -- /tmp/pd.json "$GF_PROVISIONING_PATH/dashboards"
-replace_template 'Test-Cluster-PD' "${TIDB_CLUSTER_NAME}-PD" "$GF_PROVISIONING_PATH/dashboards"/pd.json
+replace_dashboard_title 'Test-Cluster-PD' "${TIDB_CLUSTER_NAME}-PD" "$GF_PROVISIONING_PATH/dashboards"/pd.json
 
 # TiKV dashboard
 cp -- /tmp/tikv*.json "$GF_PROVISIONING_PATH/dashboards"
 if [ ! -f /tmp/tikv_pull.json ];then
-    replace_template 'Test-Cluster-TiKV-Details' "${TIDB_CLUSTER_NAME}-TiKV-Details" "$GF_PROVISIONING_PATH/dashboards"/tikv_details.json
-    replace_template 'Test-Cluster-TiKV-Summary' "${TIDB_CLUSTER_NAME}-TiKV-Summary" "$GF_PROVISIONING_PATH/dashboards"/tikv_summary.json
-    replace_template 'Test-Cluster-TiKV-Trouble-Shooting' "${TIDB_CLUSTER_NAME}-TiKV-Trouble-Shooting" "$GF_PROVISIONING_PATH/dashboards"/tikv_trouble_shooting.json
+    replace_dashboard_title 'Test-Cluster-TiKV-Details' "${TIDB_CLUSTER_NAME}-TiKV-Details" "$GF_PROVISIONING_PATH/dashboards"/tikv_details.json
+    replace_dashboard_title 'Test-Cluster-TiKV-Summary' "${TIDB_CLUSTER_NAME}-TiKV-Summary" "$GF_PROVISIONING_PATH/dashboards"/tikv_summary.json
+    replace_dashboard_title 'Test-Cluster-TiKV-Trouble-Shooting' "${TIDB_CLUSTER_NAME}-TiKV-Trouble-Shooting" "$GF_PROVISIONING_PATH/dashboards"/tikv_trouble_shooting.json
 else
-    replace_template 'Test-Cluster-TiKV' "${TIDB_CLUSTER_NAME}-TiKV" "$GF_PROVISIONING_PATH/dashboards"/tikv_pull.json
+    replace_dashboard_title 'Test-Cluster-TiKV' "${TIDB_CLUSTER_NAME}-TiKV" "$GF_PROVISIONING_PATH/dashboards"/tikv_pull.json
 fi
 
 # Binlog dashboard
 cp -- /tmp/binlog.json "$GF_PROVISIONING_PATH/dashboards"
-replace_template 'Test-Cluster-Binlog' "${TIDB_CLUSTER_NAME}-Binlog" "$GF_PROVISIONING_PATH/dashboards"/binlog.json
+replace_dashboard_title 'Test-Cluster-Binlog' "${TIDB_CLUSTER_NAME}-Binlog" "$GF_PROVISIONING_PATH/dashboards"/binlog.json
 
 # Lighting
 cp -- /tmp/lightning.json "$GF_PROVISIONING_PATH/dashboards"
-replace_template 'Test-Cluster-Lightning' "${TIDB_CLUSTER_NAME}-Lightning" "$GF_PROVISIONING_PATH/dashboards"/lightning.json
+replace_dashboard_title 'Test-Cluster-Lightning' "${TIDB_CLUSTER_NAME}-Lightning" "$GF_PROVISIONING_PATH/dashboards"/lightning.json
 
 
 # Rules
@@ -103,7 +122,7 @@ then
     else
          sed -i 's/$namespace/default/g' /tmp/pods.json
     fi
-    replace_template 'Test-Cluster-Pods-Info' "${TIDB_CLUSTER_NAME}-Pods-Info" /tmp/pods.json
+    replace_dashboard_title 'Test-Cluster-Pods-Info' "${TIDB_CLUSTER_NAME}-Pods-Info" /tmp/pods.json
     cp -- /tmp/pods.json "$GF_PROVISIONING_PATH/dashboards"
 
     # nodes
