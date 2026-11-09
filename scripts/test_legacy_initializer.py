@@ -63,6 +63,9 @@ class LegacyInitializerTests(unittest.TestCase):
                     self.env.update(
                         GF_PROVISIONING_PATH=str(dashboard_root) if grafana else "",
                         GF_DATASOURCE_PATH=str(datasources) if provision else "",
+                        TIDB_CLUSTER_NAMESPACE="" if grafana and provision else r"unused\namespace",
+                        GF_K8S_PROMETHEUS_URL="" if provision else "prometheus-k8s.monitoring.svc:9090",
+                        GF_TIDB_PROMETHEUS_URL="" if provision else "https://example.com\u0085    jsonData: {tlsSkipVerify: true}",
                     )
                     result = self.run_initializer(source)
                     self.assertEqual((result.returncode, result.stderr), (0, ""))
@@ -110,6 +113,9 @@ class LegacyInitializerTests(unittest.TestCase):
             self.assertEqual((Path(self.env["GF_DATASOURCE_PATH"]) / filename).read_text(), expected)
 
     def test_unsafe_values_fail_before_any_output_changes(self):
+        datasources = self.root / "datasources"
+        datasources.mkdir()
+        self.env["GF_DATASOURCE_PATH"] = str(datasources)
         existing = []
         for relative in ("grafana/dashboards/existing.json", "prometheus/rules/existing.yml"):
             path = self.root / relative

@@ -9,20 +9,26 @@ replace_template() {
 # Keep replacement values safe in the existing JSON, YAML and alert templates.
 LC_ALL=C
 export LC_ALL
-for value in "$TIDB_CLUSTER_NAME" "$TIDB_CLUSTER_NAMESPACE"; do
+namespace_to_validate=
+if [ -n "$GF_DATASOURCE_PATH" ] && [ -n "$GF_PROVISIONING_PATH" ]; then
+    namespace_to_validate=$TIDB_CLUSTER_NAMESPACE
+fi
+for value in "$TIDB_CLUSTER_NAME" "$namespace_to_validate"; do
     case "$value" in
         -|*[!a-zA-Z0-9_.-]*) echo "Cluster name and namespace must contain only letters, digits, _, . or -" >&2; exit 1;;
     esac
 done
-for value in "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
-    case "$value" in
-        *[![:graph:]]*|*:) echo "Datasource URLs must be printable ASCII without whitespace or a trailing colon" >&2; exit 1;;
-    esac
-    case "$value" in
-        ''|http://?*|https://?*) ;;
-        *) echo "Datasource URLs must use HTTP or HTTPS" >&2; exit 1;;
-    esac
-done
+if [ -n "$GF_DATASOURCE_PATH" ]; then
+    for value in "$GF_K8S_PROMETHEUS_URL" "$GF_TIDB_PROMETHEUS_URL"; do
+        case "$value" in
+            *[![:graph:]]*|*:) echo "Datasource URLs must be printable ASCII without whitespace or a trailing colon" >&2; exit 1;;
+        esac
+        case "$value" in
+            ''|http://?*|https://?*) ;;
+            *) echo "Datasource URLs must use HTTP or HTTPS" >&2; exit 1;;
+        esac
+    done
+fi
 if [ -z "$PROM_CONFIG_PATH" ]; then
     echo "Prometheus output path is required" >&2
     exit 1
