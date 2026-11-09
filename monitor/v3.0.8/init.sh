@@ -6,22 +6,38 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
-# Encode JSON string contents before protecting them from sed interpretation.
-replace_dashboard_title() {
-    json_value=$(printf '%s' "$2" | LC_ALL=C awk '
+# JSON string contents also work inside YAML double-quoted scalars.
+json_string() {
+    printf '%s' "$1" | LC_ALL=C awk '
         BEGIN {
             for (i = 1; i < 32; i++)
                 escapes[sprintf("%c", i)] = sprintf("\\u%04x", i)
+            escapes[sprintf("%c", 127)] = "\\u007f"
+            for (i = 128; i < 160; i++)
+                escapes[sprintf("%c%c", 194, i)] = sprintf("\\u%04x", i)
+            escapes[sprintf("%c%c%c", 226, 128, 168)] = "\\u2028"
+            escapes[sprintf("%c%c%c", 226, 128, 169)] = "\\u2029"
             escapes["\\"] = "\\\\"
             escapes["\""] = "\\\""
         }
         {
             for (i = 1; i <= length($0); i++) {
                 c = substr($0, i, 1)
+                if (substr($0, i, 2) in escapes) {
+                    c = substr($0, i, 2)
+                    i++
+                } else if (substr($0, i, 3) in escapes) {
+                    c = substr($0, i, 3)
+                    i += 2
+                }
                 printf "%s", (c in escapes ? escapes[c] : c)
             }
         }
-    ') || return 1
+    '
+}
+
+replace_dashboard_title() {
+    json_value=$(json_string "$2") || return 1
     replace_template "$1" "$json_value" "$3"
 }
 
@@ -76,6 +92,10 @@ replace_dashboard_title 'Test-Cluster-Lightning' "${TIDB_CLUSTER_NAME}-Lightning
 
 
 # Rules
+json_cluster_name=$(json_string "$TIDB_CLUSTER_NAME") || exit 1
+rule_label=$(printf '%s' "$json_cluster_name" | sed 's/[\\&|]/\\&/g') || exit 1
+# A constant template preserves the name without relying on sample labels.env.
+rule_description=$(printf '%s' "$json_cluster_name" | sed "s/'/''/g" | sed 's/[\\&|]/\\&/g') || exit 1
 if [ ! -d "$PROM_CONFIG_PATH/rules"  ];then
     mkdir -p -- "$PROM_CONFIG_PATH/rules"
 else
@@ -87,7 +107,10 @@ echo "$META_VALUE"
 cp -- /tmp/*.rules.yml "$PROM_CONFIG_PATH/rules"
 for file in "$PROM_CONFIG_PATH/rules"/*
 do
-    replace_template 'ENV_LABELS_ENV' "${TIDB_CLUSTER_NAME}" "$file"
+    sed -i \
+        -e "s|^\\([[:space:]]*env: \\)ENV_LABELS_ENV$|\\1\"$rule_label\"|" \
+        -e "s|^\\([[:space:]]*description: 'cluster: \\)ENV_LABELS_ENV,|\\1{{ \"$rule_description\" }},|" \
+        -- "$file"
 done
 
 # Copy Persistent rules to override raw files

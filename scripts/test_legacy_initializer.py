@@ -98,9 +98,9 @@ class LegacyInitializerTests(unittest.TestCase):
                         prefix = "Test-Cluster" if configured and name.startswith("tikv_") else "test-cluster"
                         self.assertEqual(json.loads((dashboards / f"{name}.json").read_text())["title"], f"{prefix}-{title}")
                     rules = self.root / "prometheus/rules"
-                    self.assertEqual((rules / "cluster.rules.yml").read_text(), "env: test-cluster\n")
+                    self.assertEqual((rules / "cluster.rules.yml").read_text(), 'env: "test-cluster"\n')
                     self.assertEqual((rules / "persistent.rules.yml").read_text(),
-                                     "saved rules\n" if configured else "env: test-cluster\n")
+                                     "saved rules\n" if configured else 'env: "test-cluster"\n')
                     if configured:
                         self.assertEqual(json.loads((dashboards / "tikv_pull.json").read_text())["title"], "test-cluster-TiKV")
                         self.assertEqual(json.loads((dashboards / "pods.json").read_text()), {"title": "test-cluster-Pods-Info", "namespace": "tenant-a"})
@@ -164,7 +164,7 @@ class LegacyInitializerTests(unittest.TestCase):
                 self.assertEqual(json.loads((dashboards / "tidb.json").read_text())["title"], f"{cluster}-TiDB")
                 self.assertEqual(json.loads((dashboards / "pods.json").read_text()), {"title": f"{cluster}-Pods-Info", "namespace": "default"})
                 rules = Path(self.env["PROM_CONFIG_PATH"]) / "rules"
-                self.assertEqual((rules / "cluster.rules.yml").read_text(), f"env: {cluster}\n")
+                self.assertEqual(json.loads((rules / "cluster.rules.yml").read_text().removeprefix("env: ")), cluster)
                 self.assertEqual((rules / "persistent.rules.yml").read_text(), "saved rules\n")
                 for name in ("k8s", "tidb-cluster"):
                     data = Path(self.env["GF_DATASOURCE_PATH"]) / f"{name}-datasource.yaml"
