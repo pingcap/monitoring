@@ -9,6 +9,7 @@ on:
       - 'cmd/**'
       - 'platform-monitoring/operator/**'
       - 'monitor-snapshot/master/operator/**'
+      - 'monitor/v*/init.sh'
       - 'scripts/**'
       - 'go.mod'
       - 'go.sum'
@@ -32,6 +33,7 @@ jobs:
       - run: go test ./pkg/common
       - run: go test ./cmd/monitoring.go ./cmd/cli_test.go ./cmd/dm_rules_test.go ./cmd/persisted_rules_test.go
       - run: python3 -m unittest discover -s scripts -p 'test_build_security.py' -v
+      - run: python3 -m unittest discover -s scripts -p 'test_legacy_initializer.py' -v
 
   reloader:
     runs-on: ubuntu-latest
