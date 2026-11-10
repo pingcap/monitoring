@@ -22,8 +22,6 @@ Many of the useful settings come from the [kube-prometheus project](https://gith
 
 - __Enable etcd cluster monitoring__
 
-- __Log collection with ElasticSearch and Fluent-Bit__
-
 ## Install
 
 There are two ways to customize and install, choose one you prefer.
@@ -31,10 +29,6 @@ There are two ways to customize and install, choose one you prefer.
 -  __[Install from the generated YAML](#Install-from-the-generated-YAML-files-in-manifests-directory)__
 
 -  __[Install from jsonnet](#Install-from-jsonnet)__
-
-And then install logging services with helm:
-
-- __[Install logging services with helm](#Install-logging-services-with-helm)__
 
 
 

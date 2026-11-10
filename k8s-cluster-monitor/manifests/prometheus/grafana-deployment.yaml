@@ -45,8 +45,6 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/api-server
           name: grafana-dashboard-api-server
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/elasticsearch
-          name: grafana-dashboard-elasticsearch
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/k8s-cluster-monitoring
           name: grafana-dashboard-k8s-cluster-monitoring
@@ -119,9 +117,6 @@ spec:
       - configMap:
           name: grafana-dashboard-api-server
         name: grafana-dashboard-api-server
-      - configMap:
-          name: grafana-dashboard-elasticsearch
-        name: grafana-dashboard-elasticsearch
       - configMap:
           name: grafana-dashboard-k8s-cluster-monitoring
         name: grafana-dashboard-k8s-cluster-monitoring

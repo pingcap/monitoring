@@ -16,7 +16,6 @@
     grafanaDashboards+:: {
           //Configure this to be the dashboard definitions, keep the name unique
           'api-server.json': (import 'dashboards/api-server-dashboard.json'),
-          'elasticsearch.json': (import 'dashboards/elasticsearch.json'),
           'k8s-cluster-monitoring.json': (import 'dashboards/k8s-cluster-monitoring-dashboard.json'),
           'k8s-nodes-overview.json': (import 'dashboards/k8s-nodes-overview.json'),
 	  'k8s-node-disk.json': (import 'dashboards/k8s-node-disk.json'),

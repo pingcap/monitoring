@@ -79,27 +79,6 @@ local kp =  (if std.extVar("PrivateCloudEnv") == "true" then privateCloud else c
                else endpoint for endpoint in serviceMonitorKubeletEndpoints ],
           },
       },
-
-      serviceMonitorElasticSearchExporter+: {
-        apiVersion: "monitoring.coreos.com/v1",
-        kind: "ServiceMonitor",
-        metadata: {
-          labels: {app: "elasticsearch"},
-          name: "es-exporter",
-          namespace: "monitoring",
-        },
-        spec+: {
-          endpoints: [
-            {interval: "10s"},
-            {port: "http"},
-            {scheme: "http"},
-          ],
-          jobLabel: "app",
-          selector: {
-            matchLabels: {app: "elasticsearch-exporter"},
-          },
-        },
-      },
     },
 
   grafana+:: {
