@@ -45,7 +45,6 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/api-server
           name: grafana-dashboard-api-server
           readOnly: false
-          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/k8s-cluster-monitoring
           name: grafana-dashboard-k8s-cluster-monitoring
           readOnly: false
