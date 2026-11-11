@@ -6,6 +6,10 @@ replace_template() {
     sed -i "s|$1|$replacement|g" -- "$3"
 }
 
+# Rules installed only by the DM initializer. The initializer image and its
+# /tmp rule bundle are shared by TiDB and DM monitors.
+DM_ONLY_RULES="dm_worker.rules.yml"
+
 # Reject symlink ancestors before any rule deletion, copy or ownership changes.
 validate_rule_path() {
     case "$1" in
@@ -103,6 +107,7 @@ restore_rules() {
     case "$1" in
         ''|.|..|*/*) echo "Invalid persisted rules version" >&2; return 1;;
     esac
+    exclude=${2:-}
     saved_root="$PROM_PERSISTENT_DIR/latest-rules"
     saved_version="$saved_root/$1"
     if [ -L "$PROM_PERSISTENT_DIR" ] || [ -L "$saved_root" ] || [ -L "$saved_version" ]; then
@@ -114,6 +119,9 @@ restore_rules() {
     [ -d "$saved_version" ] || return 0
     for rule in "$saved_version"/*.rules.yml "$saved_version"/.rules.yml "$saved_version"/.*.rules.yml; do
         [ -e "$rule" ] || [ -L "$rule" ] || continue
+        if [ -n "$exclude" ] && [ "${rule##*/}" = "$exclude" ]; then
+            continue
+        fi
         validate_rule_file "$rule" || return 1
         destination="$PROM_CONFIG_PATH/rules/${rule##*/}"
         if [ -e "$destination" ] || [ -L "$destination" ]; then
@@ -285,14 +293,23 @@ reset_rules || exit 1
 echo $META_TYPE
 echo $META_INSTANCE
 echo $META_VALUE
-cp -- /tmp/*.rules.yml "$PROM_CONFIG_PATH/rules" || exit 1
+for rule in /tmp/*.rules.yml; do
+    [ -e "$rule" ] || continue
+    case "${rule##*/}" in
+        "$DM_ONLY_RULES")
+            # DM rules are installed by the DM initializer, not this one.
+            continue
+            ;;
+    esac
+    cp -f -- "$rule" "$PROM_CONFIG_PATH/rules" || exit 1
+done
 for file in "$PROM_CONFIG_PATH/rules"/*; do
     sed -i 's/ENV_LABELS_ENV/Cluster/g' "$file"
     sed -i 's%job=%component=%g' "$file"
     sed -i -e 's%\(by\s(\)job\(,.*)\)%\1component\2%g' -e 's%\(by\s(.*\),job,\(.*)\)%\1,component,\2%g' -e 's%\(by\s(.*,\)job)%\1component)%g' -e 's%\(by\s(\)job)%\1component)%g' "$file"
 done
 
-restore_rules "${TIDB_VERSION##*/}" || exit 1
+restore_rules "${TIDB_VERSION##*/}" "$DM_ONLY_RULES" || exit 1
 
 # Datasources
 prepare_reloader_rules "${TIDB_VERSION##*/}" || exit 1
