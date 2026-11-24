@@ -2,10 +2,10 @@ groups:
     - name: alert.rules
       rules:
         - alert: DM_master_all_down
-          expr: up{job="dm_master"} == 0
+          expr: max by (tidb_cluster) (up{component="dm-master"}) == 0
           labels:
             env: ENV_LABELS_ENV
-            expr: up{job="dm_master"} == 0
+            expr: max by (tidb_cluster) (up{component="dm-master"}) == 0
             level: critical
           annotations:
             description: 'cluster: ENV_LABELS_ENV, instance: {{ $labels.instance }}, values: {{ $value }}'

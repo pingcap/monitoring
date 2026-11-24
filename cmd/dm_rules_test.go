@@ -1,6 +1,9 @@
 package main
 
 import (
+	"archive/tar"
+	"compress/gzip"
+	"encoding/json"
 	"io"
 	"net/http"
 	"os"
@@ -10,9 +13,6 @@ import (
 	"runtime"
 	"strings"
 	"testing"
-
-	"github.com/pingcap/monitoring/pkg/common"
-	"gopkg.in/yaml.v3"
 )
 
 type dmTransport func(*http.Request) (*http.Response, error)
@@ -20,44 +20,114 @@ type dmTransport func(*http.Request) (*http.Response, error)
 func (f dmTransport) RoundTrip(r *http.Request) (*http.Response, error) { return f(r) }
 
 func TestDMRulesAreGenerated(t *testing.T) {
-	data, err := os.ReadFile("../monitoring.yaml")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var config Config
-	if err := yaml.Unmarshal(data, &config); err != nil {
-		t.Fatal(err)
-	}
-	found := false
-	for _, component := range config.ComponentConfigs {
-		if component.RepoName == "tiflow" && component.RulesPath == "dm/metrics/alertmanager" {
-			found = true
-		}
-	}
-	if !found {
-		t.Fatal("default generator config does not fetch DM rules")
-	}
 	body, err := os.ReadFile("testdata/dm_worker.rules.yml")
 	if err != nil {
 		t.Fatal(err)
 	}
-	oldTransport, oldAnsible, oldOperator := http.DefaultTransport, ansibleRuleDir, operatorRuleDir
-	t.Cleanup(func() { http.DefaultTransport, ansibleRuleDir, operatorRuleDir = oldTransport, oldAnsible, oldOperator })
-	ansibleRuleDir, operatorRuleDir = t.TempDir(), t.TempDir()
-	http.DefaultTransport = dmTransport(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(body)))}, nil
+	oldConfigFile, oldOutputDir, oldTag, oldAutoPush := configFile, outputDir, tag, autoPush
+	oldTransport, oldConfig, oldUseGlobalTag, oldBaseTagDir := http.DefaultTransport, cfg, useGlobalTag, baseTagDir
+	oldAnsibleDashboards, oldAnsibleRules := ansibleGrafanaDir, ansibleRuleDir
+	oldOperatorDashboards, oldOperatorRules, oldExpr := operatorGrafanaDir, operatorRuleDir, operatorReplaceExpr
+	t.Cleanup(func() {
+		configFile, outputDir, tag, autoPush = oldConfigFile, oldOutputDir, oldTag, oldAutoPush
+		http.DefaultTransport, cfg, useGlobalTag, baseTagDir = oldTransport, oldConfig, oldUseGlobalTag, oldBaseTagDir
+		ansibleGrafanaDir, ansibleRuleDir = oldAnsibleDashboards, oldAnsibleRules
+		operatorGrafanaDir, operatorRuleDir, operatorReplaceExpr = oldOperatorDashboards, oldOperatorRules, oldExpr
 	})
-	service, err := common.NewGitRepoService()
+	configFile, outputDir, tag, autoPush = "../monitoring.yaml", t.TempDir(), "release-8.5", false
+	operatorReplaceExpr = make(map[string]string)
+	if err := stepUp(); err != nil {
+		t.Fatal(err)
+	}
+
+	const (
+		rawURL    = "https://raw.githubusercontent.com"
+		rule      = "/pingcap/tiflow/release-8.5/dm/metrics/alertmanager/dm_worker.rules.yml"
+		dashboard = "/pingcap/tiflow/release-8.5/metrics/grafana/TiCDC-Monitor-Summary.json"
+		readme    = "/pingcap/tiflow/release-8.5/README.md"
+	)
+	directory := func(path string) string {
+		data, err := json.Marshal([]map[string]string{{"name": filepath.Base(path), "download_url": rawURL + path}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return string(data)
+	}
+	rootFetched := false
+	http.DefaultTransport = dmTransport(func(r *http.Request) (*http.Response, error) {
+		response := "[]"
+		switch r.URL.Path {
+		case "/repos/pingcap/tiflow/contents/":
+			rootFetched = true
+			response = directory(readme)
+		case "/repos/pingcap/tiflow/contents/dm/metrics/alertmanager":
+			response = directory(rule)
+		case "/repos/pingcap/tiflow/contents/metrics/grafana":
+			response = directory(dashboard)
+		case rule:
+			response = string(body)
+		case dashboard:
+			response = `{"title":"Test-Cluster-TiCDC-Summary"}`
+		case readme:
+			response = "# TiFlow"
+		}
+		return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(response))}, nil
+	})
+	if err := Start(); err != nil {
+		t.Fatal(err)
+	}
+	if rootFetched {
+		t.Error("a rule-only component fetched dashboards from the repository root")
+	}
+
+	file, err := os.Open(filepath.Join(baseTagDir, "ansible-monitor.tar.gz"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	name, target := "dm_worker.rules.yml", "https://raw.githubusercontent.com/pingcap/tiflow/master/dm/metrics/alertmanager/dm_worker.rules.yml"
-	ProcessRules([]*common.RepositoryContent{{Name: &name, DownloadURL: &target}}, service)
-	for _, dir := range []string{ansibleRuleDir, operatorRuleDir} {
-		generated, err := os.ReadFile(filepath.Join(dir, name))
-		if err != nil || len(generated) == 0 {
-			t.Fatalf("DM rule missing: %s %v", dir, err)
+	defer file.Close()
+	gzipReader, err := gzip.NewReader(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer gzipReader.Close()
+	archive := tar.NewReader(gzipReader)
+	var hasDashboard, hasRule bool
+	for {
+		header, err := archive.Next()
+		if err == io.EOF {
+			break
 		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		switch header.Name {
+		case "/ansible/tidb-monitor/README.md":
+			t.Error("repository README leaked into Ansible dashboards")
+		case "/ansible/tidb-monitor/TiCDC-Monitor-Summary.json":
+			hasDashboard = true
+		case "/ansible/tidb-rule/dm_worker.rules.yml":
+			raw, err := io.ReadAll(archive)
+			if err != nil || string(raw) != string(body) {
+				t.Fatalf("Ansible rule changed: %v", err)
+			}
+			hasRule = true
+		}
+	}
+	if !hasDashboard || !hasRule {
+		t.Fatalf("missing Ansible artifacts: dashboard=%t, rule=%t", hasDashboard, hasRule)
+	}
+
+	generated, err := os.ReadFile(filepath.Join(operatorRuleDir, filepath.Base(rule)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	const operatorExpr = `max by (tidb_cluster) (up{component="dm-master"}) == 0`
+	if strings.Count(string(generated), "expr: "+operatorExpr) != 2 {
+		t.Error("Operator rule did not override both the alert expression and its expr label")
+	}
+	snapshot, err := os.ReadFile("../monitor-snapshot/release-8.5/operator/rules/dm_worker.rules.yml")
+	if err != nil || string(generated) != string(snapshot) {
+		t.Fatalf("Operator rule differs from the 8.5 snapshot: %v", err)
 	}
 }
 
@@ -65,9 +135,12 @@ func TestDMInitializerRejectsMissingRules(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("initializer requires a POSIX shell")
 	}
-	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
+	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/release-8.5/operator/init.sh"} {
 		t.Run(source, func(t *testing.T) {
-			root := t.TempDir()
+			root, err := filepath.EvalSymlinks(t.TempDir())
+			if err != nil {
+				t.Fatal(err)
+			}
 			assets := filepath.Join(root, "assets")
 			extraPath := ""
 			if runtime.GOOS == "darwin" {
@@ -144,9 +217,12 @@ func TestInitializerRejectsMultilineReplacement(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("initializer requires a POSIX shell")
 	}
-	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
+	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/release-8.5/operator/init.sh"} {
 		t.Run(source, func(t *testing.T) {
-			root := t.TempDir()
+			root, err := filepath.EvalSymlinks(t.TempDir())
+			if err != nil {
+				t.Fatal(err)
+			}
 			cmd := exec.Command("sh", source)
 			cmd.Env = append(os.Environ(), "DM_CLUSTER_NAME=test", "GF_PROVISIONING_PATH="+filepath.Join(root, "grafana"), "PROM_CONFIG_PATH="+filepath.Join(root, "prometheus"), "GF_DM_PROMETHEUS_URL=bad\nreplacement")
 			out, err := cmd.CombinedOutput()
@@ -165,9 +241,12 @@ func TestTiDBInitializerPreservesDatasourceURLs(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("initializer requires a POSIX shell")
 	}
-	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/master/operator/init.sh"} {
+	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/release-8.5/operator/init.sh"} {
 		t.Run(source, func(t *testing.T) {
-			root := t.TempDir()
+			root, err := filepath.EvalSymlinks(t.TempDir())
+			if err != nil {
+				t.Fatal(err)
+			}
 			assets := filepath.Join(root, "assets")
 			datasource := filepath.Join(root, "data sources")
 			for _, dir := range []string{assets, datasource} {
