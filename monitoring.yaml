@@ -37,5 +37,10 @@ components:
     rule_path: "cdc/metrics/alertmanager"
     fix_tag: "main"
 
+operator:
+  replace_expr:
+    - rule_name: "DM_master_all_down"
+      expr: 'max by (tidb_cluster) (up{component="dm-master"}) == 0'
+
 platform_monitoring:
   repo_name: "monitoring"
