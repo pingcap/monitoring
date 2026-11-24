@@ -160,7 +160,9 @@ func Start() error {
 
 	stream.OfSlice(cfg.ComponentConfigs).Peek(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
-		ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixTag)), rservice)
+		if component.MonitorPath != "" {
+			ProcessDashboards(fetchDirectory(rservice, component.Owner, component.RepoName, component.MonitorPath, getTag(component.Ref, component.FixTag)), rservice)
+		}
 	}).ForEach(func(t streamtypes.T) {
 		component := t.(ComponentConfig)
 		ProcessRules(fetchDirectory(rservice, component.Owner, component.RepoName, component.RulesPath, getTag(component.Ref, component.FixTag)), rservice)

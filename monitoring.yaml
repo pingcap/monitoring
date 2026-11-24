@@ -19,6 +19,8 @@ components:
   - repo_name: "tiflow"
     monitor_path: "metrics/grafana"
     rule_path: "metrics/alertmanager"
+  - repo_name: "tiflow"
+    rule_path: "dm/metrics/alertmanager"
   - repo_name: "ticdc"
     monitor_path: "metrics/grafana"
     # rule_path: "" TODO: This repo is a new arch of ticdc, we will add this rule_path later
@@ -31,6 +33,11 @@ components:
     monitor_path: "cdc/metrics/grafana"
     rule_path: "cdc/metrics/alertmanager"
     fix_tag: "main"
+
+operator:
+  replace_expr:
+    - rule_name: "DM_master_all_down"
+      expr: 'max by (tidb_cluster) (up{component="dm-master"}) == 0'
 
 platform_monitoring:
   repo_name: "monitoring"
