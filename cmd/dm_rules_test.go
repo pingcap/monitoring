@@ -119,8 +119,14 @@ func TestDMRulesAreGenerated(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	oldTransport, oldAnsible, oldOperator := http.DefaultTransport, ansibleRuleDir, operatorRuleDir
-	t.Cleanup(func() { http.DefaultTransport, ansibleRuleDir, operatorRuleDir = oldTransport, oldAnsible, oldOperator })
+	oldTransport, oldAnsible, oldOperator, oldExpr := http.DefaultTransport, ansibleRuleDir, operatorRuleDir, operatorReplaceExpr
+	t.Cleanup(func() {
+		http.DefaultTransport, ansibleRuleDir, operatorRuleDir, operatorReplaceExpr = oldTransport, oldAnsible, oldOperator, oldExpr
+	})
+	operatorReplaceExpr = make(map[string]string)
+	for _, replacement := range config.OperatorConfig.NeedToReplaceExpr {
+		operatorReplaceExpr[strings.ToUpper(replacement.RuleName)] = replacement.NewExpr
+	}
 	ansibleRuleDir, operatorRuleDir = initializerTempDir(t), initializerTempDir(t)
 	http.DefaultTransport = dmTransport(func(*http.Request) (*http.Response, error) {
 		return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(body)))}, nil
@@ -131,11 +137,21 @@ func TestDMRulesAreGenerated(t *testing.T) {
 	}
 	name, target := "dm_worker.rules.yml", "https://raw.githubusercontent.com/pingcap/tiflow/master/dm/metrics/alertmanager/dm_worker.rules.yml"
 	ProcessRules([]*common.RepositoryContent{{Name: &name, DownloadURL: &target}}, service)
-	for _, dir := range []string{ansibleRuleDir, operatorRuleDir} {
-		generated, err := os.ReadFile(filepath.Join(dir, name))
-		if err != nil || len(generated) == 0 {
-			t.Fatalf("DM rule missing: %s %v", dir, err)
-		}
+	ansibleRule, err := os.ReadFile(filepath.Join(ansibleRuleDir, name))
+	if err != nil || string(ansibleRule) != string(body) {
+		t.Fatalf("Ansible rule differs from the upstream fixture: %v", err)
+	}
+	generated, err := os.ReadFile(filepath.Join(operatorRuleDir, name))
+	if err != nil {
+		t.Fatal(err)
+	}
+	const operatorExpr = `max by (tidb_cluster) (up{component="dm-master"}) == 0`
+	if strings.Count(string(generated), "expr: "+operatorExpr) != 2 {
+		t.Error("Operator rule did not override both the alert expression and its expr label")
+	}
+	snapshot, err := os.ReadFile(filepath.Join("../monitor-snapshot/master/operator/rules", name))
+	if err != nil || string(generated) != string(snapshot) {
+		t.Fatalf("Operator rule differs from the master snapshot: %v", err)
 	}
 }
 
