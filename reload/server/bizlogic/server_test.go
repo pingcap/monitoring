@@ -93,7 +93,6 @@ func TestListConfigsFileBoundary(t *testing.T) {
 	if err := os.Mkdir(filepath.Join(dir, "directory.yml"), 0755); err != nil {
 		t.Fatal(err)
 	}
-	linked := map[string]bool{}
 	for name, target := range map[string]string{
 		"alias.yml":             "rules.yml",
 		"escape.yml":            outside,
@@ -108,16 +107,13 @@ func TestListConfigsFileBoundary(t *testing.T) {
 			t.Logf("symbolic link %s unavailable: %v", name, err)
 			continue
 		}
-		linked[name] = true
 	}
 	files, err := newConfigTestServer(nil, dir, false, "").getConfigs()
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Symlink aliases are readable directly, but are not editable atomic-replacement targets.
 	want := []string{"rules.yml"}
-	if linked["alias.yml"] {
-		want = []string{"alias.yml", "rules.yml"}
-	}
 	if !reflect.DeepEqual(files, want) {
 		t.Fatalf("unexpected config list: %v", files)
 	}
