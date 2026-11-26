@@ -6,6 +6,7 @@ on:
       - '.github/workflows/build-security.yaml'
       - '.github/workflows/reloader-dockerhub.yaml'
       - 'pkg/common/**'
+      - 'pkg/ansible/**'
       - 'pkg/operator/**'
       - 'cmd/**'
       - 'monitor-snapshot/release-8.5/operator/rules/**'
@@ -29,6 +30,7 @@ jobs:
         with:
           go-version-file: go.mod
       - run: go test ./pkg/common
+      - run: go test -race ./pkg/ansible
       - run: go test -race ./pkg/operator
       - run: go test ./cmd/main.go ./cmd/rules_test.go ./cmd/file_modes_unix_test.go
       - run: go test ./cmd/monitoring.go ./cmd/auth_test.go ./cmd/dm_rules_test.go ./cmd/rule_errors_test.go
