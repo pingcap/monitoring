@@ -9,7 +9,8 @@ on:
       - 'pkg/ansible/**'
       - 'pkg/operator/**'
       - 'cmd/**'
-      - 'monitor-snapshot/release-8.5/operator/rules/**'
+      - 'platform-monitoring/operator/**'
+      - 'monitor-snapshot/release-8.5/operator/**'
       - 'scripts/**'
       - 'reload/**'
       - 'go.mod'
@@ -34,7 +35,7 @@ jobs:
       - run: go test -race ./pkg/ansible
       - run: go test -race ./pkg/operator
       - run: go test ./cmd/main.go ./cmd/rules_test.go ./cmd/file_modes_unix_test.go
-      - run: go test ./cmd/monitoring.go ./cmd/auth_test.go ./cmd/dm_rules_test.go ./cmd/rule_errors_test.go ./cmd/dashboard_errors_test.go
+      - run: go test ./cmd/monitoring.go ./cmd/auth_test.go ./cmd/dm_rules_test.go ./cmd/rule_errors_test.go ./cmd/dashboard_errors_test.go ./cmd/persisted_rules_test.go
       - run: python3 -m unittest discover -s scripts -p 'test_build_security.py' -v
       - run: docker build -f reload/Dockerfile_buildx -t monitoring-reloader:backport-check .
 
@@ -50,5 +51,9 @@ jobs:
       - run: go test -race ./reload/...
       - name: Verify ownership failure as root
         run: sudo env GOCACHE="$(go env GOCACHE)" GOMODCACHE="$(go env GOMODCACHE)" "$(command -v go)" test -mod=readonly -buildvcs=false -race ./reload/server/bizlogic -run '^TestRuleReplacementRejectsOwnershipFailure$' -count=1
+      - name: Verify Linux identity preparation and privilege drop as root
+        run: sudo env GOCACHE="$(go env GOCACHE)" GOMODCACHE="$(go env GOMODCACHE)" "$(command -v go)" test -mod=readonly -buildvcs=false -race ./reload/identity -count=1
+      - name: Verify initializer ownership preparation as root
+        run: sudo env GOCACHE="$(go env GOCACHE)" GOMODCACHE="$(go env GOMODCACHE)" "$(command -v go)" test -mod=readonly -buildvcs=false ./cmd/monitoring.go ./cmd/dm_rules_test.go ./cmd/persisted_rules_test.go -run '^TestInitializerPreparesRuleAccess$' -count=1
       - run: go vet ./reload/...
       - run: CGO_ENABLED=0 go build -o /tmp/reloader ./reload
