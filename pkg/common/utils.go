@@ -25,13 +25,21 @@ var (
 	Monitoring_Base_Brach = "master"
 )
 
+// GeneratedFileMode keeps scripts executable and data files non-executable.
+func GeneratedFileMode(name string) os.FileMode {
+	if filepath.Ext(name) == ".sh" {
+		return 0755
+	}
+	return 0644
+}
+
 func WriteFile(baseDir string, fileName string, body string) {
 	if body == "" {
 		return
 	}
 
 	fn := fmt.Sprintf("%s%c%s", baseDir, filepath.Separator, fileName)
-	f, err := os.Create(fn)
+	f, err := os.OpenFile(fn, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, GeneratedFileMode(fileName))
 	CheckErr(err, "create file failed, f="+fn)
 	defer f.Close()
 
