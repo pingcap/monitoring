@@ -1,6 +1,7 @@
 package bizlogic
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pingcap/monitoring/reload/server/types"
@@ -22,15 +24,26 @@ import (
 	streamtypes "github.com/youthlin/stream/types"
 )
 
+const prometheusRequestTimeout = 10 * time.Second
+const maxRulesBytes = 16 << 20
+
 type server struct {
+	reload                   func(context.Context) error
+	httpClient               *http.Client
 	url                      *url.URL
 	dir                      string
 	storePath                string
 	needStoreFileToStorePath bool
 }
 
-func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool, storePath string) *server {
+func NewServer(promURL *url.URL, watchDir string, needStoreFileToStorePath bool, storePath string, reloaders ...*Reloader) *server {
+	reloader := NewReloader(promURL, watchDir)
+	if len(reloaders) > 0 && reloaders[0] != nil {
+		reloader = reloaders[0]
+	}
 	return &server{
+		reload:                   reloader.Reload,
+		httpClient:               &http.Client{Timeout: prometheusRequestTimeout},
 		url:                      promURL,
 		dir:                      watchDir,
 		needStoreFileToStorePath: needStoreFileToStorePath,
@@ -85,27 +98,27 @@ func (s *server) GetConfig(c *gin.Context) {
 }
 
 func (s *server) ListRules(c *gin.Context) {
-	r, err := http.NewRequest("GET", fmt.Sprintf("%s/api/v1/rules", s.url), nil)
+	r, err := http.NewRequestWithContext(c.Request.Context(), "GET", fmt.Sprintf("%s/api/v1/rules", s.url), nil)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
+		c.JSON(http.StatusBadGateway, utils.NewErrorResponse("cannot query Prometheus rules"))
 		return
 	}
 
-	resp, err := http.DefaultClient.Do(r)
+	resp, err := s.httpClient.Do(r)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
+		c.JSON(http.StatusBadGateway, utils.NewErrorResponse("cannot query Prometheus rules"))
 		return
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		c.JSON(http.StatusBadRequest, errors.New(fmt.Sprintf("request failed, code=%d", resp.StatusCode)))
+		c.JSON(http.StatusBadGateway, utils.NewErrorResponse("Prometheus rules request failed"))
 		return
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
+	body, err := io.ReadAll(io.LimitReader(resp.Body, maxRulesBytes+1))
+	if err != nil || len(body) > maxRulesBytes {
+		c.JSON(http.StatusBadGateway, utils.NewErrorResponse("cannot read Prometheus rules within size limit"))
 	} else {
 		c.Header("Content-Type", "application/json")
 		c.Writer.Write(body)
@@ -191,6 +204,10 @@ func (s *server) UpdateConfig(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot persist config"))
 			return
 		}
+	}
+	if err := s.reload(c.Request.Context()); err != nil {
+		c.JSON(http.StatusBadGateway, utils.NewErrorResponse("config saved but Prometheus reload failed"))
+		return
 	}
 	c.JSON(http.StatusOK, config)
 }
