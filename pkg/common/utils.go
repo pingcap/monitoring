@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/google/go-github/v66/github"
@@ -124,47 +123,33 @@ func GetRef(client *github.Client, commitBranch string, ctx context.Context) (re
 // getTree generates the tree to commit based on the given files and the commit
 // of the ref you got in getRef.
 func GetTree(client *github.Client, ref *github.Reference, directory string, ctx context.Context, rootDir string) (tree *github.Tree, err error) {
-	// Create a tree with what to commit.
+	if rootDir == "" {
+		return nil, errors.New("output root is empty")
+	}
+	relativeDir, err := filepath.Rel(rootDir, directory)
+	if err != nil || !filepath.IsLocal(relativeDir) {
+		return nil, errors.New("bundle directory is outside output root")
+	}
+	root, err := os.OpenRoot(rootDir)
+	if err != nil {
+		return nil, err
+	}
+	defer root.Close()
 	entries := []*github.TreeEntry{}
-
-	// Load each file into the tree.
-	files := ListAllFiles(directory)
-	for _, fileArg := range files {
-		file, content, err := getFileContent(fileArg)
+	for _, file := range ListAllFiles(directory) {
+		relative, err := filepath.Rel(rootDir, file)
+		if err != nil || !filepath.IsLocal(relative) {
+			return nil, errors.New("bundle file is outside output root")
+		}
+		content, err := root.ReadFile(relative)
 		if err != nil {
 			return nil, err
 		}
-
-		if rootDir[len(rootDir)-1] == filepath.Separator {
-			rootDir = rootDir[0 : len(rootDir)-1]
-		}
-
-		treePath := strings.ReplaceAll(file, fmt.Sprintf("%s%c", rootDir, filepath.Separator), "")
-		entries = append(entries, &github.TreeEntry{Path: github.String(treePath), Type: github.String("blob"), Content: github.String(string(content)), Mode: github.String("100644")})
+		entries = append(entries, &github.TreeEntry{Path: github.String(filepath.ToSlash(relative)), Type: github.String("blob"), Content: github.String(string(content)), Mode: github.String("100644")})
 	}
 
 	tree, _, err = client.Git.CreateTree(ctx, Monitoring_Owner, Monitoirng_Repo, *ref.Object.SHA, entries)
 	return tree, err
-}
-
-// getFileContent loads the local content of a file and return the target name
-// of the file in the target repository and its contents.
-func getFileContent(fileArg string) (targetName string, b []byte, err error) {
-	var localFile string
-	files := strings.Split(fileArg, ":")
-	switch {
-	case len(files) < 1:
-		return "", nil, errors.New("empty `-files` parameter")
-	case len(files) == 1:
-		localFile = files[0]
-		targetName = files[0]
-	default:
-		localFile = files[0]
-		targetName = files[1]
-	}
-
-	b, err = ioutil.ReadFile(localFile)
-	return targetName, b, err
 }
 
 // createCommit creates the commit in the given reference using the given tree.
