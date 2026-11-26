@@ -309,3 +309,50 @@ func TestTiDBAndDMInitializeSharedRules(t *testing.T) {
 		}
 	}
 }
+
+func TestDMRestorePreservesTiDBVersion(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("initializer requires POSIX shell")
+	}
+	for _, source := range []string{"init.sh", "../platform-monitoring/operator/init.sh", "../monitor-snapshot/release-8.5/operator/init.sh"} {
+		t.Run(source, func(t *testing.T) {
+			root := initializerTempDir(t)
+			active, store := filepath.Join(root, "active", "rules"), filepath.Join(root, "data", "latest-rules", "dm-v2")
+			for _, dir := range []string{active, store} {
+				if err := os.MkdirAll(dir, 0755); err != nil {
+					t.Fatal(err)
+				}
+			}
+			for path, content := range map[string]string{
+				filepath.Join(active, "tidb.rules.yml"):      "TiDB selected version v1",
+				filepath.Join(active, "dm_worker.rules.yml"): "bundled DM",
+				filepath.Join(store, "tidb.rules.yml"):       "stale TiDB from DM version v2",
+				filepath.Join(store, "dm_worker.rules.yml"):  "saved DM v2",
+				filepath.Join(store, ".custom.rules.yml"):    "custom DM",
+			} {
+				if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+					t.Fatal(err)
+				}
+			}
+			script, err := os.ReadFile(source)
+			if err != nil {
+				t.Fatal(err)
+			}
+			prefix, _, ok := strings.Cut(string(script), "# Multiline replacements")
+			if !ok {
+				t.Fatal("initializer function boundary missing")
+			}
+			cmd := exec.Command("sh", "-c", prefix+"\nrestore_rules dm-v2")
+			cmd.Env = append(os.Environ(), "DM_CLUSTER_NAME=test", "PROM_CONFIG_PATH="+filepath.Dir(active), "PROM_PERSISTENT_DIR="+filepath.Join(root, "data"))
+			if out, err := cmd.CombinedOutput(); err != nil {
+				t.Fatalf("restore failed: %v %s", err, out)
+			}
+			for name, want := range map[string]string{"tidb.rules.yml": "TiDB selected version v1", "dm_worker.rules.yml": "saved DM v2", ".custom.rules.yml": "custom DM"} {
+				got, err := os.ReadFile(filepath.Join(active, name))
+				if err != nil || string(got) != want {
+					t.Fatalf("%s = %q, want %q: %v", name, got, want, err)
+				}
+			}
+		})
+	}
+}

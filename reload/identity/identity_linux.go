@@ -34,14 +34,31 @@ func Prepare(watchDir, storeRoot, version string) error {
 	if err != nil || gid <= 0 {
 		return fmt.Errorf("invalid non-root GID %q", account.Gid)
 	}
-	// Kubernetes may explicitly set runAsGroup independently of runAsUser.
-	if os.Getgid() != 0 {
-		gid = os.Getgid()
+	gid, err = servingGID(gid, os.Getgid())
+	if err != nil {
+		return err
 	}
 	if err := preparePaths(watchDir, storeRoot, version, uid); err != nil {
 		return err
 	}
 	return dropAndExec(uid, gid)
+}
+
+// A primary GID of zero cannot reveal whether runAsGroup was explicitly set.
+// RELOADER_GID makes that choice explicit for the root compatibility bootstrap.
+func servingGID(imageGID, currentGID int) (int, error) {
+	if currentGID != 0 {
+		return currentGID, nil
+	}
+	value, configured := os.LookupEnv("RELOADER_GID")
+	if !configured {
+		return imageGID, nil
+	}
+	gid, err := strconv.Atoi(value)
+	if err != nil || gid < 0 || uint64(gid) >= (1<<32)-1 {
+		return 0, fmt.Errorf("RELOADER_GID must be a numeric group ID between 0 and 4294967294")
+	}
+	return gid, nil
 }
 
 func preparePaths(watchDir, storeRoot, version string, uid int) error {
@@ -234,7 +251,11 @@ func checkPaths(watchDir, storeRoot, version string, writable bool) error {
 			dir.Close()
 			return err
 		}
-		if writable && i != 1 && !readOnly {
+		if writable && i != 1 {
+			if readOnly {
+				dir.Close()
+				return fmt.Errorf("editing requires a writable rules directory: %s is read-only", path)
+			}
 			access |= unix.W_OK
 		}
 		if err := unix.Faccessat(int(dir.Fd()), ".", access, unix.AT_EACCESS); err != nil {
@@ -260,8 +281,8 @@ func checkReplacementGroups(dir *os.File) error {
 		return err
 	}
 	if readOnly {
-		return nil
-	} // Watch-only read-only mounts need no metadata writes.
+		return fmt.Errorf("editing requires a writable rules directory: %s is read-only", dir.Name())
+	}
 	info, err := dir.Stat()
 	if err != nil {
 		return err

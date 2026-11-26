@@ -46,15 +46,26 @@ an admin account enables editing, atomic saves also require a file group to
 match the directory's inherited group or a Kubernetes-granted serving group. Inconsistent custom groups fail startup with
 an actionable message; the process does not grant itself extra group access.
 Watch-only and viewer-only services need only their existing read/traverse access;
-read-only mounts do not trigger metadata writes. No identity override is needed
+read-only mounts do not trigger metadata writes. If an admin policy enables
+editing, read-only active or current-version save directories instead stop
+startup before listening. No identity override is needed
 for the compatible default startup path.
 
 Custom builds retain the existing `PINGCAP_UID`/`PINGCAP_GID` build arguments.
 The reloader looks up the image's `pingcap` account; initializer permission
 preparation uses `RELOADER_UID` (default 1000) or existing env configuration
 (`spec.initializer.envs`, and `spec.dm.initializer.envs` for DM). File groups are
-inherited from the volumes, not reassigned to the image GID. Explicit runAsGroup
-is honored. Non-root initializers retain their identity and do not attempt chown;
+inherited from the volumes, not reassigned to the image GID.
+
+A nonzero explicit `runAsGroup` is honored. During root compatibility startup,
+a primary GID of 0 cannot distinguish an unset group from `runAsGroup: 0`.
+For the latter, also set `RELOADER_GID=0` in the reloader container's environment;
+without this declaration the bootstrap uses the image account's GID (default
+2000). `RELOADER_GID` selects the serving group only when the startup primary
+GID is 0; a nonzero runtime GID takes precedence. An explicit non-root UID
+bypasses bootstrap and retains its runtime GID, including 0.
+
+Non-root initializers retain their identity and do not attempt chown;
 they leave existing ownership/modes untouched, including setgid directories
 created by a previous bootstrap. Unprivileged chmod can otherwise clear setgid
 when its inherited group is not one of the initializer's groups. Matching
@@ -76,7 +87,10 @@ selected version automatically, including hidden names and names not present in
 the image's bundle. TiDB clears the dedicated active rules directory, including
 hidden leftovers, before installing bundled rules and restoring saved ones. DM runs
 after TiDB against the shared directory, preserving TiDB rules while installing
-DM rules and restoring saved ones. Existing destination rule files are validated
+DM rules and restoring saved ones. If the DM store contains a non-DM filename
+already selected by TiDB, DM preserves the active TiDB file instead of overlaying
+it from a different version store. DM custom/hidden names absent from the active
+directory are still restored. Existing destination rule files are validated
 before replacement. Invalid paths, symlink/hard-linked/non-regular saved rules,
 and copy errors stop initialization. The PVC copies are not deleted. There is no
 `PROM_RESTORE_RULES` option and no cross-version directory discovery or migration.

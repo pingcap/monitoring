@@ -126,6 +126,10 @@ restore_rules() {
         destination="$PROM_CONFIG_PATH/rules/${rule##*/}"
         if [ -e "$destination" ] || [ -L "$destination" ]; then
             validate_rule_file "$destination" || return 1
+            # DM runs second: retain the rules selected by the TiDB initializer.
+            if [ -n "$DM_CLUSTER_NAME" ] && [ "${rule##*/}" != dm_worker.rules.yml ]; then
+                continue
+            fi
         fi
         cp -f -- "$rule" "$PROM_CONFIG_PATH/rules/${rule##*/}" || return 1
     done
