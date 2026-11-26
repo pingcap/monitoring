@@ -316,7 +316,7 @@ func ProcessRules(rules []*common.RepositoryContent, service *common.GitRepoServ
 	}).ForEach(func(t streamtypes.T) {
 		content := t.(string)
 		// operatotr
-		operator.WriteRule(content, name, operatorRuleDir, operatorReplaceExpr)
+		common.CheckErr(operator.WriteRule(content, name, operatorRuleDir, operatorReplaceExpr), fmt.Sprintf("generate operator rule %s", name))
 	})
 }
 
