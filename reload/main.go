@@ -18,10 +18,10 @@ import (
 )
 
 var (
-	watchDir        string
-	promUrl         string
-	rootStorePath 	string
-	subStorePath	string
+	watchDir      string
+	promUrl       string
+	rootStorePath string
+	subStorePath  string
 )
 
 func main() {
@@ -35,10 +35,10 @@ func main() {
 		},
 	}
 
-	rootCmd.Flags().StringVar(&watchDir,"watch-path", "", "the directory to watch for updates.")
-	rootCmd.Flags().StringVar(&rootStorePath,"root-store-path", "/data", "the directory to store updated files.")
-	rootCmd.Flags().StringVar(&subStorePath,"sub-store-path", "", "the sub directory to store updated files.")
-	rootCmd.Flags().StringVar(&promUrl,"prometheus-url", "http://localhost:9090", "the url to send a request to when the files are updated.")
+	rootCmd.Flags().StringVar(&watchDir, "watch-path", "", "the directory to watch for updates.")
+	rootCmd.Flags().StringVar(&rootStorePath, "root-store-path", "/data", "the directory to store updated files.")
+	rootCmd.Flags().StringVar(&subStorePath, "sub-store-path", "", "the sub directory to store updated files.")
+	rootCmd.Flags().StringVar(&promUrl, "prometheus-url", "http://localhost:9090", "the url to send a request to when the files are updated.")
 	rootCmd.MarkFlagRequired("watch-path")
 
 	rootCmd.Execute()
@@ -53,7 +53,7 @@ func startServer() {
 	storePath := fmt.Sprintf("%s%clatest-rules%c%s", rootStorePath, filepath.Separator, filepath.Separator, extract(subStorePath))
 	if len(subStorePath) != 0 && !exist(storePath) {
 		log.Println("need to store latest file to store path")
-		if err := os.MkdirAll(storePath, os.ModePerm); err != nil {
+		if err := os.MkdirAll(storePath, 0755); err != nil {
 			log.Println("failed to create store path", err)
 		}
 	}
@@ -79,13 +79,13 @@ func startServer() {
 func extract(path string) string {
 	for i := len(path) - 1; i >= 0; i-- {
 		if path[i] == filepath.Separator {
-			return path[i + 1:]
+			return path[i+1:]
 		}
 	}
 	return path
 }
 
-func exist(filepath string) bool{
+func exist(filepath string) bool {
 	if _, err := os.Stat(filepath); err != nil {
 		return false
 	}

@@ -1,9 +1,10 @@
 package bizlogic
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
-	"log"
 	"log/slog"
 	"net/http"
 	"net/url"
@@ -46,14 +47,41 @@ func (s *server) ListConfigs(c *gin.Context) {
 	}
 }
 
+const maxConfigBytes = 8 << 20
+
+func validConfigName(name string) bool {
+	return name != "" && name == filepath.Base(name) && filepath.Ext(name) == ".yml"
+}
+
 func (s *server) GetConfig(c *gin.Context) {
-	configName := utils.GetHttpParameter(c.Param, "config")
-	v, err := ioutil.ReadFile(fmt.Sprintf("%s%c%s", s.dir, filepath.Separator, configName))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
-	} else {
-		c.JSON(http.StatusOK, string(v))
+	name := utils.GetHttpParameter(c.Param, "config")
+	if !validConfigName(name) {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config name"))
+		return
 	}
+	root, err := os.OpenRoot(s.dir)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot open config directory"))
+		return
+	}
+	defer root.Close()
+	f, err := root.OpenFile(name, os.O_RDONLY|nonblockOpenFlag, 0)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot open config"))
+		return
+	}
+	defer f.Close()
+	info, err := f.Stat()
+	if err != nil || !info.Mode().IsRegular() {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config file"))
+		return
+	}
+	data, err := io.ReadAll(io.LimitReader(f, maxConfigBytes+1))
+	if err != nil || len(data) > maxConfigBytes {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot read config within size limit"))
+		return
+	}
+	c.JSON(http.StatusOK, string(data))
 }
 
 func (s *server) ListRules(c *gin.Context) {
@@ -89,11 +117,20 @@ func (s *server) getConfigs() ([]string, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "get config list failed")
 	}
+	root, err := os.OpenRoot(s.dir)
+	if err != nil {
+		return nil, errors.Wrap(err, "get config list failed")
+	}
+	defer root.Close()
 
 	r := make([]string, 0)
 	stream.OfSlice(files).Filter(func(t streamtypes.T) bool {
 		info := t.(os.FileInfo)
-		return !info.IsDir() && filepath.Ext(info.Name()) == ".yml"
+		if info.IsDir() || filepath.Ext(info.Name()) != ".yml" {
+			return false
+		}
+		target, err := root.Stat(info.Name())
+		return err == nil && target.Mode().IsRegular() && target.Size() <= maxConfigBytes
 	}).ForEach(func(t streamtypes.T) {
 		info := t.(os.FileInfo)
 		r = append(r, info.Name())
@@ -102,51 +139,83 @@ func (s *server) getConfigs() ([]string, error) {
 }
 
 func (s *server) UpdateConfig(c *gin.Context) {
-	configName := utils.GetHttpParameter(c.Param, "config")
-
-	files, err := ioutil.ReadDir(s.dir)
+	name := utils.GetHttpParameter(c.Param, "config")
+	if !validConfigName(name) {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid config name"))
+		return
+	}
+	root, err := os.OpenRoot(s.dir)
 	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("cannot open config directory"))
+		return
+	}
+	defer root.Close()
+	info, err := root.Stat(name)
+	if err != nil || !info.Mode().IsRegular() {
+		c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
+		return
+	}
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxConfigBytes)
+	body, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid or oversized request body"))
+		return
+	}
+	config := &types.Config{}
+	if err := json.Unmarshal(body, config); err != nil {
+		c.JSON(http.StatusBadRequest, utils.NewErrorResponse("invalid or oversized request body"))
+		return
+	}
+	data := []byte(config.Data)
+	if err := parse(data); err != nil {
 		c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
-	} else {
-		config := &types.Config{}
-		if err := c.ShouldBindJSON(config); err != nil {
-			fmt.Println(err)
-			msg := fmt.Sprintf("invalid request body: %v", err)
-			c.JSON(http.StatusBadRequest, msg)
+		return
+	}
+	// The primary must still exist after the upload; only the persistence copy may be created.
+	if err := writeRegularConfig(root, name, data, 0); err != nil {
+		if os.IsNotExist(err) {
+			c.JSON(http.StatusNotFound, utils.NewErrorResponse("config not found"))
+		} else {
+			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot write config"))
+		}
+		return
+	}
+	if s.needStoreFileToStorePath {
+		store, err := os.OpenRoot(s.storePath)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot open persistence directory"))
 			return
 		}
-
-		stream.OfSlice(files).Filter(func(t streamtypes.T) bool {
-			info := t.(os.FileInfo)
-			return info.Name() == configName
-		}).Map(func(t streamtypes.T) streamtypes.R {
-			return []byte(config.Data)
-		}).Filter(func(t streamtypes.T) bool {
-			data := t.([]byte)
-			if err := parse(data); err != nil {
-				c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
-				return false
-			}
-			return true
-		}).Peek(func(t streamtypes.T) {
-			data := t.([]byte)
-			if err := ioutil.WriteFile(fmt.Sprintf("%s%c%s", s.dir, filepath.Separator, configName), data, os.ModePerm); err != nil {
-				c.JSON(http.StatusBadRequest, utils.NewErrorResponse(err.Error()))
-			} else {
-				c.JSON(http.StatusOK, config)
-			}
-		}).Filter(func(t streamtypes.T) bool {
-			if !s.needStoreFileToStorePath {
-				log.Printf("do not need to store file to storepath")
-			}
-			return s.needStoreFileToStorePath
-		}).ForEach(func(t streamtypes.T) {
-			data := t.([]byte)
-			if err := ioutil.WriteFile(fmt.Sprintf("%s%c%s", s.storePath, filepath.Separator, configName), data, os.ModePerm); err != nil {
-				log.Printf("write file to store path failed: %v", err)
-			}
-		})
+		defer store.Close()
+		if err := writeRegularConfig(store, name, data, os.O_CREATE); err != nil {
+			c.JSON(http.StatusInternalServerError, utils.NewErrorResponse("cannot persist config"))
+			return
+		}
 	}
+	c.JSON(http.StatusOK, config)
+}
+
+// Check the opened descriptor before truncating; a FIFO replacement must not block the request.
+func writeRegularConfig(root *os.Root, name string, data []byte, createFlag int) error {
+	f, err := root.OpenFile(name, os.O_WRONLY|nonblockOpenFlag|createFlag, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	info, err := f.Stat()
+	if err != nil {
+		return err
+	}
+	if !info.Mode().IsRegular() {
+		return fmt.Errorf("config is not a regular file")
+	}
+	if err := f.Truncate(0); err != nil {
+		return err
+	}
+	if _, err := f.Write(data); err != nil {
+		return err
+	}
+	return f.Close()
 }
 
 func parse(content []byte) error {

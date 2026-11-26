@@ -38,19 +38,19 @@ func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 	defer watcher.Close()
 	for {
 		select {
-		case event, ok := <- watcher.Events:
+		case event, ok := <-watcher.Events:
 			if !ok {
 				return
 			}
 
 			if !r.isValidEvent(event) {
-				return
+				continue
 			}
 
 			if err := r.promReload(event); err != nil {
 				log.Println("reload failed", err)
 			}
-		case err, ok := <- watcher.Errors:
+		case err, ok := <-watcher.Errors:
 			if !ok {
 				return
 			}
@@ -63,7 +63,7 @@ func (r *Reloader) watch(watcher *fsnotify.Watcher) {
 func (r *Reloader) promReload(event fsnotify.Event) error {
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/-/reload", r.promUrl), nil)
 	if err != nil {
-		return errors.Wrap(err,"init prometheus request failed")
+		return errors.Wrap(err, "init prometheus request failed")
 	}
 
 	resp, err := http.DefaultClient.Do(req)
