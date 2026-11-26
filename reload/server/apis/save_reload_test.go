@@ -45,7 +45,7 @@ func TestSaveWaitsForReloadBeforeRefreshingRules(t *testing.T) {
 	// Always release a blocked upstream before closing the test server, including on failures.
 	defer close(release)
 	u, _ := url.Parse(upstream.URL)
-	engine := NewService(u, dir, false, "", bizlogic.NewReloader(u, dir))
+	engine := newAuthenticatedTestService(t, u, dir, false, "", bizlogic.NewReloader(u, dir))
 	body, _ := json.Marshal(map[string]string{"content": "groups: []"})
 	result := make(chan *httptest.ResponseRecorder, 1)
 	go func() {
@@ -89,7 +89,7 @@ func TestSaveReportsReloadFailure(t *testing.T) {
 	upstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(http.StatusInternalServerError) }))
 	defer upstream.Close()
 	u, _ := url.Parse(upstream.URL)
-	engine := NewService(u, dir, false, "", bizlogic.NewReloader(u, dir))
+	engine := newAuthenticatedTestService(t, u, dir, false, "", bizlogic.NewReloader(u, dir))
 	w := httptest.NewRecorder()
 	engine.ServeHTTP(w, httptest.NewRequest(http.MethodPut, "/monitoring/configs/rules.yml", strings.NewReader(`{"content":"groups: []"}`)))
 	if w.Code != http.StatusBadGateway || !strings.Contains(w.Body.String(), "saved") {
