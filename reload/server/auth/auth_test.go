@@ -3,11 +3,15 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -82,4 +86,42 @@ func loadTestHash(t *testing.T, hash string) (*Policy, error) {
 		t.Fatal(err)
 	}
 	return Load(file)
+}
+
+func TestAuthenticationSlotReleasedBeforeDownstreamHandler(t *testing.T) {
+	hash, err := bcrypt.GenerateFromPassword([]byte("test-password"), 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	policy, err := loadTestHash(t, string(hash))
+	if err != nil {
+		t.Fatal(err)
+	}
+	policy.slots = make(chan struct{}, 1)
+	router := gin.New()
+	router.Use(Middleware(policy))
+	entered, release, done := make(chan struct{}), make(chan struct{}), make(chan struct{})
+	router.GET("/slow", func(c *gin.Context) {
+		close(entered)
+		<-release
+		c.Status(http.StatusOK)
+	})
+	router.GET("/fast", func(c *gin.Context) { c.Status(http.StatusOK) })
+	request := func(path string) *httptest.ResponseRecorder {
+		req := httptest.NewRequest(http.MethodGet, path, nil)
+		req.SetBasicAuth("admin", "test-password")
+		response := httptest.NewRecorder()
+		router.ServeHTTP(response, req)
+		return response
+	}
+	defer func() { close(release); <-done }()
+	go func() { defer close(done); request("/slow") }()
+	select {
+	case <-entered:
+	case <-time.After(5 * time.Second):
+		t.Fatal("first request did not reach the downstream handler")
+	}
+	if response := request("/fast"); response.Code != http.StatusOK {
+		t.Fatalf("second authentication blocked by downstream handler: status %d", response.Code)
+	}
 }

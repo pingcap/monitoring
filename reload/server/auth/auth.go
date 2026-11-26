@@ -95,7 +95,6 @@ func Middleware(p *Policy) gin.HandlerFunc {
 		}
 		select {
 		case p.slots <- struct{}{}:
-			defer func() { <-p.slots }()
 		default:
 			c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "too many authentication requests"})
 			return
@@ -108,6 +107,7 @@ func Middleware(p *Policy) gin.HandlerFunc {
 		}
 		// Unknown usernames do the same bounded bcrypt work as known ones.
 		valid := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)) == nil
+		<-p.slots
 		if !ok || !exists || !valid {
 			slog.Warn("reloader authentication rejected", "event", "auth_rejected", "remote", c.Request.RemoteAddr)
 			c.Header("WWW-Authenticate", `Basic realm="monitoring", charset="UTF-8"`)
