@@ -33,6 +33,6 @@ jobs:
       - run: go test -race ./pkg/ansible
       - run: go test -race ./pkg/operator
       - run: go test ./cmd/main.go ./cmd/rules_test.go ./cmd/file_modes_unix_test.go
-      - run: go test ./cmd/monitoring.go ./cmd/auth_test.go ./cmd/dm_rules_test.go ./cmd/rule_errors_test.go
+      - run: go test ./cmd/monitoring.go ./cmd/auth_test.go ./cmd/dm_rules_test.go ./cmd/rule_errors_test.go ./cmd/dashboard_errors_test.go
       - run: python3 -m unittest discover -s scripts -p 'test_build_security.py' -v
       - run: docker build -f reload/Dockerfile_buildx -t monitoring-reloader:backport-check .

@@ -57,7 +57,7 @@ func TestDMRulesAreGenerated(t *testing.T) {
 	http.DefaultTransport = dmTransport(func(r *http.Request) (*http.Response, error) {
 		response := "[]"
 		switch r.URL.Path {
-		case "/repos/pingcap/tiflow/contents/":
+		case "/repos/pingcap/tiflow/contents/", "/repos/pingcap/ticdc/contents/":
 			rootFetched = true
 			response = directory(readme)
 		case "/repos/pingcap/tiflow/contents/dm/metrics/alertmanager":
@@ -70,6 +70,10 @@ func TestDMRulesAreGenerated(t *testing.T) {
 			response = `{"title":"Test-Cluster-TiCDC-Summary"}`
 		case readme:
 			response = "# TiFlow"
+		default:
+			if strings.HasSuffix(r.URL.Path, "/metrics/grafana") {
+				response = directory(dashboard)
+			}
 		}
 		return &http.Response{StatusCode: 200, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(response))}, nil
 	})
@@ -77,7 +81,7 @@ func TestDMRulesAreGenerated(t *testing.T) {
 		t.Fatal(err)
 	}
 	if rootFetched {
-		t.Error("a rule-only component fetched dashboards from the repository root")
+		t.Error("a component without an asset path fetched the repository root")
 	}
 
 	file, err := os.Open(filepath.Join(baseTagDir, "ansible-monitor.tar.gz"))
