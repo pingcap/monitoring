@@ -18,7 +18,12 @@ Grafana or other rule versions. Existing file/directory groups and reader access
 are retained; setgid on rule directories makes atomic replacements inherit the
 original group. Only the serving UID is assigned ownership. Files lose unnecessary
 write/execute permissions.
-Symlink paths and symlink, hard-linked or non-regular rule files are rejected.
+Symlink directory paths are rejected. During root bootstrap on writable volumes,
+symlink, hard-linked or non-regular rule files are also rejected. A read-only
+rules mount skips that preparation and file scan: watch-only startup does not
+guarantee rejection of symlinked, hard-linked or non-regular rule files there.
+Only mount trusted rule contents; a read-only mount does not establish their
+provenance.
 
 The process retains existing Pod supplementary groups (including a configured
 fsGroup 0), switches GID/UID, clears capabilities,
@@ -46,8 +51,12 @@ an admin account enables editing, atomic saves also require a file group to
 match the directory's inherited group or a Kubernetes-granted serving group. Inconsistent custom groups fail startup with
 an actionable message; the process does not grant itself extra group access.
 Watch-only and viewer-only services need only their existing read/traverse access;
-read-only mounts do not trigger metadata writes. If an admin policy enables
-editing, read-only active or current-version save directories instead stop
+read-only mounts do not trigger ownership or mode changes. When a persistent
+version is configured on read-only storage, pre-create both `latest-rules` and
+`latest-rules/<version>` before startup, with traversal access through their
+ancestors and read access to the version directory. Startup tries to create
+missing store directories even in watch-only mode, and fails if the mount is
+read-only. If an admin policy enables editing, read-only active or current-version save directories instead stop
 startup before listening. No identity override is needed
 for the compatible default startup path.
 

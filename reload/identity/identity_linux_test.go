@@ -206,7 +206,7 @@ func TestRejectUnpreservableRuleGroup(t *testing.T) {
 	if err := os.Chown(name, os.Geteuid(), 60001); err != nil {
 		t.Fatal(err)
 	}
-	opened, err := openDirectory(dir, false)
+	opened, err := openDirectory(dir, false, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -228,7 +228,7 @@ func TestRejectUnpreservableRuleOwner(t *testing.T) {
 	if err := os.Chown(name, 1000, os.Getegid()); err != nil {
 		t.Fatal(err)
 	}
-	opened, err := openDirectory(dir, false)
+	opened, err := openDirectory(dir, false, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -395,5 +395,74 @@ func TestReadOnlyRuleDestinations(t *testing.T) {
 	cmd.SysProcAttr = &syscall.SysProcAttr{Cloneflags: syscall.CLONE_NEWNS}
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("isolated mount test failed: %v: %s", err, out)
+	}
+}
+
+func TestServingIdentityWithTraverseOnlyAncestors(t *testing.T) {
+	if os.Getenv("RELOADER_TRAVERSE_TEST_CHILD") == "1" {
+		root := os.Getenv("RELOADER_TRAVERSE_TEST_ROOT")
+		active, data := filepath.Join(root, "active"), filepath.Join(root, "data")
+		if _, err := os.ReadDir(data); err == nil {
+			t.Fatal("test ancestor is readable; expected traverse-only access")
+		}
+		// Prepare is the first operation after the compatibility bootstrap execs.
+		if err := Prepare(active, data, "v1"); err != nil {
+			t.Fatalf("serving startup rejected accessible rules: %v", err)
+		}
+		if err := CheckWritable(active, data, "v1"); err != nil {
+			t.Fatalf("editing rejected accessible rules: %v", err)
+		}
+		for _, dir := range []string{active, filepath.Join(data, "latest-rules", "v1")} {
+			if err := os.WriteFile(filepath.Join(dir, "probe.rules.yml"), []byte("groups: []"), 0644); err != nil {
+				t.Fatal(err)
+			}
+		}
+		return
+	}
+	if os.Geteuid() != 0 {
+		t.Skip("requires disposable Linux root runner")
+	}
+	root, err := os.MkdirTemp("", "reloader-traverse-only-")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(root)
+	if err := os.Chmod(root, 0755); err != nil {
+		t.Fatal(err)
+	}
+	active, data := filepath.Join(root, "active"), filepath.Join(root, "data")
+	saved := filepath.Join(data, "latest-rules", "v1")
+	for _, dir := range []string{active, saved} {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for _, dir := range []string{active, saved} {
+		if err := os.Chown(dir, 1000, 2000); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Chmod(dir, 0750); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for _, dir := range []string{data, filepath.Join(data, "latest-rules")} {
+		if err := os.Chmod(dir, 0711); err != nil {
+			t.Fatal(err)
+		}
+	}
+	// The copied executable avoids root-only Go build-cache ancestors.
+	binary, err := os.ReadFile(os.Args[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	child := filepath.Join(root, "identity.test")
+	if err := os.WriteFile(child, binary, 0755); err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.Command(child, "-test.run=^TestServingIdentityWithTraverseOnlyAncestors$")
+	cmd.Env = append(os.Environ(), "RELOADER_TRAVERSE_TEST_CHILD=1", "RELOADER_TRAVERSE_TEST_ROOT="+root)
+	cmd.SysProcAttr = &syscall.SysProcAttr{Credential: &syscall.Credential{Uid: 1000, Gid: 2000, Groups: []uint32{2000}}}
+	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("serving identity failed: %v: %s", err, out)
 	}
 }

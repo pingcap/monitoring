@@ -72,7 +72,7 @@ func preparePaths(watchDir, storeRoot, version string, uid int) error {
 		return nil
 	}
 	// The volume root must already exist. Only create and change dedicated rule directories.
-	root, err := openDirectory(storeRoot, false)
+	root, err := openDirectory(storeRoot, false, false)
 	if err != nil {
 		return err
 	}
@@ -85,8 +85,9 @@ func preparePaths(watchDir, storeRoot, version string, uid int) error {
 }
 
 // Open each component with NOFOLLOW, retaining directory descriptors so renames
-// cannot redirect ownership changes to a symlink target.
-func openDirectory(path string, create bool) (*os.File, error) {
+// cannot redirect ownership changes to a symlink target. Only the final
+// directory needs a readable descriptor for listing or metadata preparation.
+func openDirectory(path string, create, read bool) (*os.File, error) {
 	if !filepath.IsAbs(path) || filepath.Clean(path) == "/" {
 		return nil, fmt.Errorf("rules path must be an absolute non-root directory: %q", path)
 	}
@@ -95,19 +96,23 @@ func openDirectory(path string, create bool) (*os.File, error) {
 			return nil, fmt.Errorf("rules path must not contain ..: %q", path)
 		}
 	}
-	fd, err := unix.Open("/", unix.O_RDONLY|unix.O_DIRECTORY|unix.O_CLOEXEC, 0)
+	fd, err := unix.Open("/", unix.O_PATH|unix.O_DIRECTORY|unix.O_CLOEXEC, 0)
 	if err != nil {
 		return nil, err
 	}
 	parts := strings.Split(filepath.Clean(path)[1:], "/")
 	for i, part := range parts {
-		next, openErr := unix.Openat(fd, part, unix.O_RDONLY|unix.O_DIRECTORY|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0)
+		flags := unix.O_PATH | unix.O_DIRECTORY | unix.O_NOFOLLOW | unix.O_CLOEXEC
+		if i == len(parts)-1 && read {
+			flags = unix.O_RDONLY | unix.O_DIRECTORY | unix.O_NOFOLLOW | unix.O_CLOEXEC
+		}
+		next, openErr := unix.Openat(fd, part, flags, 0)
 		if openErr == unix.ENOENT && create && i == len(parts)-1 {
 			if err := unix.Mkdirat(fd, part, 0755); err != nil && err != unix.EEXIST {
 				unix.Close(fd)
 				return nil, err
 			}
-			next, openErr = unix.Openat(fd, part, unix.O_RDONLY|unix.O_DIRECTORY|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0)
+			next, openErr = unix.Openat(fd, part, flags, 0)
 		}
 		unix.Close(fd)
 		if openErr != nil {
@@ -152,7 +157,7 @@ func setOwnerMode(file *os.File, uid int, directory bool) error {
 }
 
 func prepareDirectory(path string, create, rules bool, uid int) error {
-	dir, err := openDirectory(path, create)
+	dir, err := openDirectory(path, create, true)
 	if err != nil {
 		return err
 	}
@@ -241,11 +246,14 @@ func checkPaths(watchDir, storeRoot, version string, writable bool) error {
 		paths = append(paths, filepath.Join(storeRoot, "latest-rules"), filepath.Join(storeRoot, "latest-rules", version))
 	}
 	for i, path := range paths {
-		dir, err := openDirectory(path, i > 0)
+		dir, err := openDirectory(path, i > 0, i != 1)
 		if err != nil {
 			return fmt.Errorf("access rules as serving user: %w", err)
 		}
-		access := uint32(unix.R_OK | unix.X_OK)
+		access := uint32(unix.X_OK)
+		if i != 1 {
+			access |= unix.R_OK
+		}
 		readOnly, err := readOnlyDirectory(dir)
 		if err != nil {
 			dir.Close()
