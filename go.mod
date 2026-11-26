@@ -1,6 +1,6 @@
 module github.com/pingcap/monitoring
 
-go 1.25.5
+go 1.25.12
 
 require (
 	github.com/fsnotify/fsnotify v1.10.1
@@ -88,7 +88,7 @@ require (
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/term v0.43.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
+	golang.org/x/text v0.39.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
