@@ -20,6 +20,30 @@ With this guide, the Service keeps port 9089 but clients must use **HTTPS and
 Basic authentication**. Viewers can read rules; only administrators can save.
 The separate `prometheus-config-reloader` container is not configured here.
 
+## Required admission controls before upgrade
+
+Before enabling remote access, configure the external HTTP gateway and backend
+network restrictions in [Required network admission controls](SECURITY.md#required-network-admission-controls).
+This requirement also applies when the reloader itself serves TLS: direct TLS
+protects credentials but does not limit repeated password guesses. The gateway
+must rate-limit all requests before forwarding (including unknown users and
+failed or missing credentials), with per-source and shared aggregate limits;
+set and record finite sustained rates based on measured bcrypt cost and CPU
+capacity, and finite burst budgets that accommodate a cold console load and
+normal reads/saves. Unlimited defaults are not sufficient. Verify these budgets
+with an empty browser cache and under a sustained invalid-credential flood,
+including availability of the restricted administrative recovery path.
+Return 429 for excess traffic before it reaches bcrypt. Restrict the Service and
+Pod IPs to the gateway and trusted administrative clients, with no alternate
+exposed Service that bypasses the gateway. Do not expose the new listener until
+these controls are in place. Restrict port-forward RBAC to trusted operators.
+
+Verify gateway 429 responses under a burst, denial of direct backend access from
+an unauthorized Pod, and successful legitimate console access. The port-forward
+tests in step 6 deliberately verify the backend as a trusted operator; they do
+not validate or replace these gateway and network checks. Retain that restricted
+recovery path for administrative access during a flood.
+
 ## 1. Prepare and record the current deployment
 
 Use Bash for the commands below. Install `kubectl`, `jq`, Apache `htpasswd`,
@@ -223,7 +247,7 @@ rule persistence. Resolve existing overrides of these web flags rather than
 leaving conflicting duplicates. If an existing customization overrides the
 container image or command, reconcile it with the intended upgrade as well.
 
-Apply the complete CR once, with both the image and security configuration:
+Validate and inspect the complete CR, with both the image and security configuration:
 
 ```bash
 kubectl apply --dry-run=server -f tidbmonitor-upgrade.json
@@ -233,7 +257,15 @@ else
   DIFF_EXIT=$?
   test "$DIFF_EXIT" -eq 1
 fi
-# Inspect the diff before running the actual apply:
+```
+
+Stop here and review the diff. Compare the current live CR with the snapshot;
+reconcile any intervening changes from other operators or controllers into
+`tidbmonitor-upgrade.json`, then repeat the dry-run and diff. Coordinate updates
+so the saved spec does not restore stale values. Only after reviewing the final
+diff, apply in a separate step:
+
+```bash
 kubectl apply -f tidbmonitor-upgrade.json
 ```
 

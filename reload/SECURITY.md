@@ -40,6 +40,38 @@ an authenticated plaintext backend explicitly; restrict that backend's network
 reachability. It never disables authentication. No forwarded identity header is
 trusted.
 
+## Required network admission controls
+
+The eight authentication slots bound concurrent bcrypt work, **not** password
+attempts over time. Every remotely reachable deployment, including the direct
+TLS listener above, must use an external HTTP gateway that rate-limits requests
+before they reach the reloader. TLS and bcrypt alone do not prevent sustained
+password guessing or slot exhaustion.
+
+Require per-source limits and an aggregate limit shared across all clients and
+gateway replicas. Set and record finite sustained request rates and burst
+budgets; unlimited defaults are not sufficient. Choose the aggregate sustained
+rate using measured bcrypt verification time at the configured cost and CPU,
+leaving capacity for legitimate administrators. The bounded burst budget must
+accommodate a cold console load (HTML, CSS, JavaScript, Ace modes and initial API
+requests); verify this with an empty browser cache and normal rule reads/saves.
+Count all requests, including missing or invalid credentials and unknown
+usernames; do not key admission solely on the supplied username. Reject excess
+requests with 429 before forwarding or running bcrypt. During a sustained
+invalid-credential flood, verify both the configured rate/burst bounds and
+availability of the restricted administrative recovery path below.
+
+Only the gateway and explicitly authorized administrative clients may reach the
+backend: enforce source allowlists and Kubernetes NetworkPolicy (or equivalent
+firewall rules) for the Service and Pod IPs, including other monitor shards.
+Do not expose a bypass through a NodePort, load balancer or alternate Service.
+Use TLS from gateway to reloader, or the explicitly trusted plaintext backend
+option described above. Restrict `kubectl port-forward` RBAC to trusted operators;
+it bypasses gateway admission. Before exposing access, verify that a request
+burst receives 429 at the gateway, direct backend access from an unauthorized
+Pod fails, and a trusted operator can still authenticate. Keep an authorized
+local port-forward recovery path for administrative access during a flood.
+
 ## TiDB Operator v1 deployments
 
 For the complete migration procedure, see [Upgrading with TiDB Operator](UPGRADING.md),

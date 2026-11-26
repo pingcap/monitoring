@@ -2,6 +2,7 @@ package auth
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -68,6 +69,17 @@ func Load(path string) (*Policy, error) {
 		cost, err := bcrypt.Cost([]byte(user.PasswordHash))
 		if err != nil || cost < 10 || cost > 14 {
 			return nil, fmt.Errorf("bcrypt password cost must be between 10 and 14")
+		}
+		// Cost parses the header but does not validate the salt or checksum.
+		hash := user.PasswordHash
+		if len(hash) != 60 || (hash[:4] != "$2a$" && hash[:4] != "$2b$" && hash[:4] != "$2y$") || hash[6] != '$' {
+			return nil, fmt.Errorf("invalid bcrypt password hash")
+		}
+		encoding := base64.NewEncoding("./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789").WithPadding(base64.NoPadding).Strict()
+		salt, saltErr := encoding.DecodeString(hash[7:29])
+		checksum, checksumErr := encoding.DecodeString(hash[29:])
+		if saltErr != nil || len(salt) != 16 || checksumErr != nil || len(checksum) != 23 {
+			return nil, fmt.Errorf("invalid bcrypt password hash encoding")
 		}
 		p.dummyHash = user.PasswordHash
 	}
